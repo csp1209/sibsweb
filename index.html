@@ -203,21 +203,40 @@
         <div class="app-header">
             <h1 class="app-title" data-lang-key="inputTitle">线路编号输入</h1>
 
-            <div class="station-search-wrapper">
-                <input type="text" id="stationSearchInput" data-lang-key="stationSearcher" placeholder="輸入搜尋站點...">
-                <div id="stationSearchDropdown" class="station-dropdown hidden">
-                    <div class="station-dropdown-header" data-lang-key="stationSearcherHeader">所有站點列表</div>
-                    <div id="stationListContainer" class="station-list-container">
-                    </div>
-                </div>
-            </div>
+<div class="station-search-wrapper">
+    <!-- 新增：手機版專用召喚按鈕 -->
+    <button id="mobileSearchToggle" class="modern-mobile-search-btn">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+    </button>
+    
+    <!-- 搜尋輸入框與關閉按鈕的容器 -->
+    <div id="searchContainerWrap" class="search-input-wrap">
+        <input type="text" id="stationSearchInput" >
+        <!-- 新增：手機版專用關閉按鈕 -->
+        <button id="mobileSearchClose" class="modern-mobile-close-btn">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+    </div>
+    
+    <div id="stationSearchDropdown" class="station-dropdown hidden">
+        <div class="station-dropdown-header" data-lang-key="stationSearcherHeader">所有站點列表</div>
+        <div id="stationListContainer" class="station-list-container">
+        </div>
+    </div>
+</div>
         </div>
         <div class="app-content input-content">
 
             <div class="input-keyboard-suggest-wrap">
                 <div id="routeSuggestPanel" class="route-suggest-panel">
                     <div class="suggest-title" data-lang-key="suggestTitle">匹配的线路</div>
-                    <div id="suggestList" class="suggest-list"></div>
+                    <div id="suggestList" class="suggest-list custom-scrollbar-panel"></div>
                 </div>
 
                 <div class="keyboard-input-container">
