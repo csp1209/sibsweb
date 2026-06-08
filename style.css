@@ -4422,6 +4422,26 @@ html[lang="en-US"] .station-item .station-name-en {
     min-width: 0;
 }
 
+/* 手機版排版：對調順序 */
+@media (max-width: 768px) {
+    .keyboard-input-container {
+        display: flex;
+        flex-direction: column;
+    }
+    .custom-keyboard {
+        order: 1; /* 手機版移至下方 */
+    }
+    .keyboard-filter-container {
+        order: 2; /* 手機版移至上方 */
+    }
+}
+
+/* 套用至指定容器 */
+.suggest-list, 
+.input-keyboard-suggest-wrap {
+    overflow-y: auto;
+}
+
 .keyboard-input-container .input-container {
     width: 100%;
 }
@@ -4627,7 +4647,7 @@ html[lang="en-US"] .station-item .station-name-en {
     box-sizing: border-box;
 }
 
-.keyboard-filter-scroll-panel {
+.keyboard-filter-scroll-panel, .custom-scrollbar-panel {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -4638,18 +4658,18 @@ html[lang="en-US"] .station-item .station-name-en {
 }
 
 /* Custom Scrollbar for the Filters Panel */
-.keyboard-filter-scroll-panel::-webkit-scrollbar {
+.keyboard-filter-scroll-panel::-webkit-scrollbar, .custom-scrollbar-panel::-webkit-scrollbar {
     width: 6px;
 }
-.keyboard-filter-scroll-panel::-webkit-scrollbar-track {
+.keyboard-filter-scroll-panel::-webkit-scrollbar-track, .custom-scrollbar-panel::-webkit-scrollbar-track {
     background: #f1f5f9;
     border-radius: 3px;
 }
-.keyboard-filter-scroll-panel::-webkit-scrollbar-thumb {
+.keyboard-filter-scroll-panel::-webkit-scrollbar-thumb, .custom-scrollbar-panel::-webkit-scrollbar-thumb {
     background: #cbd5e1;
     border-radius: 3px;
 }
-.keyboard-filter-scroll-panel::-webkit-scrollbar-thumb:hover {
+.keyboard-filter-scroll-panel::-webkit-scrollbar-thumb:hover, .custom-scrollbar-panel::-webkit-scrollbar-thumb:hover {
     background: #94a3b8;
 }
 
@@ -5802,5 +5822,223 @@ html[lang="en-US"] .hero-title {
         /* 如果篩選器在手機上太擠，讓它們可以水平滑動或縮小間距 */
         grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
         gap: 6px;
+    }
+}
+
+/* ==================================================
+   手機版排版適配：路線資訊卡與操作按鈕 (螢幕寬度 768px 以下)
+   ================================================== */
+@media screen and (max-width: 768px) {
+    /* 1. 隱藏建議列表的標題 */
+    .suggest-title {
+        display: none !important;
+    }
+
+    /* 2. 整個路線資訊列：縮小外框內邊距與圓角 */
+    .route-info-bar {
+        padding: 16px !important;
+        border-radius: 16px !important;
+    }
+
+    /* 3. 基礎資訊區塊：改為垂直堆疊，確保內容不擁擠 */
+    .route-basic-info {
+        padding: 16px !important;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    /* 4. 路線編號與類型標籤：允許換行並縮小間距 */
+    .route-num-color-wrap {
+        gap: 8px !important;
+        flex-wrap: wrap !important;
+    }
+
+    .route-basic-info .route-num {
+        font-size: 24px !important; /* 稍微縮小字體 */
+        padding: 6px 16px !important;
+    }
+
+    /* 5. 行駛方向 UI：縮小內邊距與字體，並允許過長站名換行 */
+    .clean-direction-ui {
+        padding: 10px 14px !important;
+        margin: 4px 0 !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        width: 100% !important; /* 確保不會超出畫面 */
+        box-sizing: border-box;
+    }
+
+    .clean-direction-ui .dir-stop {
+        font-size: 15px !important;
+    }
+
+    /* 6. 核心修復：操作按鈕群組 (設定、資訊、收費、時間表)
+       解除右上角絕對定位，改為在資訊下方自然橫向排列 */
+    .route-actions-wrap {
+        position: static !important; 
+        width: 100% !important;
+        justify-content: flex-start !important; 
+        flex-wrap: wrap !important;
+        margin-top: 8px !important;
+        gap: 10px !important;
+    }
+
+    /* 微調按鈕尺寸，讓手指更容易觸控但不會佔用太多空間 */
+    .action-btn-modern {
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+        min-height: 40px !important;
+    }
+    
+    .action-btn-modern svg {
+        width: 18px !important;
+        height: 18px !important;
+    }
+
+    /* 班次標籤微調 */
+    .route-shift-tags {
+        margin-top: 4px !important;
+        margin-bottom: 4px !important;
+    }
+}
+
+/* 手機版排版：橫向滾動模式 */
+@media screen and (max-width: 768px) {
+    #stop-wrap {
+        width: 100%;
+        overflow-x: auto; /* 允許橫向滑動 */
+        -webkit-overflow-scrolling: touch; /* 提升 iOS 設備的滑動順暢度 */
+        padding: 10px;
+        box-sizing: border-box;
+        border-radius: 8px;
+    }
+
+    #stop-wrap .stop-table {
+        width: 100%;
+        min-width: 600px; /* 設定表格最小寬度，低於此寬度時觸發外層滑動 */
+        border-collapse: collapse;
+    }
+
+    /* 優化手機端觸控區域與字體大小 */
+    #stop-wrap .stop-table th,
+    #stop-wrap .stop-table td {
+        padding: 12px 8px;
+        font-size: 14px;
+        white-space: nowrap; /* 防止站點名稱被過度換行折斷 */
+    }
+}
+
+/* ===== stationSearchInput 手機版按鈕與排版 ===== */
+.modern-mobile-search-btn, .modern-mobile-close-btn {
+    display: none;
+    background: transparent;
+    border: none;
+    color: #334155;
+    padding: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.search-input-wrap {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .modern-mobile-search-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f1f5f9;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        margin-left: auto;
+    }
+    
+    .search-input-wrap {
+        display: none; /* 預設隱藏，點擊按鈕後顯示 */
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: 12px 16px;
+        z-index: 100;
+        animation: slideDown 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    .search-input-wrap.active {
+        display: flex;
+        gap: 12px;
+    }
+
+    .modern-mobile-close-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f1f5f9;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+    }
+
+    #stationSearchInput {
+        flex: 1;
+        width: 100%;
+        border-radius: 20px;
+        padding: 10px 18px;
+        border: 1px solid #e2e8f0;
+        font-size: 15px;
+    }
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-15px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* ===== stop-wrap 及 stop-name-container 手機版現代排版 ===== */
+@media (max-width: 768px) {
+    .stop-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 14px 16px;
+        background: #ffffff;
+        border-radius: 12px;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        position: relative;
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid #f1f5f9;
+    }
+
+    .stop-name-container {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        width: 100%;
+        word-wrap: break-word;
+        white-space: normal;
+        margin-top: 8px;
+    }
+
+    /* 優化站點名稱的文字斷行與行高 */
+    .stop-name-container .stop-main-name {
+        font-size: 17px;
+        font-weight: 600;
+        line-height: 1.4;
+        color: #1e293b;
+    }
+
+    .stop-name-container .stop-english-name {
+        font-size: 14px;
+        color: #64748b;
+        line-height: 1.3;
     }
 }
