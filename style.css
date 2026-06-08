@@ -4881,15 +4881,15 @@ html[lang="en-US"] .station-item .station-name-en {
 .input-screen:not(.hidden) {
     display: flex !important;
     flex-direction: column;
-    overflow: hidden !important;
+    overflow: auto !important;
 }
 
 .input-screen .app-content.input-content {
     flex: 1;
     display: flex;
     flex-direction: column;
-    overflow: hidden !important;
-    /* 將滾動限制在內部 */
+    /* 取消禁止滾動，改為自動顯示垂直滾動條 */
+    overflow-y: auto !important; 
     padding-bottom: 20px;
 }
 
@@ -6469,5 +6469,54 @@ html[lang="en-US"] .hero-title {
 @media (max-width: 480px) {
     .route-num {
         font-size: 26px;
+    }
+}
+
+/* =========================================
+   手機版響應式設計 (Mobile Responsive)
+   ========================================= */
+@media screen and (max-width: 768px) {
+
+    /* 解決 1：確保 inputScreen 可以順暢滾動 */
+    .input-screen, 
+    .input-screen .app-content.input-content {
+        height: 100vh; /* 確保高度不超過螢幕 */
+        overflow-y: auto !important; 
+        -webkit-overflow-scrolling: touch; /* 讓 iOS 上的滾動更滑順 */
+        padding-bottom: 80px; /* 底部預留空間，避免被手機瀏覽器導覽列遮擋 */
+    }
+
+    /* 解決 2：route-actions-wrap 與 route-num-color-wrap 撞在一起 */
+    /* 假設它們在同一個父容器內，強制讓它們換行或改為上下排列 */
+    .route-header-container, 
+    .route-info-wrap { /* 請替換成這兩個元素的實際「父容器」Class */
+        display: flex;
+        flex-direction: column; /* 改為上下排列 */
+        align-items: flex-start;
+        gap: 12px; /* 增加兩者之間的垂直間距 */
+        width: 100%;
+    }
+
+    .route-actions-wrap, 
+    .route-num-color-wrap {
+        width: 100%; /* 讓它們在手機上各自佔滿整行 */
+        justify-content: space-between; 
+    }
+
+    /* 解決 3：stopPageTitle 面積過高 */
+    .stopPageTitle {
+        font-size: 1.2rem; /* 縮小字體 */
+        padding: 10px 15px; /* 減少上下內距，保留左右內距 */
+        margin-bottom: 10px; /* 縮小底部外距 */
+        line-height: 1.3; /* 縮小行高 */
+    }
+
+    /* 解決 4：其他改善手機體驗的細節 (觸控目標大小) */
+    button, 
+    input, 
+    select, 
+    .route-action-btn {
+        min-height: 44px; /* 蘋果與 Google 建議的最小觸控高度 */
+        font-size: 16px; /* 防止 iOS 點擊輸入框時自動放大畫面 */
     }
 }
