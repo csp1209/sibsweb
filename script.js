@@ -3877,4 +3877,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     }
+
+    const mobileSearchBtn = document.getElementById('mobileSearchToggle');
+const mobileCloseBtn = document.getElementById('mobileSearchClose');
+const searchWrap = document.getElementById('searchContainerWrap');
+const searchInput = document.getElementById('stationSearchInput');
+
+if (mobileSearchBtn && mobileCloseBtn && searchWrap) {
+    mobileSearchBtn.addEventListener('click', () => {
+        searchWrap.classList.add('active');
+        if (searchInput) searchInput.focus();
+    });
+
+    mobileCloseBtn.addEventListener('click', () => {
+        searchWrap.classList.remove('active');
+    });
+}
 });
