@@ -1,0 +1,6473 @@
+.app-header {
+    position: relative !important;
+}
+
+.page-id-label {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    font-size: 12px;
+    color: var(--text-tertiary);
+    z-index: 999;
+}
+
+/* ============================
+   加载页面样式 (loadingScreen)
+   ============================ */
+.loading-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #5c6bc0 100%);
+}
+
+.loading-container {
+    text-align: center;
+    color: white;
+}
+
+.loading-title {
+    font-size: 28px;
+    margin-bottom: 30px;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* 多语言标题间距优化 */
+    letter-spacing: 1px;
+}
+
+html[lang="en-US"] .loading-title {
+    font-size: 24px;
+    letter-spacing: 0.5px;
+}
+
+.loading-img-wrap {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+}
+
+.loading-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* ============================
+   功能选择页面 (funcScreen)
+   ============================ */
+.func-content {
+    padding-top: 30px;
+}
+
+.func-card-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.func-card {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    cursor: pointer;
+    border-radius: var(--radius-lg);
+    background: var(--bg-white);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-base);
+}
+
+.route-badge,
+.shift-tag {
+    box-shadow: none !important;
+}
+
+.func-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.func-card-icon {
+    font-size: 32px;
+    margin-right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-md);
+    background: var(--primary-light);
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.func-card-content {
+    flex: 1;
+}
+
+.func-card-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+/* 英文模式下功能卡片标题调整 */
+html[lang="en-US"] .func-card-title {
+    font-size: 17px;
+}
+
+.func-card-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+html[lang="en-US"] .func-card-desc {
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.func-card-arrow {
+    font-size: 20px;
+    color: var(--text-tertiary);
+    transition: var(--transition-base);
+}
+
+.func-card:hover .func-card-arrow {
+    color: var(--primary-color);
+    transform: translateX(5px);
+}
+
+/* ============================
+   更新日志页面 (updateLogScreen)
+   ============================ */
+.log-content {
+    padding-top: 30px;
+}
+
+.update-log-screen .app-content {
+    padding: 20px;
+}
+
+.update-log-panel {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    box-shadow: var(--shadow-md);
+}
+
+.close-log-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #f5f5f7;
+    border: none;
+    font-size: 16px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-base);
+}
+
+.close-log-btn:hover {
+    background: #eee;
+    color: var(--text-primary);
+    transform: rotate(90deg);
+}
+
+.log-meta {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.log-version {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.log-list {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.log-item {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.log-item:last-child {
+    border-bottom: none;
+}
+
+.log-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.log-item-version {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.log-item-time {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    background: #f5f5f7;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.log-item-content ul {
+    padding-left: 20px;
+    margin: 0;
+}
+
+.log-item-content li {
+    margin-bottom: 8px;
+    line-height: 1.6;
+    color: var(--text-primary);
+}
+
+.log-item-content li:before {
+    content: "•";
+    color: var(--primary-color);
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+/* ============================
+   输入页面 (inputScreen) - 核心优化
+   ============================ */
+.input-content {
+    padding-top: 20px;
+    width: 80%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.route-suggest-panel {
+    flex: 1.5;
+    min-width: 300px;
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    box-shadow: var(--shadow-md);
+    height: fit-content;
+    max-width: 450px;
+    max-height: 600px;
+    overflow-y: auto;
+    display: block !important;
+}
+
+.suggest-route-num-wrap {
+    display: flex;
+    align-items: center;
+}
+
+.input-container {
+    background: transparent !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    width: 100%;
+}
+
+.input-title-wrap {
+    text-align: center;
+}
+
+.input-title {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+html[lang="en-US"] .input-title {
+    font-size: 17px;
+}
+
+.input-box {
+    max-width: 400px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.input-field-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-field-wrap label {
+    font-size: 14px;
+    color: var(--text-secondary);
+    text-align: left;
+}
+
+/* 2. 讓輸入框佔滿全寬，並自帶獨立的卡片質感 */
+.custom-input {
+    width: 100% !important;
+    height: 50px !important;
+    font-size: 20px !important;
+    font-weight: 600;
+    background: #ffffff !important;
+    border-radius: 12px !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+    text-align: center;
+}
+
+/* 聚焦時的輸入框變化 */
+.custom-input:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 3px var(--primary-light) !important;
+}
+
+.custom-keyboard {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    box-shadow: var(--shadow-md);
+    width: 100%;
+    flex: 1;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.keyboard-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.key-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: calc(33.333% - 10px);
+}
+
+.key-group-empty {
+    width: calc(33.333% - 10px);
+}
+
+.main-num-key,
+.func-key {
+    height: 60px;
+    border: none;
+    border-radius: var(--radius-md);
+    background: var(--primary-color);
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-base);
+}
+
+/* 禁用按键样式强化：更明显的灰色，区分有效/无效 */
+.main-num-key:disabled {
+    background: #e0e0e0;
+    color: var(--text-tertiary);
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.main-num-key:hover:not(:disabled) {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(74, 144, 226, 0.2);
+}
+
+.key-sub-wrap {
+    display: flex;
+    gap: 5px;
+}
+
+.sub-letter-btn {
+    flex: 1;
+    height: 30px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: var(--primary-color);
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: var(--transition-base);
+}
+
+.sub-letter-btn:disabled {
+    background: #e0e0e0;
+    color: var(--text-tertiary);
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.sub-letter-btn:hover:not(:disabled) {
+    background: var(--primary-dark);
+}
+
+.keyboard-func-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.suggest-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: var(--text-primary);
+    text-align: center;
+}
+
+.suggest-route-num {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+    background: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.suggest-shifts-container {
+    padding-left: 4px;
+}
+
+.shift-info-item {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 4px;
+}
+
+.shift-name {
+    font-weight: 500;
+    color: #555;
+}
+
+.shift-route {
+    color: #666;
+}
+
+/* 英文模式下方向标签宽度调整 */
+html[lang="en-US"] .dir-label {
+    min-width: 90px;
+    /* 适配英文Start Point/End Point宽度 */
+}
+
+/* 输入框提示文字多语言适配 */
+.custom-input::placeholder {
+    font-size: 14px;
+}
+
+html[lang="en-US"] .custom-input::placeholder {
+    font-size: 13px;
+}
+
+.route-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f8faff;
+}
+
+.route-identity {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.route-color-block {
+    display: none;
+}
+
+/* 路线号容器 - 视觉焦点 */
+.route-num-color-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+}
+
+/* 标签内部光效 */
+.shift-tag::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+/* 班次图标 */
+.shift-icon {
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+.shift-text {
+    line-height: 1;
+}
+
+/* 班次标题 */
+.shift-title-cell {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+/* 运营时间按钮 - 现代渐变按钮 */
+.timetable-btn {
+    position: absolute !important;
+    top: 24px !important;
+    right: 24px !important;
+    padding: 8px 14px !important;
+    border-radius: 20px !important;
+    font-size: 13px !important;
+    background: #f0f4fc !important;
+    color: var(--primary-color) !important;
+    box-shadow: none !important;
+    border: 1px solid #d6e4f9 !important;
+    margin: 0 !important;
+}
+
+/* 按钮悬浮效果 */
+.timetable-btn:hover {
+    background: var(--primary-color) !important;
+    color: white !important;
+}
+
+.timetable-btn .timetable-icon {
+    font-size: 14px !important;
+}
+
+@media (max-width: 480px) {
+    .timetable-btn {
+        position: relative !important;
+        top: 0 !important;
+        right: 0 !important;
+        width: fit-content !important;
+        margin-top: 10px !important;
+    }
+}
+
+/* 3. 全新：精簡版行駛方向 UI 樣式 */
+.clean-direction-ui {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 14px 0 6px 0;
+    padding: 12px 18px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    width: fit-content;
+}
+
+.clean-direction-ui .dir-stop {
+    font-size: 17px;
+    font-weight: 700;
+    color: #1e293b;
+    letter-spacing: 0.5px;
+}
+
+.clean-direction-ui .dir-icon {
+    font-size: 14px;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+}
+
+.clean-direction-ui .dir-stop.loop-text {
+    font-size: 14px;
+    color: #e53e3e;
+    font-weight: 600;
+}
+
+.temp-close-reason {
+    font-size: 12px;
+    color: #999;
+    margin-top: 4px;
+    line-height: 1.5;
+}
+
+/* 路线详情区域 - 网格布局 + 卡片式设计 */
+.route-dest-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* 详情项 - 现代卡片样式 */
+.route-detail-item {
+    padding: 24px;
+    background: #f8f9fa;
+    border-radius: 16px;
+    border: 1px solid #f0f2ff;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 详情项悬浮效果 */
+.route-detail-item:hover {
+    background: white;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+    border-color: #e8f0fe;
+}
+
+/* 详情项左侧装饰条 */
+.route-detail-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: #4a90e2;
+    border-radius: 0 2px 2px 0;
+}
+
+/* 主要文本（标签）- 现代排版 */
+.main-text {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: #666 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px !important;
+    margin-bottom: 8px !important;
+    display: block !important;
+}
+
+/* 次要文本（值）- 突出显示 */
+.sub-text {
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    color: #1a1a1a !important;
+    line-height: 1.4 !important;
+    display: block !important;
+}
+
+.dest-dir {
+    margin-bottom: 8px;
+}
+
+.dir-label {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 2px;
+}
+
+.dir-content {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.via-wrap,
+.route-type-wrap {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 4px;
+}
+
+.via-label,
+.type-label {
+    font-size: 12px;
+    color: #666;
+    min-width: 60px;
+}
+
+.via-content,
+.type-content {
+    font-size: 13px;
+    flex: 1;
+    word-break: break-all;
+}
+
+.dest-dir,
+.via-direction-cn,
+.via-direction-en,
+.route-type {
+    font-size: 13px;
+    display: flex;
+}
+
+.dest-dir .label,
+.via-direction-cn .label,
+.via-direction-en .label,
+.route-type .label {
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-right: 4px;
+    min-width: 60px;
+    /* 优化多语言标签宽度 */
+}
+
+/* 英文模式下标签宽度调整 */
+html[lang="en-US"] .dest-dir .label,
+html[lang="en-US"] .via-direction-cn .label,
+html[lang="en-US"] .via-direction-en .label,
+html[lang="en-US"] .route-type .label {
+    min-width: 80px;
+}
+
+.via-direction-en {
+    font-style: italic;
+    color: #888;
+}
+
+.route-type {
+    color: var(--text-secondary);
+}
+
+.toggle-direction-btn:hover:not(:disabled) {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(74, 144, 226, 0.2);
+}
+
+.pagination-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pagination-btn {
+    padding: 4px 10px;
+    border: none;
+    border-radius: 4px;
+    background: var(--primary-color);
+    color: white;
+    font-size: 13px;
+    cursor: pointer;
+    transition: var(--transition-base);
+}
+
+.pagination-btn:disabled {
+    background: #cccccc;
+    color: var(--text-tertiary);
+    cursor: not-allowed;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background: var(--primary-dark);
+}
+
+.pagination-info {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.pagination-info span {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* 运营时间面板样式 - 支持回程切换 */
+.timetable-direction-controls {
+    display: flex;
+    gap: 8px;
+    margin-left: 15px;
+}
+
+.direction-btn {
+    padding: 8px 16px;
+    border: 1px solid #e8e8e8;
+    border-radius: var(--radius-md);
+    background: #ffffff;
+    color: #333333;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-base);
+    position: relative;
+    overflow: hidden;
+}
+
+.direction-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.02);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+}
+
+.direction-btn:hover::after {
+    transform: translateX(0);
+}
+
+.direction-btn.active {
+    border-color: var(--route-color, var(--primary-color));
+    background: var(--route-color, var(--primary-color));
+    color: white;
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
+}
+
+.direction-btn:hover:not(.active) {
+    border-color: #d0d0d0;
+    background: #fafafa;
+}
+
+.direction-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.timetable-direction-info {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--route-color, var(--primary-color));
+    margin-bottom: 20px;
+    padding: 12px 16px;
+    background: rgba(74, 144, 226, 0.05);
+    border-radius: var(--radius-md);
+    border-left: 3px solid var(--route-color, var(--primary-color));
+}
+
+/* 1. 彻底取消no-seq线条淡化（优先级最高） */
+.single-shift-seq-wrap.no-seq {
+    border: none !important;
+}
+
+.single-shift-seq-wrap.no-seq .shift-seq-text {
+    color: white !important;
+    opacity: 0 !important;
+}
+
+/* 2. 有序号站点样式 */
+.single-shift-seq-wrap:not(.no-seq):not(.shift-start-stop):not(.shift-end-stop):not(.shift-start-end-stop) {
+    border: 2px solid var(--shift-color) !important;
+    background: white !important;
+}
+
+/* 3. 起点/终点样式 */
+.shift-start-stop,
+.shift-end-stop,
+.shift-start-end-stop {
+    border: none !important;
+    background: var(--shift-color) !important;
+}
+
+.shift-start-stop .shift-seq-text,
+.shift-end-stop .shift-seq-text,
+.shift-start-end-stop .shift-seq-text {
+    color: white !important;
+    font-weight: 600 !important;
+}
+
+.shift-seq-text {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--shift-color);
+    position: relative;
+    z-index: 3;
+}
+
+/* 美化內部滾動條（讓介面更像原生 App） */
+.timetable-panel-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.timetable-panel-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.timetable-panel-content::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+/* 3. 班次標題與動態矩形顏色樣式 */
+.shift-title-premium {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    color: #1e293b;
+}
+
+/* 左側彩色小矩形 */
+.shift-color-rect {
+    display: inline-block;
+    width: 6px;
+    height: 16px;
+    border-radius: 3px;
+    margin-right: 10px;
+    flex-shrink: 0;
+    /* 絕不變形 */
+}
+
+.timetable-panel-header {
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 20px;
+    margin-bottom: 24px;
+}
+
+.panel-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.5px;
+}
+
+.switch-timetable-direction-btn {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #3a7bc9 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 24px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    box-shadow: 0 8px 16px rgba(74, 144, 226, 0.25);
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+.switch-timetable-direction-btn strong {
+    font-size: 16px;
+    margin-left: 6px;
+    color: #ffffff;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+}
+
+.switch-timetable-direction-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 20px rgba(74, 144, 226, 0.35);
+}
+
+.timetable-shift-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s ease;
+}
+
+.timetable-shift-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* 简化动画 */
+@keyframes panelFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes panelSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.panel-title {
+    font-size: 20px;
+    /* 缩小标题字号 */
+    font-weight: 600;
+    /* 降低字重，更柔和 */
+    color: #1d1d1f;
+    margin: 0;
+    /* 清除默认边距 */
+}
+
+/* 关闭按钮 - 极简样式 */
+.close-panel-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #f9f9f9;
+    border: none;
+    font-size: 18px;
+    color: #666;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.close-panel-btn:hover {
+    background: #f1f1f1;
+    color: #333;
+    transform: rotate(90deg);
+}
+
+/* 方向切换区域 - 精简 */
+.timetable-direction-wrap {
+    margin-bottom: 20px;
+}
+
+.timetable-direction-label {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--route-color, var(--primary-color));
+    margin-bottom: 12px;
+    padding: 8px 12px;
+    background: rgba(74, 144, 226, 0.05);
+    border-radius: 6px;
+    display: inline-block;
+}
+
+.switch-timetable-direction-btn {
+    background: var(--route-color, var(--primary-color));
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    margin-top: 8px;
+}
+
+.switch-timetable-direction-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
+}
+
+/* 1. 外層遮罩層：負責全螢幕佈局、彈窗置中與毛玻璃效果 */
+.timetable-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
+    /* 調整背景顏色與透明度，更低透明度能讓毛玻璃效果更通透 */
+    background: rgba(0, 0, 0, 0.3) !important;
+
+    /* 使用 Flexbox 完美的將子項目（彈窗內容）在畫面正中間對齊 */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    z-index: 1000;
+    padding: 16px;
+    box-sizing: border-box;
+
+    /* 核心毛玻璃效果 (backdrop-filter) */
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    /* 確保支援 Safari 瀏覽器 */
+}
+
+/* 營運時間面板外層遮罩 - 毛玻璃效果 */
+.timetable-panel-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(15, 23, 42, 0.3);
+    /* 暗色半透明基底，讓毛玻璃更顯質感 */
+    backdrop-filter: blur(12px);
+    /* 核心：毛玻璃模糊效果 */
+    -webkit-backdrop-filter: blur(12px);
+    /* 支援 Safari 瀏覽器 */
+    display: flex;
+    align-items: center;
+    /* 垂直居中 */
+    justify-content: center;
+    /* 水平居中 */
+    z-index: 1000;
+    /* 確保覆蓋在最上層 */
+    animation: fadeInOverlay 0.3s ease;
+}
+
+/* 營運時間面板內容 */
+.timetable-panel-content {
+    background: #ffffff;
+    border-radius: 24px;
+    /* 圓潤現代感 */
+    padding: 28px;
+    width: 100%;
+    max-width: 600px;
+    /* 限制最大寬度 */
+    max-height: 80vh;
+    /* 限制最大高度，避免超出螢幕 */
+    overflow-y: auto;
+    /* 內容過多時自動允許垂直滾動 */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    position: relative;
+    animation: slideUpContent 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 簡約進場動畫 */
+@keyframes fadeInOverlay {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUpContent {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* 班次卡片 - 极简风格 */
+.timetable-shift-card {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.timetable-shift-card:hover {
+    background: #ffffff;
+    border-color: #e8e8e8;
+}
+
+/* 时间表表格 - 极致精简 */
+.timetable-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.timetable-table td {
+    padding: 8px 0;
+    /* 大幅精简内边距 */
+    vertical-align: top;
+    font-size: 14px;
+}
+
+.timetable-label-cell {
+    font-weight: 500;
+    color: #666;
+    width: 25%;
+    /* 缩小标签列宽度 */
+}
+
+.timetable-value-cell {
+    color: #1d1d1f;
+    line-height: 1.5;
+}
+
+.timetable-value-cell strong {
+    color: var(--route-color, var(--primary-color));
+    font-size: 16px;
+    font-weight: 600;
+    background: rgba(74, 144, 226, 0.08);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+/* 发车间隔列表 - 极简设计 */
+.interval-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    /* 缩小间距 */
+}
+
+.interval-list li {
+    padding: 10px 16px;
+    background: #ffffff;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #f1f3f5;
+    margin-bottom: 8px;
+}
+
+/* 空提示样式 - 精简 */
+.empty-tip {
+    text-align: center;
+    padding: 40px 20px;
+    /* 精简内边距 */
+    color: #999;
+    font-size: 14px;
+    background: #fafafa;
+    border-radius: 8px;
+    border: 1px dashed #e0e0e0;
+    margin: 16px 0;
+}
+
+/* 滚动条美化 - 精简 */
+.timetable-panel-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.timetable-panel-content::-webkit-scrollbar-track {
+    background: #f9f9f9;
+    border-radius: 3px;
+}
+
+.timetable-panel-content::-webkit-scrollbar-thumb {
+    background: #e0e0e0;
+    border-radius: 3px;
+}
+
+.timetable-panel-content::-webkit-scrollbar-thumb:hover {
+    background: #4a90e2;
+}
+
+.func-key.disabled,
+.func-key:disabled {
+    background: #cccccc !important;
+    color: var(--text-tertiary) !important;
+    cursor: not-allowed !important;
+    opacity: 0.7 !important;
+}
+
+.func-key:not(.disabled) {
+    background: #28a745 !important;
+    color: white !important;
+}
+
+.func-key:not(.disabled):hover {
+    background: #218838 !important;
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.2);
+}
+
+/* ========== 路线详情区（网格布局）- 全新设计 ========== */
+.route-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* 详情项通用样式（卡片化） */
+.detail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px;
+    background: linear-gradient(135deg, #f8f9ff 0%, #f5f7ff 100%);
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    border: 1px solid #eef2ff;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 详情项hover效果 */
+.detail-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: #4a90e2;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.detail-item:hover {
+    background: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(74, 144, 226, 0.08);
+}
+
+.detail-item:hover::before {
+    opacity: 1;
+}
+
+/* 详情图标（强化视觉） */
+.detail-icon {
+    font-size: 24px;
+    color: #4a90e2;
+    margin-top: 2px;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    text-align: center;
+    line-height: 32px;
+    background: rgba(74, 144, 226, 0.1);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.detail-item:hover .detail-icon {
+    transform: scale(1.15);
+    background: rgba(74, 144, 226, 0.2);
+}
+
+/* 详情内容（主次分明） */
+.detail-content {
+    flex: 1;
+}
+
+.detail-label {
+    font-size: 16px;
+    color: #666666;
+    margin-bottom: 6px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.detail-value {
+    font-size: 15px;
+    color: #1a1a1a;
+    line-height: 1.5;
+    word-break: break-all;
+}
+
+/* 主要内容（标签）：粗体大字（匹配 driveDirection/viaDirection/routeType 标签） */
+.driveDirection-label,
+.viaDirection-label,
+.routeType-label {
+    font-size: 16px;
+    /* 大字 */
+    font-weight: 700;
+    /* 粗体 */
+    color: #1a1a1a;
+    /* 深色突出 */
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+    display: block;
+    /* 确保标签独占一行，视觉更清晰 */
+}
+
+/* 次要内容（值）：常规大小（匹配 driveDirection/viaDirection/routeType 对应数值） */
+.driveDirection-content,
+.viaDirection-content,
+.routeType-content {
+    font-size: 14px;
+    /* 常规大小 */
+    font-weight: 400;
+    /* 常规字重 */
+    color: #333;
+    /* 稍浅，突出主要内容 */
+    line-height: 1.5;
+    display: block;
+    /* 确保内容独占一行 */
+}
+
+@media (max-width: 768px) {
+    .main-text {
+        font-size: 15px !important;
+    }
+
+    .sub-text {
+        font-size: 13px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-text {
+        font-size: 14px !important;
+    }
+
+    .sub-text {
+        font-size: 12px !important;
+    }
+}
+
+/* 响应式适配 */
+@media (max-width: 768px) {
+    .route-info-bar {
+        padding: 24px 20px;
+        gap: 20px;
+        border-radius: 20px;
+    }
+
+    .route-header {
+        gap: 16px;
+        padding-bottom: 16px;
+    }
+
+    .route-num {
+        font-size: 28px;
+    }
+
+    .shift-tag {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+
+    .timetable-btn {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+
+    .route-details {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .detail-item {
+        padding: 16px;
+        gap: 12px;
+        border-radius: 14px;
+    }
+
+    .detail-icon {
+        font-size: 20px;
+        width: 28px;
+        height: 28px;
+        line-height: 28px;
+    }
+
+    .detail-value {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .route-info-bar {
+        padding: 16px;
+        border-radius: 16px;
+    }
+
+    .route-num {
+        font-size: 24px;
+    }
+
+    .route-basic-info {
+        gap: 12px;
+        padding-bottom: 16px;
+    }
+
+    .shift-tag {
+        padding: 4px 10px;
+        font-size: 12px;
+    }
+
+    .detail-item {
+        gap: 10px;
+        padding: 14px;
+        border-radius: 12px;
+    }
+
+    .detail-icon {
+        font-size: 18px;
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+    }
+}
+
+@media (max-width: 768px) {
+    .app-content {
+        padding: 15px;
+    }
+
+    .route-suggest-panel {
+        width: 100% !important;
+        min-width: 100% !important;
+    }
+
+    .direction-pagination-wrap {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    .pagination-control {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .multi-shift-seq-wrap {
+        gap: 8px;
+    }
+
+    .single-shift-seq-wrap {
+        width: 30px;
+        height: 30px;
+    }
+
+    .timetable-panel-content {
+        padding: 20px 16px;
+        max-height: 85vh;
+        border-radius: 12px;
+    }
+
+    .panel-title {
+        font-size: 18px;
+    }
+
+    .timetable-table td {
+        padding: 6px 0;
+    }
+
+    .timetable-label-cell {
+        width: 30%;
+    }
+
+    .interval-list li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .timetable-direction-controls {
+        flex-wrap: wrap;
+    }
+
+    .direction-btn {
+        flex: 1;
+        min-width: 120px;
+    }
+
+    .timetable-time-info {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .timetable-time-item {
+        min-width: 100%;
+    }
+
+    .timetable-shift {
+        padding: 22px;
+        margin-bottom: 25px;
+    }
+
+    .stop-table th:first-child,
+    .stop-table td:first-child {
+        width: 150px;
+    }
+
+    html[lang="en-US"] .stop-table th:first-child,
+    html[lang="en-US"] .stop-table td:first-child {
+        width: 170px;
+    }
+
+    /* 优化副站名样式 */
+    .stop-name-container {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .stop-main-name {
+        font-size: 15px;
+        font-weight: 500;
+    }
+
+    .stop-sub-name {
+        font-size: 0.8em;
+        color: #666;
+        font-weight: normal;
+    }
+
+    .stop-english-name {
+        font-size: 0.8em;
+        color: #888;
+    }
+
+    .temp-close-tag {
+        margin-left: 0;
+        margin-top: 4px;
+    }
+
+    .timetable-header h3 {
+        font-size: 22px;
+    }
+
+    .timetable-shift h4 {
+        font-size: 19px;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .app-header {
+        padding: 12px 15px;
+    }
+
+    .app-title {
+        font-size: 18px;
+    }
+
+    .func-card {
+        padding: 15px;
+    }
+
+    .func-card-icon {
+        font-size: 24px;
+        width: 50px;
+        height: 50px;
+        margin-right: 15px;
+    }
+
+    .main-num-key {
+        height: 50px;
+    }
+
+    .stop-container {
+        padding: 0 10px;
+    }
+
+    .route-info-bar,
+    .direction-pagination-wrap,
+    .stop-wrap {
+        padding: 12px;
+    }
+
+    .stop-table th:last-child,
+    .stop-table td:last-child {
+        width: auto;
+    }
+
+    .timetable-content {
+        padding: 25px 20px;
+    }
+
+    .timetable-header h3 {
+        font-size: 22px;
+    }
+
+    .timetable-shift {
+        padding: 20px 18px;
+    }
+
+    .time-slots-list li {
+        padding: 14px 18px;
+        font-size: 15px;
+    }
+
+    .slot-time {
+        font-size: 16px;
+    }
+
+    .slot-interval {
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+
+    /* 移动端语言切换按钮优化 */
+    .lang-switch-wrap {
+        left: 15px;
+    }
+
+    .lang-btn {
+        padding: 3px 8px;
+        font-size: 12px;
+    }
+
+    /* 移动端面板优化 */
+    .panel-title {
+        font-size: 17px;
+    }
+
+    .close-panel-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+    }
+
+    .timetable-shift-card {
+        padding: 18px 16px;
+    }
+
+    .interval-list li {
+        padding: 10px 12px;
+    }
+}
+
+/* ============================
+   更新日志页面 (updateLogScreen) - 分类样式优化
+   ============================ */
+/* 里程碑样式 */
+.log-item {
+    position: relative;
+    padding: 25px 20px 25px 40px;
+    margin-bottom: 30px;
+    border-radius: var(--radius-md);
+    background: white;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-base);
+}
+
+.log-item:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.log-item::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 30px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    z-index: 2;
+}
+
+.log-item::after {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 42px;
+    /* 修改：将 bottom 改为 height，避免越界 */
+    height: calc(100% - 42px);
+    width: 2px;
+    background: #f0f0f0;
+    z-index: 1;
+}
+
+.log-item:last-child::after {
+    display: none;
+}
+
+/* 版本标题样式 */
+.log-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.log-item-version {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.log-item-version::before {
+    content: '🔖';
+    font-size: 16px;
+}
+
+.log-item-time {
+    font-size: 14px;
+    color: var(--text-tertiary);
+    background: #f8f8f8;
+    padding: 4px 10px;
+    border-radius: 12px;
+}
+
+/* 日志标题 */
+.log-item-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+/* 分类内容容器 */
+.log-content-categories {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* 分类标题 */
+.log-category-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* 不同分类的颜色标识 */
+.log-category-added .log-category-title {
+    color: #38a169;
+}
+
+.log-category-fixed .log-category-title {
+    color: #e53e3e;
+}
+
+.log-category-removed .log-category-title {
+    color: #9f7aea;
+}
+
+.log-category-revamped .log-category-title {
+    color: #4299e1;
+}
+
+.log-category-improvements .log-category-title {
+    color: #ed8936;
+}
+
+/* 分类图标 */
+.log-category-title::before {
+    font-size: 12px;
+}
+
+.log-category-added .log-category-title::before {
+    content: '➕';
+}
+
+.log-category-fixed .log-category-title::before {
+    content: '✅';
+}
+
+.log-category-removed .log-category-title::before {
+    content: '➖';
+}
+
+.log-category-revamped .log-category-title::before {
+    content: '🔄';
+}
+
+.log-category-improvements .log-category-title::before {
+    content: '✨';
+}
+
+/* 分类列表 */
+.log-category-list {
+    padding-left: 20px;
+}
+
+.log-category-list li {
+    margin-bottom: 6px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+
+.log-category-list li::marker {
+    color: inherit;
+}
+
+/* 空日志提示 */
+.empty-log-tip {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-tertiary);
+    font-size: 14px;
+    background: #fafafa;
+    border-radius: var(--radius-md);
+    border: 1px dashed #e0e0e0;
+    margin: 20px 0;
+}
+
+/* 响应式适配 */
+@media (max-width: 768px) {
+    .log-item {
+        padding: 20px 15px 20px 30px;
+    }
+
+    .log-item::before {
+        left: 10px;
+        width: 10px;
+        height: 10px;
+    }
+
+    .log-item::after {
+        left: 14px;
+    }
+
+    .log-item-version {
+        font-size: 16px;
+    }
+
+    .log-item-title {
+        font-size: 15px;
+    }
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
+:root {
+    --primary-color: #4a90e2;
+    --primary-dark: #3a80d2;
+    --primary-light: rgba(74, 144, 226, 0.1);
+    --text-primary: #1d1d1f;
+    --text-secondary: #666;
+    --text-tertiary: #999;
+    --bg-primary: #f5f5f7;
+    --bg-white: #ffffff;
+    --border-light: #e0e0e0;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --transition-base: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html[lang="en-US"] {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+    line-height: 1.5;
+}
+
+/* ==================== 通用樣式 ==================== */
+.screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    padding-bottom: 20px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.app-header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #5c6bc0 100%);
+    color: white;
+    padding: 16px 20px;
+    position: relative;
+    box-shadow: var(--shadow-sm);
+}
+
+.header-left-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* 搜尋框置於右上角 */
+.header-search-wrap {
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 240px;
+}
+
+.app-title {
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+html[lang="en-US"] .app-title {
+    letter-spacing: 0.3px;
+}
+
+.app-version {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+.lang-switch-wrap {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 8px;
+}
+
+.lang-btn {
+    padding: 4px 12px;
+    border-radius: var(--radius-sm);
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-base);
+}
+
+.lang-btn.active {
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--primary-color);
+}
+
+.lang-btn:not(.active) {
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+/* 返回按鈕 */
+.app-back-btn {
+    position: fixed;
+    top: 18px;
+    left: 20px;
+    width: 80px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--primary-color);
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-base);
+}
+
+/* ==========================================
+   修復：站點名稱過長時自動換行 (覆蓋原有 nowrap 限制)
+   ========================================== */
+.stop-main-name,
+.stop-sub-name,
+.stop-en-name,
+.node-name-en,
+.fare-node.centered-stop-name .stop-main-name,
+.stop-table .stop-main-name,
+.route-node .node-name-cn {
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    height: auto !important;
+}
+
+.app-back-btn:hover {
+    background: white;
+    transform: scale(1.05);
+}
+
+/* ==================== 站點頁面 - 優化重點 ==================== */
+.stop-content {
+    padding: 20px 12px;
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+.stop-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* 路線資訊卡 */
+.route-info-bar {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+    border: 1px solid #e6e9f0;
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    position: relative;
+    overflow: hidden;
+}
+
+.route-info-bar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: var(--route-main-color, #4a90e2) !important;
+    border-radius: 20px 20px 0 0;
+}
+
+/* 路線名稱/編號樣式提升 */
+.route-basic-info .route-num {
+    font-size: 32px !important;
+    font-weight: 700 !important;
+    color: white !important;
+    letter-spacing: -0.5px !important;
+    margin: 0 !important;
+}
+
+/* 途經站點與描述文字優化 */
+.route-basic-info .route-via-info,
+.route-basic-info .route-desc {
+    font-size: 14px !important;
+    color: #4b5563 !important;
+    line-height: 1.6 !important;
+}
+
+.search-container {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 12px 16px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    background: transparent;
+}
+
+/* 路線類型標籤 */
+.route-type-badge {
+    background: rgba(74, 144, 226, 0.1);
+    color: var(--primary-color);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.search-input::placeholder {
+    color: var(--text-tertiary);
+}
+
+/* 分頁與方向控制 */
+.direction-pagination-wrap {
+    background: white;
+    border-radius: var(--radius-md);
+    padding: 14px 20px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.toggle-direction-btn {
+    padding: 8px 18px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: var(--primary-color);
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-base);
+}
+
+.toggle-direction-btn:disabled {
+    background: #cccccc;
+    color: var(--text-tertiary);
+    cursor: not-allowed;
+}
+
+/* 站點表格 */
+.stop-wrap {
+    background: white;
+    border-radius: 18px;
+    padding: 10px;
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+}
+
+.stop-table-container {
+    background: #ffffff;
+    border-radius: var(--radius-lg, 16px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    border: 1px solid #f0f2f5;
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+.stop-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 15px;
+    color: var(--text-primary, #1f2937);
+}
+
+/* --- 表頭樣式（科技感深色或柔和灰色調） --- */
+.stop-table th {
+    background: #f8fafc;
+    color: var(--text-secondary, #4b5563);
+    font-weight: 600;
+    padding: 16px 20px;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #e2e8f0;
+    text-transform: uppercase;
+}
+
+/* --- 單元格樣式 --- */
+.stop-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+    transition: background-color 0.2s ease;
+}
+
+/* --- 斑馬紋與懸浮高亮 (Hover Effects) --- */
+.stop-table tbody tr:nth-child(even) {
+    background-color: #fafbfc;
+}
+
+.stop-table tbody tr:hover {
+    background-color: #f1f5f9 !important;
+    /* 滑鼠懸停時整行淡藍灰高亮 */
+}
+
+/* 班次序號與線條 */
+.multi-shift-seq-wrap {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    position: relative;
+}
+
+.single-shift-seq-wrap {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 700;
+    background: transparent !important;
+    position: relative;
+    z-index: 2;
+    transition: all 0.2s ease;
+}
+
+.single-shift-seq-wrap.shift-in-range-container {
+    z-index: 1 !important;
+}
+
+.single-shift-seq-wrap.shift-in-range-container::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: var(--shift-start-top, 0) !important;
+    height: var(--shift-line-height, 100%) !important;
+    /* 核心修復：改用 JS 計算的像素高度 */
+    bottom: auto !important;
+    /* 強制移除舊版的 bottom 限制 */
+    width: 3.5px;
+    background: var(--shift-color);
+    transform: translateX(-50%);
+    border-radius: 2px;
+    z-index: -1 !important;
+}
+
+/* 核心修復：將文字容器轉為實體白色遮罩，完美擋住穿過內部的線條 */
+.single-shift-seq-wrap:not(.no-seq):not(.shift-start-stop):not(.shift-end-stop) .shift-seq-text {
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    /* 確保遮罩在線條之上 */
+}
+
+.single-shift-seq-wrap.shift-arrow-bottom::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -12px;
+    /* 伸出圓圈下方，指向後續表格行 */
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid var(--shift-color);
+    /* 顏色動態跟隨班次 */
+    z-index: 10000;
+    animation: arrowBounceBottom 1.5s infinite ease-in-out;
+}
+
+.single-shift-seq-wrap.shift-arrow-top::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: -12px;
+    /* 伸出圓圈上方，指向前續頁面 */
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 8px solid var(--shift-color);
+    z-index: 10000;
+    animation: arrowBounceTop 1.5s infinite ease-in-out;
+}
+
+.single-shift-seq-wrap:not(.no-seq) {
+    border: 2.5px solid var(--shift-color);
+    background: white;
+    color: var(--shift-color);
+    z-index: 1;
+}
+
+.shift-start-stop,
+.shift-end-stop {
+    background: var(--shift-color) !important;
+    color: white !important;
+    border: none !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* 5. 箭頭微動效（提升使用者體驗，可選） */
+@keyframes arrowBounceBottom {
+
+    0%,
+    100% {
+        transform: translate(-50%, 0);
+    }
+
+    50% {
+        transform: translate(-50%, 3px);
+    }
+}
+
+@keyframes arrowBounceTop {
+
+    0%,
+    100% {
+        transform: translate(-50%, 0);
+    }
+
+    50% {
+        transform: translate(-50%, -3px);
+    }
+}
+
+.stop-name-container {
+    line-height: 1.45;
+}
+
+/* --- 站點名稱與副標排版強化 --- */
+.stop-table .stop-main-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1f2937;
+    display: inline-block;
+}
+
+.stop-table .stop-sub-name {
+    font-size: 15px;
+    color: #9ca3af;
+    margin-left: 8px;
+}
+
+.stop-table .stop-english-name {
+    font-size: 15px;
+    color: #6b7280;
+    margin-top: 4px;
+    display: block;
+}
+
+/* --- 站點特殊標籤樣式調整 --- */
+.stop-table .turning-point-tag {
+    background: #fee2e2;
+    color: #ef4444;
+    padding: 3px 10px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.stop-table .temp-close-tag {
+    display: inline-block;
+    background: #ef4444;
+    /* 更加現代化的亮紅色 */
+    color: #ffffff;
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-weight: 600;
+    vertical-align: middle;
+}
+
+/* 以下為你原有的其他樣式（簡略保留重要部分） */
+.stop-row-visible:hover {
+    background: #f9f9f9;
+}
+
+/* --- 完美的語系寬度適配（同步整合你原有的寬度設定） --- */
+.stop-table th:first-child,
+.stop-table td:first-child {
+    width: 180px;
+    /* 基礎班次序列欄寬 */
+}
+
+/* 英文模式下自動調整第一欄（班次圖表欄）寬度 */
+html[lang="en-US"] .stop-table th:first-child,
+html[lang="en-US"] .stop-table td:first-child {
+    width: 220px !important;
+}
+
+/* 最後一欄（通常是站點名稱或備註欄）寬度自適應 */
+.stop-table td:last-child {
+    text-align: left;
+    width: auto;
+}
+
+.header-search-wrap input {
+    width: 100%;
+    padding: 10px 18px 10px 42px;
+    border: 2px solid transparent;
+    border-radius: 24px;
+    font-size: 14px;
+    background: #ffffff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>') no-repeat 16px center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    color: #333;
+}
+
+.header-search-wrap input:focus {
+    border-color: var(--primary-color);
+    background-color: #f8fafc;
+    box-shadow: 0 4px 16px rgba(74, 144, 226, 0.2);
+    outline: none;
+}
+
+.header-search-wrap input::placeholder {
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+/* ==================================================
+   1. 基本路線資訊與標籤 (Route Info & Tags)
+   ================================================== */
+.route-basic-info {
+    background: #ffffff !important;
+    border-radius: 20px !important;
+    padding: 24px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04) !important;
+    border: 1px solid #f1f5f9 !important;
+    margin-bottom: 24px !important;
+    position: relative;
+    /* 確保內部絕對定位按鈕正常運作 */
+}
+
+.route-shift-tags {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    margin-top: 16px !important;
+    margin-bottom: 16px !important;
+}
+
+.shift-tag {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    padding: 6px 16px !important;
+    border-radius: 8px !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    letter-spacing: 0.5px;
+}
+
+/* ==================================================
+   2. 營運時間表按鈕 (Timetable Button - Icon Only)
+   ================================================== */
+.timetable-btn.icon-only-btn {
+    position: absolute !important;
+    top: 24px !important;
+    right: 24px !important;
+    width: 44px !important;
+    height: 44px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: #f1f5f9 !important;
+    color: var(--primary-color, #4a90e2) !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    transition: background-color 0.2s ease !important;
+    cursor: pointer;
+}
+
+.timetable-btn.icon-only-btn:hover {
+    background: #e2e8f0 !important;
+    transform: none !important;
+    /* 移除縮放特效 */
+}
+
+@media (max-width: 480px) {
+    .timetable-btn.icon-only-btn {
+        top: 16px !important;
+        right: 16px !important;
+    }
+}
+
+/* ==================================================
+   3. 收費區塊 (Fares - Flat UI & Flex Grid)
+   ================================================== */
+.route-fare-wrap {
+    margin-top: 16px !important;
+    padding-top: 16px !important;
+    border-top: 1px dashed #e2e8f0 !important;
+}
+
+.fare-main-grid {
+    display: flex !important;
+    gap: 8px !important;
+    width: 100% !important;
+}
+
+.fare-item {
+    flex: 1 !important;
+    /* 自動平均分配大小 */
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 4px !important;
+    padding: 8px 4px !important;
+    text-align: center !important;
+    box-shadow: none !important;
+}
+
+.fare-price {
+    font-size: 16px !important;
+    color: #0f172a !important;
+    font-weight: 700 !important;
+}
+
+.fare-section-item.flat-style {
+    background: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+    border-left: 4px solid #64748b !important;
+    /* 深灰側條 */
+    border-radius: 4px !important;
+    padding: 10px 14px !important;
+    box-shadow: none !important;
+}
+
+.fare-section-unified-header.rebate-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.premium-fare-card.rebate-compact-card {
+    margin-bottom: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: none;
+}
+
+.fare-price-badge.rebate-price-badge {
+    color: #059669 !important;
+    background: #ecfdf5 !important;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.1);
+}
+
+.fare-section-route {
+    font-size: 13px !important;
+    color: #334155 !important;
+    line-height: 1.5 !important;
+}
+
+.fare-section-route .station-name {
+    color: #0f172a !important;
+    font-weight: 700 !important;
+}
+
+.fare-section-route .price-value {
+    color: #b91c1c !important;
+    /* 扁平高對比紅色 */
+    font-weight: 700 !important;
+    font-size: 14px !important;
+}
+
+@media (max-width: 480px) {
+    .fare-main-grid {
+        flex-wrap: wrap !important;
+    }
+
+    .fare-item {
+        min-width: calc(50% - 8px) !important;
+    }
+}
+
+/* ==================================================
+   4. 站點標籤間距修復 (Turning Point & Temp Close)
+   ================================================== */
+.stop-table .turning-point-tag,
+.stop-table .temp-close-tag {
+    display: inline-flex !important;
+    align-items: center;
+    margin-left: 20px !important;
+    padding: 3px 10px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    border-radius: 6px !important;
+    vertical-align: middle !important;
+    white-space: nowrap !important;
+}
+
+.stop-table .turning-point-tag {
+    background-color: #eff6ff !important;
+    color: #2563eb !important;
+    border: 1px solid #bfdbfe !important;
+}
+
+.stop-table .temp-close-tag {
+    background-color: #fef2f2 !important;
+    color: #ef4444 !important;
+    border: 1px solid #fca5a5 !important;
+}
+
+/* ========================================================
+   終極修復：中英文版面標籤與原因「中間點」平衡佈局
+   ======================================================== */
+
+/* 1. 站名容器轉為 CSS Grid：精確分配獨立的格子 */
+#stopContainer .stop-name-container {
+    display: grid !important;
+    grid-template-columns: auto 1fr !important;
+    align-items: center !important;
+    row-gap: 4px !important;
+    column-gap: 8px !important;
+    width: 100% !important;
+}
+
+/* 2. 主站名 (中文或英文)：鎖定在第一行左側 */
+#stopContainer .stop-main-name {
+    grid-column: 1 / 2 !important;
+    grid-row: 1 !important;
+    word-break: break-word !important;
+    line-height: 1.4 !important;
+}
+
+/* 3. 暫停標籤：鎖定在第一行右側，徹底清除舊有 margin 亂源 */
+#stopContainer .stop-table .temp-close-tag {
+    grid-column: 2 / 3 !important;
+    grid-row: 1 !important;
+    margin: 0 !important;
+    /* 核心：清除 margin-left: 20px 的干擾 */
+    justify-self: start !important;
+    /* 確保它靠左邊界對齊，不被異常拉伸 */
+    width: fit-content !important;
+    white-space: nowrap !important;
+    /* 確保標籤內文不斷行 */
+}
+
+/* 4. 英文副站名 (僅中文模式才有)：獨立霸佔第二行 */
+#stopContainer .stop-english-name {
+    grid-column: 1 / 3 !important;
+    grid-row: 2 !important;
+    margin: 0 !important;
+}
+
+/* 5. 暫停原因：永遠穩坐最後一行，背景色不會無意義拉伸 */
+#stopContainer .stop-table .temp-close-reason {
+    grid-column: 1 / 3 !important;
+    grid-row: 3 !important;
+    margin: 0 !important;
+    justify-self: start !important;
+    width: fit-content !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* 重新定位全站點搜尋框 (Station Search Wrapper) */
+.station-search-wrapper {
+    position: absolute !important;
+    top: 50% !important;
+    right: 20px !important;
+    transform: translateY(-50%) !important;
+    margin: 0 !important;
+    width: 260px !important;
+    /* 固定寬度，不干擾標題 */
+    z-index: 1050 !important;
+}
+
+.station-search-wrapper:focus-within {
+    width: 300px !important;
+}
+
+/* 手機版適配：螢幕過小時自動推到下一行 */
+@media (max-width: 768px) {
+    .app-header {
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 60px;
+        /* 留出空間給搜尋框 */
+    }
+
+    .station-search-wrapper {
+        top: auto !important;
+        bottom: 10px !important;
+        right: 50% !important;
+        transform: translateX(50%) !important;
+        width: calc(100% - 40px) !important;
+    }
+
+    .station-search-wrapper:focus-within {
+        width: calc(100% - 40px) !important;
+    }
+}
+
+/* 限制下拉選單的最大寬度，使其不顯得突兀 */
+.station-dropdown {
+    position: absolute !important;
+    /* 👉 核心修復：脫離文檔流 */
+    top: 100% !important;
+    /* 👉 緊貼在輸入框正下方 */
+    left: 0 !important;
+    right: 0 !important;
+    border-radius: 16px;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.12);
+    margin-top: 12px;
+    background: #ffffff;
+    overflow: hidden;
+    z-index: 1060 !important;
+    /* 確保層級最高 */
+}
+
+.station-search-wrapper:focus-within {
+    width: 320px;
+    /* 點擊時優雅拉長展開 */
+}
+
+#stationSearchInput {
+    width: 100%;
+    padding: 12px 16px 12px 42px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1e293b;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 30px;
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    /* 毛玻璃特效 */
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="%2364748b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>');
+    background-repeat: no-repeat;
+    background-position: 14px center;
+}
+
+#stationSearchInput:focus {
+    border-color: var(--primary-color);
+    background-color: #ffffff;
+    box-shadow: 0 10px 30px rgba(74, 144, 226, 0.15);
+    transform: translateY(-1px);
+}
+
+.station-dropdown {
+    border-radius: 16px;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.12);
+    margin-top: 12px;
+    background: #ffffff;
+    overflow: hidden;
+}
+
+.station-item {
+    padding: 12px 16px;
+    transition: all 0.2s ease;
+}
+
+.station-item:hover {
+    background-color: #f8fafc;
+    padding-left: 22px;
+    /* 滑鼠懸停時微微向右推 */
+    border-left: 3px solid var(--primary-color);
+}
+
+
+
+/* ==================================================
+   2. 分段收費卡片 (Fare Section) 視覺清晰化
+   ================================================== */
+.fare-section-unified-item.premium-section-fare {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    margin: 8px 12px 12px 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fare-section-unified-item.premium-section-fare:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+    border-color: #cbd5e1;
+}
+
+.route-nodes-visual {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.node-point {
+    background: #f1f5f9;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e293b;
+    white-space: nowrap;
+}
+
+.node-point.start-node {
+    border-left: 4px solid #3b82f6;
+}
+
+.node-point.end-node {
+    border-left: 4px solid #10b981;
+}
+
+.node-connector {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 30px;
+}
+
+.connector-line {
+    flex: 1;
+    height: 2px;
+    background: repeating-linear-gradient(90deg, #cbd5e1 0, #cbd5e1 4px, transparent 4px, transparent 8px);
+}
+
+.connector-icon {
+    color: #94a3b8;
+    font-size: 14px;
+    margin-left: 4px;
+}
+
+.price-tag-modern {
+    background: #fef2f2;
+    color: #dc2626;
+    padding: 6px 14px;
+    border-radius: 12px;
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+}
+
+.price-tag-modern .currency {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.price-tag-modern .amount {
+    font-size: 18px;
+    font-weight: 800;
+}
+
+
+/* ==================================================
+   3. 點對點途經路線圖 (Route Details Map)
+   ================================================== */
+.horizontal-timeline-wrapper {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid #e2e8f0;
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.horizontal-timeline-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 16px;
+}
+
+.horizontal-timeline-scroll-area {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.horizontal-timeline-shift-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.shift-timeline-label {
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.shift-color-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.horizontal-timeline-list {
+    display: flex;
+    align-items: flex-start;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    padding-top: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+.horizontal-timeline-list::-webkit-scrollbar {
+    height: 6px;
+}
+
+.horizontal-timeline-list::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 3px;
+}
+
+.horizontal-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    min-width: 60px;
+}
+
+.horizontal-node-dot {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+    z-index: 2;
+}
+
+.horizontal-node-text {
+    font-size: 13px;
+    color: #334155;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.horizontal-line {
+    min-width: 30px;
+    flex: 1;
+    height: 2px;
+    background: #e2e8f0;
+    margin-top: 12px;
+    /* 對齊圓點的垂直置中點 */
+    position: relative;
+    z-index: 1;
+}
+
+.route-map-visual::-webkit-scrollbar {
+    height: 6px;
+}
+
+.route-map-visual::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 3px;
+}
+
+.map-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    min-width: 75px;
+    text-align: center;
+}
+
+/* 站點圓點設計 */
+.node-dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 3.5px solid #3b82f6;
+    margin-bottom: 12px;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+.map-node.start .node-dot {
+    border-color: #10b981;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+}
+
+.map-node.end .node-dot {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+}
+
+.map-node.via .node-dot {
+    width: 14px;
+    height: 14px;
+    border-width: 2.5px;
+    border-color: #64748b;
+    box-shadow: none;
+    margin-bottom: 14px;
+    margin-top: 2px;
+}
+
+.map-node .node-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+    white-space: nowrap;
+}
+
+/* 起終點標籤 */
+.map-node .node-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    background: #f1f5f9;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-top: 6px;
+}
+
+/* 連接站點的線條 */
+.map-connector {
+    flex: 1;
+    height: 3px;
+    background: #e2e8f0;
+    margin-top: 8px;
+    /* 對齊圓點 */
+    min-width: 40px;
+    position: relative;
+    z-index: 1;
+}
+
+/* --- 手機端適配 --- */
+@media (max-width: 768px) {
+
+    .fare-section-unified-item.premium-section-fare {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .route-nodes-visual {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .node-connector {
+        display: none;
+        /* 手機直列排版時隱藏橫向箭頭 */
+    }
+
+    .price-tag-modern {
+        align-self: flex-end;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .stop-table .turning-point-tag,
+    .stop-table .temp-close-tag {
+        margin-left: 0 !important;
+        margin-top: 6px !important;
+        display: inline-block !important;
+    }
+}
+
+.route-suggest-item {
+    padding: 14px 20px !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    color: var(--text-main) !important;
+    font-size: 14px !important;
+    transition: all 0.2s ease !important;
+}
+
+/* ==================================================
+   6. 營運時間表面板 — 一目了然表格版 (Timetable Panel)
+   ================================================== */
+.route-info-bar.modern-premium {
+    background: var(--surface-white) !important;
+    border-radius: var(--radius-premium) !important;
+    padding: 24px !important;
+    box-shadow: var(--shadow-premium) !important;
+    position: relative;
+    border: 1px solid #f1f5f9;
+}
+
+.fare-main-grid {
+    display: flex !important;
+    gap: 10px !important;
+    width: 100% !important;
+    margin-bottom: 16px;
+}
+
+.fare-item {
+    flex: 1 !important;
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    padding: 10px 6px !important;
+    text-align: center !important;
+    transition: all 0.2s !important;
+}
+
+.fare-item:hover {
+    background: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+}
+
+.fare-label {
+    font-size: 12px !important;
+    color: var(--text-muted) !important;
+    font-weight: 500 !important;
+    display: block;
+    margin-bottom: 4px;
+}
+
+/* 【全新美感設計】分段收費卡片庫 */
+.fare-section-wrap {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    margin-top: 14px !important;
+}
+
+.fare-section-card-modern {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    background: linear-gradient(90deg, #f8fafc 0%, #ffffff 100%) !important;
+    border: 1px solid #e2e8f0 !important;
+    border-left: 4px solid #2563eb !important;
+    /* 精緻藍色側條 */
+    border-radius: 8px !important;
+    padding: 12px 16px !important;
+}
+
+.fare-section-badge {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    background: #e0f2fe !important;
+    color: #0369a1 !important;
+    padding: 2px 6px !important;
+    border-radius: 4px !important;
+    white-space: nowrap;
+}
+
+
+.rebate-badge-modern {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    background: rgba(16, 185, 129, 0.1);
+    color: #065f46;
+    padding: 2px 6px !important;
+    border-radius: 4px !important;
+    white-space: nowrap;
+}
+
+.fare-section-route-modern {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex: 1 !important;
+    margin-horizontal: 14px !important;
+    padding-left: 12px;
+}
+
+.station-pill {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: #334155 !important;
+}
+
+.route-arrow {
+    color: #94a3b8 !important;
+    font-size: 12px !important;
+}
+
+.fare-section-price-tag {
+    font-size: 16px !important;
+    font-weight: 800 !important;
+    color: #b91c1c !important;
+    /* 高級深紅 */
+    background: #fef2f2;
+    padding: 4px 10px !important;
+    border-radius: 6px !important;
+}
+
+.section-fare-badge-modern {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    background: rgba(37, 99, 235, 0.1);
+    color: #1d4ed8;
+    padding: 4px 8px !important;
+    border-radius: 6px !important;
+    white-space: nowrap;
+}
+
+/* 4. 展開按鈕的懸停效果 */
+#expandShiftsBtn:hover {
+    background: #f1f5f9 !important;
+    border-color: #94a3b8 !important;
+    color: #334155 !important;
+}
+
+@media (max-width: 600px) {
+    .fare-section-card-modern {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+    }
+
+    .fare-section-route-modern {
+        padding-left: 0 !important;
+        margin: 4px 0 !important;
+    }
+
+    .fare-section-price-tag {
+        align-self: flex-end !important;
+    }
+}
+
+.timetable-panel-close {
+    position: absolute !important;
+    background: transparent !important;
+    border: none !important;
+    color: #0f172a !important;
+    font-size: 28px !important;
+    font-weight: 400 !important;
+    top: 16px !important;
+    right: 16px !important;
+    cursor: pointer !important;
+    transition: color 0.1s ease !important;
+}
+
+.timetable-panel-close:hover {
+    color: #ef4444 !important;
+}
+
+/* 響應式 */
+@media (max-width: 768px) {
+    .route-info-bar {
+        padding: 22px 18px;
+    }
+
+    .route-num {
+        font-size: 30px;
+    }
+
+    .single-shift-seq-wrap {
+        width: 34px;
+        height: 34px;
+        font-size: 14px;
+    }
+
+    .search-container {
+        padding: 10px 14px;
+    }
+
+    .stop-table th:first-child,
+    .stop-table td:first-child {
+        width: 78px;
+    }
+}
+
+/* 背景毛玻璃高奢感 */
+.timetable-panel-overlay.modern-blur {
+    background: rgba(15, 23, 42, 0.3) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 2000 !important;
+}
+
+/* 時間表面板本體 */
+.timetable-panel-content.modern-card {
+    background: var(--surface-white) !important;
+    border-radius: 20px !important;
+    padding: 28px !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+    max-width: 520px !important;
+    width: 92% !important;
+    position: relative !important;
+    border: 1px solid rgba(255, 255, 255, 0.8) !important;
+    animation: modernPopup 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes modernPopup {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.timetable-panel-header-modern {
+    margin-bottom: 24px !important;
+    padding-bottom: 16px !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+}
+
+.panel-title-modern {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    color: var(--text-main) !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+}
+
+.panel-title-modern .dest-pill {
+    background: #f1f5f9 !important;
+    color: #334155 !important;
+    padding: 2px 12px !important;
+    border-radius: var(--radius-pill) !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+
+.shift-title-premium {
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    color: var(--text-main) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-bottom: 14px !important;
+}
+
+/* 呼吸小綠點，增添精緻靈動感 */
+.pulse-indicator {
+    width: 7px;
+    height: 7px;
+    background-color: var(--accent-green);
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* 首末班車網格 */
+.timetable-info-modern-grid {
+    display: flex !important;
+    gap: 12px !important;
+    margin-bottom: 14px !important;
+}
+
+.info-modern-box {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 10px 14px !important;
+    border-radius: 10px !important;
+}
+
+.info-modern-box.first {
+    background: #f0fdf4 !important;
+    border: 1px solid #bbf7d0 !important;
+}
+
+.info-modern-box.last {
+    background: #fef2f2 !important;
+    border: 1px solid #fecaca !important;
+}
+
+.box-lbl {
+    font-size: 11px !important;
+    color: var(--text-muted) !important;
+    margin-bottom: 2px !important;
+    font-weight: 500;
+}
+
+.box-time {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    color: var(--text-main) !important;
+}
+
+/* 時間間隔清單線路 */
+.interval-container-modern {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    background: var(--surface-white) !important;
+    padding: 10px !important;
+    border-radius: 10px !important;
+    border: 1px solid #e2e8f0 !important;
+    margin-bottom: 8px !important;
+}
+
+.interval-row-modern {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 8px 8px !important;
+}
+
+.interval-row-modern:not(:last-child) {
+    border-bottom: 1px solid #e7f3ff;
+}
+
+.interval-time-range {
+    font-size: 17px !important;
+    font-weight: 600 !important;
+    color: #475569 !important;
+}
+
+.interval-badge {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: #2563eb !important;
+    background: #eff6ff !important;
+    padding: 4px 10px !important;
+    border-radius: 6px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+/* 現代化關閉按鈕 */
+.timetable-panel-close-modern {
+    position: absolute !important;
+    top: 24px !important;
+    right: 24px !important;
+    background: #f1f5f9 !important;
+    border: none !important;
+    color: #64748b !important;
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+.timetable-panel-close-modern:hover {
+    background: #fef2f2 !important;
+    color: #ef4444 !important;
+}
+
+/* 基礎表格寬度優化調整 */
+.stop-table th:first-child,
+.stop-table td:first-child {
+    width: 180px;
+}
+
+html[lang="en-US"] .stop-table th:first-child,
+html[lang="en-US"] .stop-table td:first-child {
+    width: 220px !important;
+}
+
+.stop-table td:last-child {
+    text-align: left;
+    width: auto;
+}
+
+/* ==========================================
+   高級現代風格：短途下車回贈 UI (fare-rebate-wrap)
+   ========================================== */
+
+.fare-rebate-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 20px;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* 卡片主體：精緻白基底 + 輕微翡翠綠漸層 + 高級左側條 */
+.fare-rebate-card-premium {
+    background: linear-gradient(135deg, #ffffff 0%, #f7fdfa 100%);
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #10b981;
+    /* 現代高級綠側邊線 */
+    border-radius: 16px;
+    padding: 18px 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.015), 0 2px 6px rgba(16, 185, 129, 0.01);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 懸停動態：卡片微微浮起，邊框轉化為清新翠綠 */
+.fare-rebate-card-premium:hover {
+    transform: translateY(-2px);
+    border-color: #a7f3d0;
+    box-shadow: 0 12px 24px -6px rgba(16, 185, 129, 0.08), 0 4px 12px -4px rgba(0, 0, 0, 0.02);
+}
+
+/* 頂部標頭與徽章 */
+.rebate-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.rebate-status-tag {
+    font-size: 11px;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+/* 站點線條流向圖（Timeline Flow） */
+.rebate-route-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    border: 1px solid #f1f5f9;
+}
+
+
+/* 新增 route-node 的排版 */
+.route-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 45%;
+    /* 避免文字過長推擠箭頭 */
+}
+
+/* 中文站名樣式 */
+.route-node .node-name-cn {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e293b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+/* 英文站名樣式 */
+.route-node .node-name-en {
+    font-size: 11px;
+    color: #64748b;
+    margin-top: 2px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+.route-line-arrow {
+    display: flex;
+    align-items: center;
+    color: #94a3b8;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+/* 核心財務算式矩陣 (Math Matrix Grid) */
+.rebate-math-matrix {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    margin-bottom: 16px;
+}
+
+.math-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+    padding: 10px 6px;
+    border-radius: 12px;
+    background: #f8fafc;
+    border: 1px solid #f1f5f9;
+    transition: background 0.2s ease;
+}
+
+.math-box .math-label {
+    font-size: 10.5px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.math-box .math-val {
+    font-size: 15px;
+    font-weight: 700;
+    color: #334155;
+}
+
+.math-operator {
+    font-size: 17px;
+    font-weight: 600;
+    color: red;
+    padding: 0 4px;
+    user-select: none;
+}
+
+/* 特殊高亮盒：回贈（輕翠綠）與實付（深邃星空藍黑） */
+.math-box.item-discount {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+}
+
+.math-box.item-discount .math-val {
+    color: #10b981;
+}
+
+.math-box.item-actual {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border: none;
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.15);
+}
+
+.math-box.item-actual .math-label {
+    color: #94a3b8;
+}
+
+.math-box.item-actual .math-val {
+    color: #ffffff;
+    font-size: 16px;
+}
+
+/* 底部提示文字 */
+.rebate-footer-tip {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    padding-top: 12px;
+    border-top: 1px dashed #e2e8f0;
+}
+
+.tip-icon {
+    font-size: 12px;
+    line-height: 1.4;
+    filter: grayscale(0.2);
+}
+
+.tip-text {
+    font-size: 12px;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+/* 容器與定位 */
+.route-input-container {
+    position: relative;
+    padding-top: 25px;
+    /* 為右上角的站點搜尋留出空間 */
+    margin-bottom: 15px;
+}
+
+.station-search-wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
+    width: 220px;
+}
+
+
+.station-dropdown.hidden {
+    display: none !important;
+}
+
+.station-dropdown-header {
+    padding: 8px 12px;
+    background: #f1f5f9;
+    font-size: 12px;
+    font-weight: bold;
+    color: #475569;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+/* 滾動列表容器 */
+.station-list-container {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 350px;
+}
+
+/* 每個站點結果項 */
+.station-item {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.station-item:hover {
+    background-color: #f8fafc;
+}
+
+.station-item:last-child {
+    border-bottom: none;
+}
+
+/* 站點名字與線路 */
+.station-name-cn {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.station-name-en {
+    font-size: 11px;
+    color: #64748b;
+    margin-top: 1px;
+    word-break: break-all;
+}
+
+.station-routes {
+    margin-top: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+/* --- 環境 C：搜尋建議列表 / 下拉選單 --- */
+.route-suggest-item .route-badge,
+.suggest-item .route-badge,
+.station-routes .route-badge {
+    --route-badge-bg: #e0f2fe;
+    --route-badge-color: #0369a1;
+    --route-badge-radius: 6px;
+    --route-badge-padding: 6px 10px;
+    --route-badge-font-size: 1300px;
+    --route-badge-min-width: 50px;
+}
+
+.panel-title-modern .route-badge {
+    --route-badge-radius: 6px;
+    --route-badge-bg: #2563eb;
+    color: white;
+    padding: 4px 12px;
+    min-width: 55px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 臨時關閉標籤與原因樣式 */
+.temp-close-badge {
+    display: inline-block;
+    background-color: #fee2e2;
+    color: #dc2626;
+    font-size: 11px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    margin-left: 6px;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+.temp-close-reason {
+    font-size: 11px;
+    color: #b91c1c;
+    background-color: #fef2f2;
+    border-left: 2px solid #ef4444;
+    padding: 2px 6px;
+    margin-top: 4px;
+    border-radius: 0 4px 4px 0;
+}
+
+/* 當沒有搜尋結果時 */
+.station-empty-tip {
+    padding: 20px;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.route-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+
+    color: var(--route-badge-color, #ffffff);
+    background: var(--route-badge-bg, var(--primary-color));
+    border-radius: var(--route-badge-radius, 6px);
+    padding: var(--route-badge-padding, 4px 8px);
+    font-size: var(--route-badge-font-size, 14px);
+    min-width: var(--route-badge-min-width, auto);
+    min-height: var(--route-badge-min-height, auto);
+    letter-spacing: var(--route-badge-letter-spacing, normal);
+}
+
+.route-basic-info .route-badge {
+    --route-badge-bg: #4a90e2;
+    --route-badge-radius: 14px;
+    --route-badge-padding: 8px 22px;
+    --route-badge-font-size: 32px;
+    --route-badge-letter-spacing: -0.5px;
+    margin: 0;
+}
+
+.station-routes .route-badge,
+.panel-title-modern .route-badge,
+.suggest-item .route-badge {
+
+    --route-badge-bg: #2563eb;
+    --route-badge-color: white;
+    --route-badge-radius: 6px;
+    --route-badge-padding: 4px 12px;
+    --route-badge-font-size: 20px;
+    --route-badge-min-width: 55px;
+}
+
+.station-item .route-badge {
+    --route-badge-bg: #2563eb;
+    --route-badge-color: white;
+    --route-badge-radius: 5px;
+    --route-badge-font-size: 15px;
+    --route-badge-min-width: 30px;
+    --route-badge-min-height: 10px;
+}
+
+.suggest-item {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 12px 16px !important;
+    gap: 6px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid #edf2f7;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0 !important;
+}
+
+/* 條件4準備：讓所有 route-badge 支援自定義文字顏色變數 (預設白色) */
+.route-badge {
+    color: var(--route-badge-color, #ffffff) !important;
+}
+
+.suggest-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    border-color: #cbd5e1;
+}
+
+.suggest-item:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.suggest-route-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* 路線類型標籤 (如：特快、通宵) */
+.suggest-route-type {
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid #bfdbfe;
+}
+
+/* 班次起訖點文字 */
+.suggest-shift-route {
+    color: #334155;
+    font-weight: 500;
+    flex: 1;
+    word-break: break-word;
+}
+
+/* 空班次/無數據提示 */
+.suggest-shift-empty {
+    color: #94a3b8;
+    font-size: 13px;
+    font-style: italic;
+    padding: 4px 0;
+}
+
+.suggest-item.empty-suggest {
+    border: none !important;
+    background: transparent !important;
+    padding: 10px !important;
+}
+
+/* --- 5. RWD 手機版適配 --- */
+@media (max-width: 768px) {
+    .route-basic-info .route-badge {
+        --route-badge-font-size: 28px;
+        --route-badge-padding: 6px 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .route-basic-info .route-badge {
+        --route-badge-font-size: 24px;
+        --route-badge-padding: 6px 16px;
+    }
+
+    .panel-title-modern .route-badge {
+        --route-badge-font-size: 18px;
+        --route-badge-padding: 3px 10px;
+    }
+}
+
+/* --- 統一收費卡片外觀 (Unified Card) --- */
+.fare-section-unified-card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    margin-bottom: 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fare-section-unified-card:hover {
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* --- 卡片頭部 (Header) --- */
+.fare-section-unified-header {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    padding: 12px 16px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.unified-badge {
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+}
+
+.section-fare-badge-modern {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+.rebate-badge-modern {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.rebate-status-tag {
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 500;
+    background: #ffffff;
+    padding: 3px 8px;
+    border-radius: 12px;
+    border: 1px solid #cbd5e1;
+}
+
+/* --- 收費列表與單項卡片 (List & Item Card) --- */
+.premium-fare-list {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.premium-fare-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    transition: background 0.2s;
+}
+
+.premium-fare-card:hover {
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+}
+
+/* ==================================================
+   重構：左上角班次限定標籤與路線內容佈局
+   ================================================== */
+
+/* 包覆標籤與路線的容器 */
+.fare-route-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    /* 確保內容靠左對齊 */
+    gap: 6px;
+    /* 標籤與下方站名之間的留白 */
+    flex: 1;
+    /* 佔據左側全部空間 */
+}
+
+/* 標籤群組容器 (支援多個標籤自動換行) */
+.fare-badges-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    /* 多個標籤之間的間距 */
+}
+
+.fare-shift-badge.prominent-badge {
+    margin-left: 0 !important;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--badge-color, #4a90e2);
+    /* 文字顏色對應班次主題色 */
+
+    /* 替換原本的厚重底色，使用 css color-mix 調出 15% 透明度淡色系背景 */
+    background: color-mix(in srgb, var(--badge-color, #4a90e2) 15%, transparent);
+
+    padding: 4px 10px;
+    border-radius: 6px;
+    /* 更為現代的輕微圓角 */
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    /* 加入細微且帶顏色的邊框增加立體感 */
+    border: 1px solid color-mix(in srgb, var(--badge-color, #4a90e2) 30%, transparent);
+    letter-spacing: 0.5px;
+    box-shadow: none;
+    /* 移除舊有的厚重陰影 */
+}
+
+.fare-shift-badge.prominent-badge .badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--badge-color, #4a90e2);
+    display: inline-block;
+    box-shadow: 0 1px 2px color-mix(in srgb, var(--badge-color, #4a90e2) 50%, transparent);
+}
+
+
+.fare-route-info {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    flex-wrap: nowrap !important;
+    /* 強制不換行，保持 A -> B */
+    gap: 12px !important;
+    width: 100%;
+    overflow-x: auto;
+    /* 若站名極長，允許區塊內橫向滑動而不破版 */
+    padding-bottom: 4px;
+    /* 避免滾動條擋住文字 */
+}
+
+.fare-node {
+    font-size: 15px;
+    color: #334155;
+    font-weight: 600;
+}
+
+/* --- 回贈樣式特化 (Rebate Specifics) --- */
+.rebate-price-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.strike-price {
+    font-size: 13px;
+    color: #94a3b8;
+    text-decoration: line-through;
+    font-weight: 500;
+}
+
+/* 警示圖標容器 */
+.rebate-remark-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    background: #f59e0b;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 1px;
+}
+
+/* 備註文字內容 */
+.rebate-remark-content {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #92400e;
+    /* 深琥珀色文字，確保易讀性 */
+    font-weight: 500;
+}
+
+/* 輕微的警示呼吸效果 (可選) */
+@keyframes soft-pulse {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.rebate-remark-icon {
+    animation: soft-pulse 2s infinite ease-in-out;
+}
+
+/* 確保 mini-timeline 的起點與終點樣式正確套用，修正字體顏色 */
+.mini-timeline-visual .shift-start-stop,
+.mini-timeline-visual .shift-end-stop {
+    background: var(--shift-color, var(--primary-color)) !important;
+    border: none !important;
+}
+
+.mini-timeline-visual .shift-start-stop .shift-seq-text,
+.mini-timeline-visual .shift-end-stop .shift-seq-text {
+    color: white !important;
+    /* 強制文字轉為白色 */
+}
+
+.fare-route-info::-webkit-scrollbar {
+    display: none !important;
+}
+
+.fare-node {
+    /* 允許文字正常換行，騰出更多高度 */
+    white-space: normal !important;
+    word-break: break-all !important;
+    /* 防止長英文單字不換行 */
+    height: auto !important;
+    /* 高度自適應 */
+    max-height: none !important;
+    /* 取消任何高度限制 */
+    display: inline-block !important;
+    /* 確保區塊能被內容撐開 */
+    overflow: visible !important;
+    text-overflow: clip !important;
+    /* 移除點點點 省略號 */
+    padding: 6px 12px !important;
+}
+
+.fare-price-badge {
+    font-size: 20px;
+    font-weight: 800;
+    color: #10b981;
+    /* 現代清新的翡翠綠 */
+    background: #f0fdf4;
+    padding: 6px 14px;
+    border-radius: 10px;
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+}
+
+.fare-price-badge .currency {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* 防止價格與路線擠壓 */
+.premium-fare-card {
+    flex-wrap: nowrap !important;
+    gap: 15px !important;
+}
+
+.fare-price-badge {
+    flex-shrink: 0 !important;
+    /* 價格也不被壓縮 */
+}
+
+/* ==================================================
+   完美組合：短途回贈車票群組 UI
+   ================================================== */
+
+/* 1. 群組外層容器 (Item Group) 
+   核心概念：將陰影與懸浮動效交給最外層，把上下兩個 div 當作「一張完整的實體卡片」
+*/
+.premium-fare-item-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    background: transparent;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    /* 整體預設陰影 */
+}
+
+/* 整個群組一起浮起，避免上下脫節 */
+.premium-fare-item-group:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* 2. 上半部主卡片 (Top Card) 
+   作為回贈卡片時，底部必須平整，準備與下方的提示框拼接
+*/
+.premium-fare-item-group .premium-fare-card.rebate-compact-card {
+    margin-bottom: 0 !important;
+    /* 徹底消除與下方提示的間距 */
+    border-bottom-left-radius: 0 !important;
+    /* 下方直角化 */
+    border-bottom-right-radius: 0 !important;
+    border-bottom: none !important;
+    /* 移除底線，交由下半部繪製虛線 */
+    box-shadow: none !important;
+    /* 移除獨立陰影，防止干擾外層群組 */
+}
+
+/* 如果是沒有提示框的普通卡片，保持原本的全圓角 */
+.premium-fare-item-group .premium-fare-card:not(.rebate-compact-card) {
+    border-radius: 12px;
+    box-shadow: none;
+}
+
+/* 3. 下半部溫馨提示 (Bottom Remark) 
+   完美接合上方卡片，頂部採用虛線營造「車票撕線」質感
+*/
+.compact-rebate-remark {
+    font-size: 13px !important;
+    color: #92400e !important;
+    /* 溫暖的深赭橘色文字 */
+    background: #fffbeb !important;
+    /* 明亮且柔和的淡黃底色 */
+    padding: 10px 18px 12px 18px !important;
+    margin: 0 !important;
+    /* 完全緊貼上方卡片，不留縫隙 */
+
+    /* 邊框設計：左右下為實線，上方為票券虛線 */
+    border: 1px solid #fde68a !important;
+    border-top: 1.5px dashed #fcd34d !important;
+    /* 車票撕線效果 */
+
+    border-radius: 0 0 12px 12px !important;
+    /* 僅保留下方圓角，與外層群組一致 */
+    display: flex !important;
+    align-items: flex-start !important;
+    /* 圖標與文字頂部對齊 */
+    gap: 8px !important;
+    box-shadow: none !important;
+    /* 移除獨立陰影 */
+}
+
+/* 提示圖標微調 */
+.compact-rebate-remark .tip-icon {
+    font-size: 14px !important;
+    margin-top: 2px !important;
+    /* 微調讓圖標與第一行文字視覺中心對齊 */
+    opacity: 0.9 !important;
+}
+
+.compact-rebate-remark .tip-text {
+    font-weight: 500 !important;
+    line-height: 1.5 !important;
+    letter-spacing: 0.3px !important;
+}
+
+/* 溫馨展開動畫 */
+@keyframes slideDownIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==================================================
+   2. 點對點垂直路線圖 (Mini Timeline) - 完美對齊 tbody 樣式
+   ================================================== */
+.mini-timeline-container {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid #e2e8f0;
+    margin-top: 24px;
+}
+
+.mini-timeline-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 16px;
+}
+
+/* 覆寫部分單元格樣式，使其完美適應迷你時間線 */
+.mini-timeline-visual .single-shift-seq-wrap {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 14px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.mini-timeline-visual .shift-via-stop {
+    background: white !important;
+    border: 2.5px solid var(--primary-color) !important;
+}
+
+.mini-timeline-visual .shift-via-stop .shift-seq-text {
+    color: black !important;
+}
+
+.mini-timeline-item:last-child .mini-timeline-info {
+    padding-bottom: 0;
+}
+
+.mini-timeline-list {
+    display: grid !important;
+    /* 👉 修改：改用 Grid 佈局 */
+    grid-auto-columns: 1fr !important;
+    /* 強制所有節點等寬 */
+    grid-auto-flow: column !important;
+    overflow-x: auto !important;
+    width: 100% !important;
+    padding: 30px 0 25px 0 !important;
+}
+
+.mini-timeline-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 10px !important;
+    position: relative !important;
+    z-index: 1 !important;
+    min-width: 90px !important;
+}
+
+/* 修改 style.css 中的 timeline 相關樣式 */
+.mini-timeline-item {
+    position: relative !important;
+    z-index: 1 !important;
+    /* 建立新的 stacking context */
+}
+
+.mini-timeline-item:not(:last-child)::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 18px !important;
+    /* 確保正好在圓圈中心 (36px / 2) */
+    left: 50% !important;
+    width: 100% !important;
+    height: 5px !important;
+    background: var(--shift-color) !important;
+    z-index: -1 !important;
+    /* 沉底，避免蓋住站點圓圈 */
+}
+
+.mini-timeline-visual {
+    background: #ffffff !important;
+    /* 加上實體白底，完美遮擋穿過中心的線條 */
+    border: 2px solid var(--shift-color, var(--primary-color)) !important;
+    border-radius: 50% !important;
+    z-index: 2 !important;
+}
+
+/* 站點圓圈：設定白底遮擋線條，並加入顏色邊框 */
+.mini-timeline-visual .single-shift-seq-wrap {
+    width: 100% !important;
+    height: 100% !important;
+    background-color: var(--shift-color, var(--primary-color)) !important;
+    border: 2px solid var(--shift-color, var(--primary-color)) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* 文字顏色對應路線顏色 */
+.mini-timeline-visual .shift-seq-text {
+    color: var(--shift-color, var(--primary-color)) !important;
+    /* 👉 文字對應顏色 */
+    font-weight: 700 !important;
+    font-size: 14px !important;
+    background: transparent !important;
+    /* 移除舊有的文字背景遮罩 */
+}
+
+.mini-timeline-visual {
+    width: 36px !important;
+    height: 36px !important;
+    flex-shrink: 0 !important;
+    margin: 0 auto !important;
+}
+
+.mini-timeline-info {
+    padding: 0 !important;
+    text-align: center !important;
+    width: 100% !important;
+}
+
+.mini-timeline-info .stop-main-name {
+    font-size: 14px !important;
+    white-space: pre-wrap !important;
+    /* 允許過長的站名自動換行 */
+    line-height: 1.3 !important;
+}
+
+.mini-timeline-info .stop-sub-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    margin-top: 6px;
+    background: #f1f5f9;
+    padding: 2px 10px;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+/* 統一現代化圓形按鈕樣式 (收費與時間表通用) */
+.route-actions-wrap {
+    position: absolute !important;
+    top: 24px !important;
+    right: 24px !important;
+    display: flex !important;
+    gap: 12px !important;
+    z-index: 50 !important;
+}
+
+/* 確保按鈕圓潤且大小固定 */
+.action-btn-modern {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: #f1f5f9 !important;
+    color: var(--primary-color) !important;
+    border: none !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.action-btn-modern:hover {
+    background: #e2e8f0 !important;
+    transform: translateY(-2px) !important;
+}
+
+/* 收費下拉容器與選單 */
+.fare-dropdown-container {
+    position: relative !important;
+}
+
+.fare-dropdown-content {
+    display: none !important;
+    /* 預設隱藏 */
+    position: absolute !important;
+    top: 55px !important;
+    /* 按鈕正下方彈出 */
+    right: 0 !important;
+    background: #ffffff !important;
+    min-width: 340px !important;
+    max-height: 500px !important;
+    overflow-y: auto !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 16px !important;
+    z-index: 100 !important;
+}
+
+.fare-dropdown-content.show {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* 消除下拉選單內的預設邊距 */
+.fare-dropdown-content .fare-section-wrap {
+    margin-top: 0 !important;
+}
+
+.fare-shift-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 6px;
+    margin-left: 4px;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+}
+
+/* 強制重置短途回贈卡片內的排版，消除所有多餘間距 */
+.rebate-compact-card .fare-route-content {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    gap: 6px !important;
+    /* 標籤與路線之間的微小間距 */
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.rebate-compact-card .fare-badges-container {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+}
+
+.rebate-compact-card .fare-route-info {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* 手機版按鈕位置優化 */
+@media (max-width: 480px) {
+    .route-actions-wrap {
+        top: 16px !important;
+        right: 16px !important;
+    }
+
+    .fare-dropdown-content {
+        position: fixed !important;
+        /* 手機版改為懸浮在畫面中央或底部 */
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        width: 90vw !important;
+        min-width: auto !important;
+    }
+}
+
+/* ==========================================
+   2. 班次資訊區塊 (Shift Info) - 現代化微型卡片設計
+   ========================================== */
+.suggest-shift-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+    background: #f8fafc;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #f1f5f9;
+}
+
+.suggest-shift-name {
+    width: fit-content !important;
+    min-width: 80px !important;
+    max-width: 100%;
+    
+    display: inline-block;
+    text-align: center;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    line-height: 1.2;
+    vertical-align: middle;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    padding: 6px 16px !important;
+    border-radius: 12px !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    letter-spacing: 0.5px;
+}
+
+/* 當語言為 en-US 時隱藏中文站名 */
+html[lang="en-US"] .station-item .station-name-cn {
+    display: none !important;
+}
+
+/* 當語言為 en-US 時，把英文站名升級為主標題樣式 */
+html[lang="en-US"] .station-item .station-name-en {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #1e293b !important;
+    margin-top: 0 !important;
+}
+
+.highlight-flash {
+    background-color: rgba(255, 235, 59, 0.5) !important; /* 明亮的黃色高亮 */
+    transition: background-color 0.5s ease;
+}
+
+.suggest-shift-list .suggest-shift-name {
+    display: inline-block;
+    width: 80px;
+    min-width: 80px;
+    text-align: center;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    line-height: 1.2;
+    margin-right: 12px;
+    vertical-align: middle;
+}
+
+.suggest-shift-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 12px 14px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+/* 路線起訖點文字流向 */
+.suggest-shift-path {
+    flex-wrap: wrap !important;
+    /* 允許內容換行 */
+    line-height: 1.4 !important;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    color: #334155;
+    font-weight: 600;
+    min-width: 0;
+    /* 確保內部文字可以被正常截斷 */
+}
+
+.path-node {
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+}
+
+.route-arrow-icon, .route-loop-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.route-arrow-icon, .route-loop-icon {
+    color: #94a3b8;
+    background: #e2e8f0;
+}
+
+.fare-node.centered-stop-name {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+    padding: 0 !important;
+    flex-shrink: 1;
+    /* 允許適度縮小 */
+}
+
+.fare-node.centered-stop-name .stop-main-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1e293b;
+    line-height: 1.3;
+    white-space: nowrap !important;
+    /* 強制站名不斷行 */
+}
+
+/* 確保箭頭絕對不會被擠壓 */
+.fare-arrow {
+    flex-shrink: 0 !important;
+    color: #94a3b8 !important;
+    font-size: 14px !important;
+    background: #e2e8f0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.fare-node.centered-stop-name .stop-english-name {
+    font-size: 11px;
+    color: #64748b;
+    font-style: italic;
+    margin-top: 3px;
+    line-height: 1.2;
+}
+
+/* 修改卡片預設間距，讓分隔線有足夠空間 */
+.timetable-shift-card-modern {
+    margin-bottom: 20px !important;
+}
+
+.shift-card-separator {
+    height: 2px;
+    background: #000;
+    margin: 12px 0 28px 0;
+    opacity: 0.7;
+}
+
+/* 營運日子區塊內部容器 */
+.shift-day-section {
+    display: flex;
+    flex-direction: column;
+}
+
+/* 時間表 - 營運日子標籤 (Service Days Tag) */
+.service-day-tag {
+    font-size: 12px;
+    font-weight: 700;
+    background: #e0f2fe;
+    color: #0369a1;
+    padding: 4px 12px;
+    border-radius: 6px;
+    border: 1px solid #bae6fd;
+    display: inline-flex;
+    align-items: center;
+    letter-spacing: 0.5px;
+}
+
+/* 假日/週末專屬紅色標籤 */
+.service-day-tag.holiday-tag {
+    background: #fef2f2;
+    color: #b91c1c;
+    border-color: #fecaca;
+}
+
+.input-screen:not(.hidden) {
+    display: flex !important;
+    flex-direction: column;
+    overflow: hidden !important;
+}
+
+.input-screen .app-content.input-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden !important;
+    /* 將滾動限制在內部 */
+    padding-bottom: 20px;
+}
+
+.input-keyboard-suggest-wrap {
+    flex: 1;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row; /* 左面板，右輸入與鍵盤 */
+    align-items: stretch;
+    width: 100%;
+    max-width: 900px; /* 限制最大寬度，避免畫面太寬 */
+    margin: 0 auto;
+    gap: 24px;
+}
+
+/* 新增的組合容器，佔用更大的比例 */
+.input-suggest-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    flex: 1.6; /* 讓這裡的比例比鍵盤大 */
+    gap: 12px;
+    min-height: 0;
+}
+
+/* 確保手機螢幕時恢復 100% 寬度，維持良好體驗 */
+@media (max-width: 768px) {
+    .input-keyboard-suggest-wrap {
+        width: 100%;
+    }
+}
+
+/* 2. 重置鍵盤與輸入框的包裹層：強制 100% 寬度，跟隨父容器 */
+.input-keyboard-wrap {
+    width: 100%;
+    max-width: 100%;
+    flex: none;
+    /* 移除原本的 flex: 1，避免比例拉扯 */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* 左側：路線建議面板 */
+.route-suggest-panel,
+#routeSuggestPanel {
+    flex: 1 !important; /* 比例設為 1 */
+    width: 100% !important;
+    max-width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.08) !important;
+    padding: 0 !important;
+    height: 100% !important;
+    max-height: none !important;
+    min-height: 0 !important;
+}
+
+/* 右側：輸入框 + 鍵盤合併容器 */
+.keyboard-input-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1.2; /* 鍵盤區域比例稍微大一點，確保按鍵舒適 */
+    gap: 16px;
+    min-width: 0;
+}
+
+.keyboard-input-container .input-container {
+    width: 100%;
+}
+
+.keyboard-input-container .custom-keyboard {
+    flex: 1;
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    box-shadow: var(--shadow-md);
+    width: 100%;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* 確保手機版時切換回上下排列 */
+@media (max-width: 768px) {
+    .input-keyboard-suggest-wrap {
+        flex-direction: column;
+        max-width: 100%;
+    }
+}
+
+.suggest-title {
+    padding: 16px 20px 8px 20px;
+    margin: 0;
+    flex-shrink: 0;
+    /* 確保標題不會被壓縮 */
+}
+
+.suggest-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto !important;
+    /* 恢復滾動功能 */
+    max-height: 100% !important;
+    /* 解除原本寫死的 none */
+    padding: 10px 20px 16px 20px !important;
+}
+
+/* 4. 確保輸入框與鍵盤本體也是 100% 滿版 */
+.input-container,
+.custom-keyboard {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* ==========================================
+   新增標籤樣式 (Badges)
+   ========================================== */
+.badge-common {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    border: 1px solid transparent;
+}
+
+.zone-badge { 
+    background: linear-gradient(135deg, #fdf4ff 0%, #f3e8ff 100%);
+    color: #7e22ce; 
+    border: 1px solid #e9d5ff;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    padding: 4px 10px;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+}
+
+.operator-badge { background: #ffedd5; color: #c2410c; }
+.route-code-badge { background: #f1f5f9; color: #475569; border-color: #e2e8f0; font-family: monospace; }
+.type-badge { background: #dcfce7; color: #15803d; border-color: #bbf7d0; }
+
+.level-badge {
+    position: static;
+    bottom: 8px;
+    right: 12px;
+    background: #ffe4e6;
+    color: #e11d48;
+    border-color: #fecdd3;
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+    box-shadow: 0 2px 4px rgba(225, 29, 72, 0.1);
+}
+
+/* ==================================================
+   解鎖條件卡片 (Unlock Levels Panel) 全新UI
+   ================================================== */
+.level-unlock-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.level-unlock-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    transition: all 0.2s ease;
+    gap: 16px;
+}
+
+.level-unlock-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+    transform: translateY(-2px);
+}
+
+.level-unlock-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    flex: 1;
+}
+
+.level-shift-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+
+.level-route-dir {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.4;
+}
+
+.level-route-dir .dir-icon {
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+}
+
+.level-route-dir .dir-stop {
+    word-break: break-all;
+}
+
+.level-unlock-right {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.level-req-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #fff1f2;
+    color: #e11d48;
+    font-size: 15px;
+    font-weight: 800;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid #ffe4e6;
+    box-shadow: 0 4px 10px rgba(225, 29, 72, 0.08);
+}
+
+@media (max-width: 480px) {
+    .level-unlock-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+    }
+    
+    .level-unlock-right {
+        align-self: flex-end;
+    }
+}
+
+.suggest-shift-item {
+    position: relative !important; 
+    padding-bottom: 12px !important;
+}
+
+.route-extra-badges-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    width: 100%;
+    align-items: center; /* Ensures badges are vertically balanced */
+}
+
+/* ==========================================
+   鍵盤與篩選器優化
+   ========================================== */
+.custom-keyboard {
+    padding: 15px 20px !important; /* 稍微縮小內邊距 */
+}
+
+.keyboard-filter-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-height: 220px;
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid #e2e8f0;
+    margin-bottom: 10px;
+    padding: 10px 0; 
+    box-sizing: border-box;
+}
+
+.keyboard-filter-scroll-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    overflow-y: auto;
+    padding: 0 16px; /* Let scrollbar stay flush by putting padding inside panel */
+    box-sizing: border-box;
+}
+
+/* Custom Scrollbar for the Filters Panel */
+.keyboard-filter-scroll-panel::-webkit-scrollbar {
+    width: 6px;
+}
+.keyboard-filter-scroll-panel::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+}
+.keyboard-filter-scroll-panel::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+.keyboard-filter-scroll-panel::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+.filter-group {
+    padding: 5px 0;
+    display: flex;
+    flex-direction: column; /* 改為直式 */
+    align-items: center;    /* 水平置中 */
+    justify-content: center;
+    width: 100%;
+}
+
+.filter-group label {
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.filter-group-title {
+    display: flex;
+    font-size: 13px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding-bottom: 5px;
+}
+
+.filter-chips-wrap {
+    display: grid;
+    /* minmax(85px, 1fr) 確保晶片最少有 85px 寬，不夠放時會自動換到下一行，且每行維持等寬 */
+    grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));
+    gap: 8px;
+    width: 100%;
+    max-width: 380px; /* 限制最大寬度，集中在畫面中央更美觀 */
+}
+
+.filter-chip {
+    padding: 8px 4px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    opacity: 0.5; 
+    border: 2px solid transparent !important;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.filter-chip:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+}
+
+.filter-chip.active {
+    opacity: 1;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15) !important;
+    transform: scale(1.05);
+    border-color: currentColor !important; /* 選中時加深邊框高對比 */
+}
+
+/* 復用資料庫定義的 Badge 顏色作為篩選器底色 */
+.operator-badge[data-operator="CSB"], .filter-chip[data-operator="CSB"] { background: #f97316 !important; color: #fff !important; }
+.operator-badge[data-operator="FT"], .filter-chip[data-operator="FT"] { background: #3b82f6 !important; color: #fff !important; }
+.operator-badge[data-operator="SE"], .filter-chip[data-operator="SE"] { background: #eab308 !important; color: #000000 !important; } 
+.operator-badge[data-operator="HZ"], .filter-chip[data-operator="HZ"] { background: #22c55e !important; color: #fff !important; }
+.operator-badge[data-operator="REBC"], .filter-chip[data-operator="REBC"] { background: #ef4444 !important; color: #fff !important; }
+
+.type-badge, .filter-chip[data-type] {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid #cbd5e1 !important;
+}
+
+.filter-chip[data-type].active {
+    background-color: #1e293b !important;
+    color: #ffffff !important;
+    border-color: #1e293b !important;
+}
+
+/* ==========================================
+   全新翻修：現代化分頁控制器 UI (Modern Pagination)
+   ========================================== */
+.pagination-control.modern-pagination {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f8fafc;        /* 輕柔的淡藍灰底色 */
+    padding: 6px 8px;           /* 膠囊內的微小留白 */
+    border-radius: 30px;        /* 膠囊外觀 */
+    border: 1px solid #e2e8f0;  /* 增加質感邊框 */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.modern-pagination-info {
+    font-size: 14px;
+    font-weight: 600;
+    color: #475569;
+    min-width: 80px;            /* 確保字數變化時不抖動 */
+    text-align: center;
+    letter-spacing: 0.5px;
+    user-select: none;          /* 避免誤觸選取文字 */
+}
+
+/* 確保分頁內圓形按鈕稍微縮小，看起來更精緻 */
+.pagination-control.modern-pagination .action-btn-modern {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05) !important;
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+}
+
+.pagination-control.modern-pagination .action-btn-modern:hover:not(:disabled) {
+    background: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: white !important;
+    transform: translateY(0) !important; /* 避免在膠囊內浮動破版 */
+}
+
+.action-btn-modern.btn-danger-modern {
+    background: #ef4444 !important;
+    color: #ffffff !important;
+}
+
+.action-btn-modern.btn-danger-modern:hover:not(:disabled) {
+    background: #dc2626 !important;
+    transform: translateY(-2px) !important;
+}
+
+.pagination-wrapper-modern {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.fare-modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 8px 0;
+}
+
+/* --- 1. 基礎收費與 Override 群組 --- */
+.modern-fare-group {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+}
+
+.modern-fare-header {
+    background: #f8fafc;
+    padding: 12px 16px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.modern-fare-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #334155;
+    letter-spacing: 0.5px;
+}
+
+.modern-fare-grid {
+    display: flex;
+    width: 100%;
+}
+
+.modern-fare-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 10px;
+    border-right: 1px solid #f1f5f9;
+}
+
+.modern-fare-item:last-child {
+    border-right: none;
+}
+
+.modern-fare-item .fare-lbl {
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.modern-fare-item .fare-val {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.modern-fare-item .currency {
+    font-size: 13px;
+    font-weight: 600;
+    margin-right: 2px;
+    color: #475569;
+}
+
+/* --- 2. 分段收費與回贈區塊容器 --- */
+.modern-section-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.modern-section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1e293b;
+    padding-left: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.modern-section-container.rebate-theme .modern-section-title {
+    color: #059669;
+}
+
+.action-tag {
+    font-size: 11px;
+    background: #ecfdf5;
+    color: #059669;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    border: 1px solid #a7f3d0;
+}
+
+.modern-route-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #3b82f6; /* 分段收費預設藍色邊條 */
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.modern-route-card.rebate-card {
+    border-left-color: #10b981;
+    background: linear-gradient(to right, #ffffff, #fcfdfd 100%);
+}
+
+.route-flow-modern {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+.route-nodes-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #f8fafc;
+    padding: 14px 18px;
+    border-radius: 12px;
+    border: 1px solid #f1f5f9;
+}
+
+.modern-route-card.rebate-card .route-nodes-wrap {
+    background: #ffffff;
+    border-color: #d1fae5;
+}
+
+.flow-arrow-modern {
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    background: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.flow-arrow-modern.success {
+    color: #10b981;
+    background: #ecfdf5;
+}
+
+.multi-price-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr; /* 成人欄位稍微寬一點 */
+    gap: 8px;
+    width: 100%;
+}
+
+.price-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 8px;
+    border-radius: 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    text-align: center;
+}
+
+.price-cell.adult-price {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+}
+
+.rebate-grid .price-cell.adult-price {
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+}
+
+.price-cell .p-label {
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 600;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+}
+
+.price-cell .p-value {
+    font-size: 17px;
+    font-weight: 800;
+    color: #1e293b;
+}
+
+.price-cell.adult-price .p-value {
+    font-size: 20px;
+    color: #1d4ed8;
+}
+
+.rebate-grid .price-cell.adult-price .p-value {
+    color: #047857;
+}
+
+.price-cell .p-value.success {
+    color: #059669;
+}
+
+.price-cell .cur {
+    font-size: 13px;
+    margin-right: 2px;
+    font-weight: 600;
+}
+
+.p-value-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.p-strike {
+    font-size: 12px;
+    color: #94a3b8;
+    text-decoration: line-through;
+    font-weight: 600;
+}
+
+/* --- 手機版自適應 RWD --- */
+@media (max-width: 640px) {
+    .multi-price-grid {
+        grid-template-columns: repeat(2, 1fr); /* 螢幕小時轉為 2x2 網格 */
+    }
+    
+    .price-cell.adult-price {
+        grid-column: span 2; /* 成人價格橫跨第一排兩格 */
+    }
+    
+    .route-nodes-wrap {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .flow-arrow-modern {
+        transform: rotate(90deg); /* 箭頭往下指 */
+        margin: 4px 0 4px 12px;
+        box-shadow: none;
+        background: transparent;
+        width: 20px;
+        height: 20px;
+    }
+}
+
+.modern-shift-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.modern-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.route-flow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* 站名排版 */
+.route-node-clean {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0; 
+}
+
+.node-main {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1e293b;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.4;
+}
+
+.node-sub {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 4px;
+}
+
+/* 高質感 SVG 箭頭容器 */
+.flow-arrow {
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    background: #f1f5f9;
+    border-radius: 50%;
+}
+
+/* 價格標籤 */
+.price-plate {
+    background: #fef2f2;
+    color: #dc2626;
+    font-size: 18px;
+    font-weight: 800;
+    padding: 8px 14px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: baseline;
+    border: 1px solid #fee2e2;
+}
+
+.price-plate .currency {
+    font-size: 14px;
+    font-weight: 600;
+    margin-right: 2px;
+}
+
+/* 回贈專屬綠色價格 */
+.price-plate.success {
+    background: #ecfdf5;
+    color: #059669;
+    border-color: #d1fae5;
+}
+
+.rebate-price-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.original-price {
+    font-size: 12px;
+    color: #94a3b8;
+    text-decoration: line-through;
+    font-weight: 600;
+    margin-right: 4px;
+}
+
+/* 回贈備註 (取代原本的燈泡 Emoji) */
+.modern-remark {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed #e2e8f0;
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+.remark-icon {
+    color: #94a3b8;
+    margin-top: 1px;
+    flex-shrink: 0;
+}
+
+.empty-data-text {
+    color: #94a3b8;
+    font-size: 14px;
+    text-align: center;
+    padding: 30px;
+    background: #f8fafc;
+    border-radius: 12px;
+}
+
+/* ============================
+   功能选择页面 (funcScreen) - 現代化重構
+   ============================ */
+.func-content {
+    padding: 30px 20px 40px 20px;
+    max-width: 800px; /* 放寬最大寬度以適應 Grid 雙排 */
+    margin: 0 auto;
+}
+
+/* --- 新增：歡迎標題區塊 --- */
+.func-welcome-header {
+    text-align: center;
+    margin-bottom: 36px;
+    animation: slideDownIn 0.5s ease-out;
+}
+
+.welcome-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+
+.welcome-subtitle {
+    font-size: 14px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+/* --- 卡片容器：改用 Grid 排版 --- */
+.func-card-container {
+    display: grid;
+    /* 在大螢幕上並排，小螢幕自動變單排 */
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+    width: 100%;
+}
+
+/* --- 現代化質感卡片 --- */
+.func-card {
+    display: flex;
+    align-items: center;
+    padding: 24px;
+    cursor: pointer;
+    border-radius: 20px; /* 更圓潤的設計 */
+    background: linear-gradient(145deg, #ffffff, #f8fafc);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 卡片左側的主題色高亮條 */
+.func-card::before {
+    content: '';
+    position: absolute;
+    top: 0; 
+    left: 0; 
+    width: 4px; 
+    height: 100%;
+    background: var(--primary-color);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+    transform-origin: bottom;
+}
+
+/* 卡片懸停動效 */
+.func-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(74, 144, 226, 0.1);
+    border-color: #cbd5e1;
+    background: #ffffff;
+}
+
+.func-card:hover::before {
+    transform: scaleY(1);
+}
+
+/* --- 圖示區塊升級 --- */
+.func-card-icon {
+    font-size: 28px;
+    margin-right: 20px;
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(74, 144, 226, 0.15) 0%, rgba(74, 144, 226, 0.05) 100%);
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: inset 0 0 0 1px rgba(74, 144, 226, 0.1);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 圖示懸停時微微旋轉與色彩反轉 */
+.func-card:hover .func-card-icon {
+    transform: scale(1.1) rotate(-5deg);
+    background: linear-gradient(135deg, var(--primary-color) 0%, #3a7bc9 100%);
+    color: #ffffff;
+    box-shadow: 0 8px 16px rgba(74, 144, 226, 0.2);
+}
+
+/* --- 文字排版 --- */
+.func-card-content {
+    flex: 1;
+}
+
+.func-card-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
+}
+
+html[lang="en-US"] .func-card-title {
+    font-size: 17px;
+}
+
+.func-card-desc {
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+html[lang="en-US"] .func-card-desc {
+    font-size: 13px;
+}
+
+/* --- 箭頭動畫與按鈕化 --- */
+.func-card-arrow {
+    color: #cbd5e1;
+    transition: all 0.3s ease;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+    border-radius: 50%;
+    margin-left: 12px;
+}
+
+.func-card:hover .func-card-arrow {
+    color: #ffffff;
+    background: var(--primary-color);
+    transform: translateX(4px); /* 懸停時箭頭輕微向右推 */
+}
+
+/* ==================================================
+   現代化網站風格 - 首頁 (Modern Func Screen)
+   ================================================== */
+.func-screen.modern-func-screen {
+    background: #f8fafc; /* 乾淨清爽的淺灰藍色系底色 */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.modern-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 48px;
+    background: transparent;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #0f172a;
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: -0.5px;
+}
+
+.brand-logo {
+    color: #2563eb;
+}
+
+.modern-icon-btn {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.modern-icon-btn:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+    transform: rotate(30deg) scale(1.05);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+}
+
+.modern-func-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 24px 80px 24px;
+    max-width: 1000px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.hero-section {
+    text-align: center;
+    margin-bottom: 60px;
+    animation: slideDownIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-badge {
+    display: inline-block;
+    background: #e0f2fe;
+    color: #0369a1;
+    font-size: 13px;
+    font-weight: 800;
+    padding: 8px 18px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.hero-title {
+    font-size: 54px;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -1.5px;
+    margin-bottom: 16px;
+    line-height: 1.2;
+}
+
+html[lang="en-US"] .hero-title {
+    font-size: 46px;
+}
+
+.hero-subtitle {
+    font-size: 20px;
+    color: #64748b;
+    font-weight: 500;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* 現代化卡片網格 */
+.modern-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 32px;
+    width: 100%;
+    animation: slideUpContent 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modern-card {
+    background: #ffffff;
+    border-radius: 28px;
+    padding: 36px;
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    cursor: pointer;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 12px 40px -12px rgba(0,0,0,0.06);
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.modern-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 28px;
+    padding: 2px;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.4), transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.modern-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 24px 48px -12px rgba(37, 99, 235, 0.12);
+}
+
+.modern-card:hover::after {
+    opacity: 1;
+}
+
+.card-icon-wrapper {
+    width: 72px;
+    height: 72px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.blue-gradient {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    color: #2563eb;
+}
+
+.purple-gradient {
+    background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+    color: #9333ea;
+}
+
+.card-text {
+    flex: 1;
+}
+
+.card-text h3 {
+    font-size: 22px;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+}
+
+.card-text p {
+    font-size: 15px;
+    color: #64748b;
+    line-height: 1.6;
+}
+
+.card-arrow {
+    color: #cbd5e1;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    align-self: center;
+}
+
+.modern-card:hover .card-arrow {
+    color: #2563eb;
+    transform: translateX(8px);
+}
+
+/* ==================================================
+   現代化設定 Modal (Settings UI)
+   ================================================== */
+.modern-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.modern-modal-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.close-icon-btn {
+    background: #f1f5f9;
+    border: none;
+    color: #64748b;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.close-icon-btn:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+    transform: scale(1.05);
+}
+
+.setting-group {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.setting-label {
+    font-size: 16px;
+    font-weight: 700;
+    color: #334155;
+    display: flex;
+    align-items: center;
+}
+
+.lang-toggle-container {
+    display: flex;
+    background: #f1f5f9;
+    padding: 6px;
+    border-radius: 18px;
+    gap: 6px;
+}
+
+.lang-toggle {
+    flex: 1;
+    padding: 14px 0;
+    border: none;
+    background: transparent;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.lang-toggle.active {
+    background: #ffffff;
+    color: #2563eb;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+
+/* ==================================================
+   現代化社群與外部連結按鈕區域 (Social Links)
+   ================================================== */
+.social-links-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 12px; /* 縮小間距，視覺更緊湊 */
+    margin-top: 40px;
+    width: 100%;
+    animation: slideUpContent 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 現代化極簡按鈕設計 */
+.social-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px; /* 縮小內邊距，更精緻 */
+    background: rgba(255, 255, 255, 0.6); /* 輕微毛玻璃底色 */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(226, 232, 240, 0.6);
+    border-radius: 50px;
+    color: #475569;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+}
+
+.social-btn svg {
+    width: 18px; /* 圖示微調，更具現代感 */
+    height: 18px;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 懸停動效：浮起、去邊框、純白底色凸顯內容 */
+.social-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    background: #ffffff;
+    border-color: transparent;
+}
+
+.social-btn:hover svg {
+    transform: scale(1.15);
+}
+
+/* 個別品牌的專屬懸停文字與圖示色彩 */
+.social-btn.youtube-btn:hover { color: #ff0000; }
+.social-btn.discord-btn:hover { color: #5865F2; }
+.social-btn.wiki-btn:hover { color: #10b981; }
+.social-btn.roblox-btn:hover { color: #315cfd; }
+.social-btn.facebook-btn:hover { color: #1877F2; }
+.social-btn.website-btn:hover { color: #0f172a; }
+
+/* 修改 suggest-badges-footer 以支援自動折行 */
+/* 基礎頁腳 Flex 佈局 */
+.suggest-badges-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    margin-top: 4px;
+}
+
+/* 標籤群組 */
+.operator-group, 
+.type-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+/* 預設狀態：Level 標籤推至最右側 */
+.suggest-badges-footer .level-group {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
+/* 【核心邏輯】當總合不超過 3 個時，激活分行樣式 */
+.suggest-badges-footer.split-rows {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+.suggest-badges-footer.split-rows .operator-group,
+.suggest-badges-footer.split-rows .type-group {
+    width: 100%; /* 撐滿一行，迫使下一個群組掉到下一行 */
+}
+
+/* 分行狀態下的 Level 標籤單獨靠右下角對齊 */
+.suggest-badges-footer.split-rows .level-group {
+    margin-left: 0;
+    width: 100%;
+    justify-content: flex-end;
+}
+
+.suggest-badges-left {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1 1 65%; /* 讓左側有足夠的彈性空間，當內容過多會擠壓右側使其換行 */
+    min-width: 200px; /* 確保左側不會被無限壓縮 */
+}
+
+.suggest-badges-left .badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.suggest-badges-right {
+    display: flex;
+    align-items: flex-end;
+    flex: 0 0 auto; /* 保持自身寬度，不跟左側搶空間 */
+    margin-left: auto; /* 確保換行後，Level Badge 依然能靠右對齊 */
+    margin-top: auto; /* 確保換行後，Level Badge 貼齊底部 */
+}
+
+.suggest-badges-left,
+.suggest-badges-right {
+    display: contents; /* 讓內部元素直接參與父級的 Flex 排版 */
+}
+
+/* RWD 手機版適配：自動換行排列，不再強制拉伸變大 */
+@media (max-width: 480px) {
+    .social-links-container {
+        gap: 10px;
+        margin-top: 32px;
+    }
+    
+    .social-btn {
+        padding: 8px 16px;
+        font-size: 13px;
+        flex: none; /* 移除舊有的寬度均分，保持按鈕小巧原貌 */
+    }
+}
+
+/* RWD 適配 */
+@media (max-width: 768px) {
+    .modern-navbar { padding: 20px 24px; }
+    .hero-title { font-size: 38px; }
+    .hero-subtitle { font-size: 16px; padding: 0 16px; }
+    .modern-func-content { padding: 0 20px 60px 20px; }
+    .modern-card { padding: 28px; flex-direction: column; gap: 16px; }
+    .modern-card-grid { grid-template-columns: 1fr; }
+    .card-icon-wrapper { width: 56px; height: 56px; }
+    .card-arrow { position: absolute; bottom: 28px; right: 28px; }
+}
+
+/* 歡迎標題動畫 */
+@keyframes slideDownIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- 手機版自適應 --- */
+@media (max-width: 480px) {
+    .modern-fare-grid {
+        flex-wrap: wrap;
+    }
+    .modern-fare-item {
+        min-width: 50%;
+        border-bottom: 1px solid #f1f5f9;
+    }
+    .modern-fare-item:nth-child(even) {
+        border-right: none;
+    }
+    
+    /* 路線流向垂直化排版 */
+    .route-flow {
+        flex-direction: column;
+        align-items: flex-start;
+        position: relative;
+        gap: 8px;
+    }
+    .flow-arrow {
+        transform: rotate(90deg);
+        background: transparent;
+        width: 20px;
+        height: 20px;
+        margin-left: -4px;
+    }
+    .price-plate, .rebate-price-block {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    }
+}
+
+/* --- 手機端適配 --- */
+@media (max-width: 768px) {
+    .premium-fare-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .fare-price-badge {
+        align-self: flex-end;
+    }
+}
+
+/* 微弱脈衝動畫 */
+@keyframes pulseIcon {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.15);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* --- 移動端 / 響應式小螢幕適配 --- */
+@media (max-width: 768px) {
+
+    .stop-table th:first-child,
+    .stop-table td:first-child {
+        width: 140px !important;
+        /* 在手機端適度縮小班次欄，把空間留給站點名稱 */
+    }
+
+    .stop-table th,
+    .stop-table td {
+        padding: 12px 14px;
+        /* 縮小手機端表格內邊距 */
+        font-size: 14px;
+    }
+
+    .stop-table .stop-main-name {
+        font-size: 15px;
+    }
+
+    .temp-close-reason {
+        display: block;
+        margin-left: 0;
+        margin-top: 6px;
+        width: max-content;
+        max-width: 100%;
+    }
+
+    .fare-main-grid {
+        justify-content: center;
+    }
+
+    .fare-item {
+        flex: 1;
+        min-width: calc(50% - 12px);
+    }
+
+    .fare-section-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 6px;
+    }
+
+}
+
+@media (max-width: 480px) {
+    .route-num {
+        font-size: 26px;
+    }
+}
