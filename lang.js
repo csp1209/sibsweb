@@ -93,7 +93,7 @@ var LANG_PACK = {
         typeCityStepped: 'CityStepped',
         stationSearcher: '站點搜尋器',
         stationSearcherHeader: '所有站點列表',
-        version: 'Website System v0.4.1',
+        version: 'Website System v0.3.1',
         brand: '陽光群島'
     },
     'en-US': {
@@ -192,7 +192,7 @@ var LANG_PACK = {
         typeCityStepped: 'CityStepped',
         stationSearcher: 'Station Searcher',
         stationSearcherHeader: 'All Stations List',
-        version: 'Website System v0.4.1',
+        version: 'Website System v0.3.1',
         brand: 'Sunshine Islands'
     }
 };
