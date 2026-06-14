@@ -4,6 +4,8 @@ var routeData = {
             "route": "21",
             "textColor": "#fff",
             "enabled": true,
+            "random": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/勞博頓快巴21線",
             "zones": ["Zone 1"],
             "operators": ["REBC"],
             "typeTags": ["Circular"],
@@ -116,6 +118,8 @@ var routeData = {
             "route": "25",
             "textColor": "#fff",
             "enabled": true,
+            "random": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/永巴25線",
             "zones": ["Zone 1"],
             "operators": ["FT"],
             "typeTags": ["CentralAxis"],
@@ -124,11 +128,11 @@ var routeData = {
                     "bound": "A,B",
                     "A": {
                         "viaCn": "虹尾角、賴得、艾迪、醫院島",
-                        "viaEn": "Southern, Central, Northern Interchange, Norton"
+                        "viaEn": "Iris Point, Wright, Addi, Hospital Island"
                     },
                     "B": {
                         "viaCn": "醫院島、艾迪、賴得、虹尾角",
-                        "viaEn": "Norton, Northern Interchange, Central, Southern"
+                        "viaEn": "Hospital Island, Addi, Wright, Iris Point"
                     }
                 }
             },
@@ -269,6 +273,8 @@ var routeData = {
             "route": "41A",
             "textColor": "#fff",
             "enabled": true,
+            "random": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/永巴縱橫通41A線",
             "zones": ["Zone 4"],
             "operators": ["SE"],
             "typeTags": ["CentralAxis"],
@@ -407,6 +413,8 @@ var routeData = {
             "route": "42",
             "textColor": "#fff",
             "enabled": true,
+            "random": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/永巴縱橫通42線",
             "zones": ["Zone 4"],
             "operators": ["SE"],
             "typeTags": ["CentralAxis"],
@@ -553,6 +561,8 @@ var routeData = {
             "route": "42A",
             "textColor": "#fff",
             "enabled": true,
+            "random": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/永巴縱橫通42A線",
             "zones": ["Zone 4"],
             "operators": ["SE"],
             "bound": "A,B",
@@ -701,6 +711,8 @@ var routeData = {
             "route": "46",
             "textColor": "#fff",
             "enabled": true,
+            "random": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/永巴縱橫通46線",
             "zones": ["Zone 4"],
             "operators": ["SE"],
             "bound": "A,B",
@@ -828,6 +840,8 @@ var routeData = {
             "route": "47",
             "textColor": "#fff",
             "enabled": true,
+            "random": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/永巴縱橫通47線",
             "zones": ["Zone 4"],
             "operators": ["SE"],
             "bound": "A,B",
@@ -931,7 +945,7 @@ var routeData = {
                     { "seq": 6, "nameCn": "中環醫院", "nameEn": "Central Hopsital", "visible": true, "stopFor": ["normal"] },
                     { "seq": 7, "nameCn": "陽光站", "nameEn": "Sunshine Station", "visible": true, "stopFor": ["normal"] },
                     { "seq": 8, "nameCn": "中環南路", "nameEn": "Southern Central Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 9, "nameCn": "東錦葵邨 - 陽葵屋", "nameEn": "Eastmallow Estate - Sunny House", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 9, "nameCn": "東錦葵邨陽葵屋", "nameEn": "Sunny House Eastmallow Estate", "visible": true, "stopFor": ["normal"] },
                     { "seq": 10, "nameCn": "東錦葵大街", "nameEn": "Eastmallow Main Street", "visible": true, "stopFor": ["normal"] },
                     { "seq": 11, "nameCn": "陽光大學", "nameEn": "Sunshine University", "visible": true, "stopFor": ["normal"] },
                     { "seq": 12, "nameCn": "望環台", "nameEn": "Panorama Heights", "visible": true, "stopFor": ["normal"] },
@@ -968,6 +982,8 @@ var routeData = {
             "route": "49A",
             "textColor": "#fff",
             "enabled": true,
+            "random": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/永巴縱橫通49A線",
             "zones": ["Zone 4"],
             "operators": ["SE"],
             "bound": "A,B",
@@ -1119,6 +1135,8 @@ var routeData = {
             "route": "73",
             "textColor": "#fff",
             "enabled": true,
+            "random": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/天際陽光際巴673線",
             "zones": ["Zone 7", "Zone 8"],
             "operators": ["HZ", "CSB"],
             "typeTags": ["Circular"],
@@ -1215,6 +1233,8 @@ var routeData = {
             "route": "74A",
             "textColor": "#fff",
             "enabled": true,
+            "random": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/際巴74A線",
             "zones": ["Zone 7", "Zone 8"],
             "operators": ["CSB"],
             "typeTags": ["CentralAxis"],
@@ -1399,6 +1419,8 @@ var routeData = {
             "route": "75",
             "textColor": "#fff",
             "enabled": true,
+            "random": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/際巴75線",
             "zones": ["Zone 7", "Zone 8"],
             "operators": ["CSB"],
             "bound": "A,B",
@@ -1575,6 +1597,8 @@ var routeData = {
             "route": "75P",
             "textColor": "#fff",
             "enabled": true,
+            "random": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/際巴75P線",
             "zones": ["Zone 7", "Zone 8"],
             "operators": ["CSB"],
             "bound": "A",
@@ -1645,6 +1669,8 @@ var routeData = {
             "route": "76",
             "textColor": "#fff",
             "enabled": true,
+            "random": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/際巴76線",
             "zones": ["Zone 7"],
             "operators": ["CSB"],
             "typeTags": [{ "type": "Special Departure", "bound": "B", "shift": "special1" }],
@@ -1841,7 +1867,7 @@ var routeData = {
                 "B": [
                     { "seq": 1, "nameCn": "仙貝廣場", "nameEn": "Senpai Shopping Center", "visible": true, "stopFor": ["normal", "special1"] },
                     { "seq": 2, "nameCn": "仙貝圖書館", "nameEn": "Senpai Library", "visible": true, "stopFor": ["normal", "special1"] },
-                    { "seq": 3, "nameCn": "上灣街市", "nameEn": "Sheung Bay Market", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 3, "nameCn": "上灣街市", "nameEn": "Sheung Bay Market", "visible": true, "nameSubCn": "仙貝紀念碑花園", "nameSubEn": "The Stone of Memory Garden", "stopFor": ["normal", "special1"] },
                     { "seq": 4, "nameCn": "仙貝市政大廈", "nameEn": "Senpai Municipal Services Building", "nameSubCn": "仙貝站", "nameSubEn": "Senpai Station", "visible": true, "stopFor": ["normal", "special1"] },
                     { "seq": 5, "nameCn": "仙貝", "nameEn": "Senpai", "visible": true, "stopFor": ["normal", "special1"] },
                     { "seq": 6, "nameCn": "仙貝道", "nameEn": "Senpai Road", "visible": true, "stopFor": ["normal", "special1"] },
@@ -1862,304 +1888,110 @@ var routeData = {
             }
         },
         {
-            "route": "T999",
-            "textColor": "#ffd900",
+            "route": "77",
+            "textColor": "#fff",
             "enabled": true,
-            "zones": ["Zone 1", "Zone 2", "Zone 3", "Zone 4", "Zone 5", "Zone 6", "Zone 7", "Zone 8", "Zone 9", "Zone 10"],
-            "operators": ["CSB", "FT", "SE", "HZ", "REBC"],
-            "typeTags": ["Overnight", { "type": "Sightseeing", "bound": "A" }, { "type": "Event", "shift": "special1" }, "Festival", "Crew Shuttle", "University", "Express", { "type": "Limited-stop", "bound": "B", "shift": "normal" }, "Circular", "Special Departure", "Stadium", "CentralAxis", "CityStepped"],
+            "random": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/際巴77線",
+            "zones": ["Zone 7"],
+            "operators": ["CSB"],
             "bound": "A,B",
             "viaDirections": {
                 "normal": {
                     "bound": "A,B",
-                    "A": { "viaCn": "1、2、3", "viaEn": "One, Two, Three" },
-                    "B": { "viaCn": "西區海底隧道轉車站", "viaEn": "Western Harbour Tunnel Interchange" }
-                },
-                "special1": {
-                    "bound": "A",
-                    "A": { "viaCn": "4、5、6", "viaEn": "Four, Five, Six" }
+                    "A": {
+                        "viaCn": "葉角大學、亞歷山、樂莫坳",
+                        "viaEn": "Leafy University, Alexander, Normal Gap"
+                    },
+                    "B": {
+                        "viaCn": "樂莫坳、亞歷山、葉角大學",
+                        "viaEn": "Normal Gap, Alexander, Leafy University"
+                    }
                 }
             },
             "fares": {
-                "adult": 4.0,
-                "child": 2.0,
-                "overrides": [
-                    {
-                        "bound": "A",
-                        "shift": "normal",
-                        "adult": 5.0,
-                        "child": 2.5,
-                        "elder": 2.5,
-                        "student": 2.5
-                    },
-                    {
-                        "bound": "A",
-                        "shift": "special1",
-                        "adult": 6.5,
-                        "child": 3.5,
-                        "elder": 3.5,
-                        "student": 3.5
-                    },
-                    {
-                        "bound": "B",
-                        "shift": "special1",
-                        "adult": 8.0,
-                        "child": 4.0,
-                        "elder": 4.0,
-                        "student": 4.0
-                    }
-                ],
-                "sectionFares": [
-                    {
-                        "direction": "A",
-                        "shift": ["special1"],
-                        "fromCn": "fromCn", "fromEn": "fromEn",
-                        "toCn": "toCn", "toEn": "toEn",
-                        "price": 12.0,
-                        "childPrice": 7.3,
-                        "elderPrice": 7.3,
-                        "studentPrice": 7.3
-                    },
-                    {
-                        "direction": "B",
-                        "shift": ["special1"],
-                        "fromCn": "fromCn", "fromEn": "fromEn",
-                        "toCn": "toCn", "toEn": "toEn",
-                        "price": 2.0
-                    }
-                ],
-                "shortDistanceRebates": [
-                    {
-                        "direction": "A",
-                        "shift": ["special1"],
-                        "startStopCn": "startStopCn", "startStopEn": "startStopEn",
-                        "alightStopCn": "alightStopCn", "alightStopEn": "alightStopEn",
-                        "rebate": 1.5,
-                        "actualFare": 2.5,
-                        "childFare": 1.4,
-                        "elderFare": 1.0,
-                        "studentFare": 2.0,
-                        "fullFare": 100.0,
-                        "childFullFare": 50.0,
-                        "elderFullFare": 40.0,
-                        "studentFullFare": 30.0,
-                        "remarkCn": "常規班次專屬優惠",
-                        "remarkEn": "Discount"
-                    },
-                    {
-                        "direction": "A",
-                        "shift": ["special1"],
-                        "startStopCn": "startStopCn", "startStopEn": "startStopEn",
-                        "alightStopCn": "alightStopCn", "alightStopEn": "alightStopEn",
-                        "rebate": 1.5,
-                        "actualFare": 2.5,
-                        "remarkCn": "常規班次專屬優惠",
-                        "remarkEn": "Discount"
-                    },
-                    {
-                        "direction": "B",
-                        "shift": ["special1"],
-                        "startStopCn": "startStopCn", "startStopEn": "startStopEn",
-                        "alightStopCn": "alightStopCn", "alightStopEn": "alightStopEn",
-                        "rebate": 1.5,
-                        "actualFare": 2.5,
-                        "remarkCn": "常規班次專屬優惠",
-                        "remarkEn": "Discount"
-                    }
-                ]
+                "adult": 6.3,
+                "child": 3.2,
+                "elder": 3.2,
+                "student": 3.2
             },
-            "routeType": "測試路綫展示",
-            "routeTypeEn": "Test Route Showcase",
+            "routeType": "",
+            "routeTypeEn": "",
             "shifts": {
                 "A": {
-                    "normal": true,
-                    "special1": true
+                    "normal": true
                 },
                 "B": {
-                    "normal": true,
-                    "special1": false
+                    "normal": true
                 }
             },
             "shiftConfig": {
                 "normal": {
                     "label": "普通班次",
-                    "labelEn": "Regular Shift",
-                    "color": "#000"
-                },
-                "special1": {
-                    "label": "普通班次",
-                    "labelEn": "Regular Shift",
-                    "color": "#381"
+                    "labelEn": "Regular Shift"
                 }
             },
             "timetable": {
                 "A": {
                     "normal": [
                         {
-                            "unlockLevel": 50000,
-                            "sunshards": 5000000,
-                            "unlockRoutes": ["476", "476*", "476P", "476S", "T999"],
-                            "unlockDateCn": "10月1 - 12月1",
-                            "unlockDateEn": "1 OCT - 1 DEC",
-                            "routeCode": "TEST1",
+                            "unlockLevel": 87,
+                            "routeCode": "77N",
                             "serviceDays": "weekday",
-                            "firstTime": "06:00",
-                            "lastTime": "22:00",
+                            "firstTime": "05:30",
+                            "lastTime": "00:00",
                             "interval": [
-                                { "time": "06:00-09:00", "interval": "10" },
-                                { "time": "09:00-22:00", "interval": "15" }
-                            ]
-                        },
-                        {
-                            "serviceDays": "saturday",
-                            "firstTime": "06:00",
-                            "lastTime": "22:00",
-                            "interval": [
-                                { "time": "06:00-09:00", "interval": "10" },
-                                { "time": "09:00-22:00", "interval": "15" }
-                            ]
-                        },
-                        {
-                            "serviceDays": "sunday",
-                            "firstTime": "06:00",
-                            "lastTime": "22:00",
-                            "interval": [
-                                { "time": "06:00-09:00", "interval": "10" },
-                                { "time": "09:00-22:00", "interval": "15" }
+                                { "time": "05:30 - 06:30", "interval": "20" },
+                                { "time": "06:30 - 07:00", "interval": "15" },
+                                { "time": "07:00 - 08:00", "interval": "10 - 12" },
+                                { "time": "08:00 - 09:30", "interval": "7 - 10" },
+                                { "time": "09:30 - 15:30", "interval": "15" },
+                                { "time": "15:30 - 17:30", "interval": "20" },
+                                { "time": "17:30 - 19:00", "interval": "15" },
+                                { "time": "19:00 - 00:00", "interval": "25" }
                             ]
                         },
                         {
                             "serviceDays": "weekend_holiday",
-                            "firstTime": "06:30",
-                            "lastTime": "21:30",
+                            "firstTime": "05:30",
+                            "lastTime": "00:00",
                             "interval": [
-                                { "time": "06:30-21:30", "interval": "20" }
-                            ]
-                        },
-                        {
-                            "serviceDays": "holiday",
-                            "firstTime": "06:30",
-                            "lastTime": "21:30",
-                            "interval": [
-                                { "time": "06:30-21:30", "interval": "20" }
-                            ]
-                        },
-                        {
-                            "serviceDays": "daily",
-                            "firstTime": "06:30",
-                            "lastTime": "21:30",
-                            "interval": [
-                                { "time": "06:30-21:30", "interval": "20" }
-                            ]
-                        },
-                        {
-                            "serviceDays": "custom",
-                            "customDaysCn": "2026年10月1日 國慶日限定",
-                            "customDaysEn": "1 Oct 2026 Only",
-                            "is24Hours": true,
-                            "cover": true,
-                            "firstTime": "08:00",
-                            "lastTime": "20:00",
-                            "interval": [
-                                { "time": "08:00-20:00", "interval": "30" }
-                            ]
-                        },
-                        {
-                            "serviceDays": "custom",
-                            "customDaysCn": "只限10月2日",
-                            "customDaysEn": "2 Oct Only",
-                            "is24Hours": true,
-                            "cover": false,
-                            "firstTime": "08:00",
-                            "lastTime": "20:00",
-                            "interval": [
-                                { "time": "08:00-20:00", "interval": "30" }
-                            ]
-                        },
-                        {
-                            "serviceDays": "custom",
-                            "customDaysCn": "只限特別日子",
-                            "customDaysEn": "Special Day Only",
-                            "firstTime": "07:00",
-                            "lastTime": "19:00",
-                            "interval": [
-                                { "time": "", "interval": "0" }
+                                { "time": "05:30 - 08:00", "interval": "30" },
+                                { "time": "08:00 - 17:30", "interval": "20" },
+                                { "time": "17:30 - 00:00", "interval": "30" }
                             ]
                         }
-                    ],
-                    "special1": {
-                        "unlockLevel": 10000,
-                        "sunshards": 1000000,
-                        "routeCode": "TEST2",
-                        "firstTime": "07:00",
-                        "lastTime": "09:00",
-                        "interval": [
-                            { "time": "07:00-09:00", "interval": "5" }
-                        ]
-                    }
+                    ]
                 },
                 "B": {
                     "normal": [
                         {
-                            "routeCode": "TEST3",
+                            "unlockLevel": 87,
+                            "routeCode": "77S",
                             "serviceDays": "weekday",
                             "firstTime": "06:00",
-                            "lastTime": "22:00",
+                            "lastTime": "00:30",
                             "interval": [
-                                { "time": "06:00-09:00", "interval": "10" },
-                                { "time": "09:00-22:00", "interval": "15" }
-                            ]
-                        },
-                        {
-                            "serviceDays": "saturday",
-                            "firstTime": "06:00",
-                            "lastTime": "22:00",
-                            "interval": [
-                                { "time": "06:00-09:00", "interval": "10" },
-                                { "time": "09:00-22:00", "interval": "15" }
-                            ]
-                        },
-                        {
-                            "serviceDays": "sunday",
-                            "firstTime": "06:00",
-                            "lastTime": "22:00",
-                            "interval": [
-                                { "time": "06:00-09:00", "interval": "10" },
-                                { "time": "09:00-22:00", "interval": "15" }
+                                { "time": "06:00 - 07:00", "interval": "20" },
+                                { "time": "07:00 - 08:00", "interval": "12 - 15" },
+                                { "time": "08:00 - 09:30", "interval": "10 - 12" },
+                                { "time": "09:30 - 15:30", "interval": "15" },
+                                { "time": "15:30 - 17:00", "interval": "12 - 15" },
+                                { "time": "17:00 - 18:40", "interval": "15" },
+                                { "time": "18:40 - 19:30", "interval": "7 - 10" },
+                                { "time": "19:30 - 23:00", "interval": "20" },
+                                { "time": "23:00 - 00:30", "interval": "30" }
                             ]
                         },
                         {
                             "serviceDays": "weekend_holiday",
-                            "firstTime": "06:30",
-                            "lastTime": "21:30",
+                            "firstTime": "06:00",
+                            "lastTime": "00:30",
                             "interval": [
-                                { "time": "06:30-21:30", "interval": "20" }
-                            ]
-                        },
-                        {
-                            "serviceDays": "holiday",
-                            "firstTime": "06:30",
-                            "lastTime": "21:30",
-                            "interval": [
-                                { "time": "06:30-21:30", "interval": "20" }
-                            ]
-                        },
-                        {
-                            "serviceDays": "daily",
-                            "firstTime": "06:30",
-                            "lastTime": "21:30",
-                            "interval": [
-                                { "time": "06:30-21:30", "interval": "20" }
-                            ]
-                        },
-                        {
-                            "serviceDays": "custom", // 指定日子
-                            "customDaysCn": "2026年10月1日 國慶日限定", // 自訂中文文字
-                            "customDaysEn": "1 Oct 2026 Only",        // 自訂英文文字
-                            "firstTime": "08:00",
-                            "lastTime": "20:00",
-                            "interval": [
-                                { "time": "08:00-20:00", "interval": "30" }
+                                { "time": "06:00 - 15:30", "interval": "30" },
+                                { "time": "15:30 - 17:00", "interval": "25" },
+                                { "time": "17:00 - 23:00", "interval": "20" },
+                                { "time": "23:00 - 00:30", "interval": "30" }
                             ]
                         }
                     ]
@@ -2167,53 +1999,341 @@ var routeData = {
             },
             "stops": {
                 "A": [
-                    { "seq": 1, "nameCn": "nameCn", "nameEn": "nameEn", "nameSubCn": "nameSubCn", "nameSubEn": "nameSubEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 2, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal", "special1"], "tempClose": true, "tempCloseReason": "idk" },
-                    { "seq": 3, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"], "tempClose": true },
-                    { "seq": 4, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"], "tempCloseReason": "idk" },
-                    { "seq": 5, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal", "special2"] },
-                    { "seq": 6, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["special1"] },
-                    { "seq": 7, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 8, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 9, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal", "special2"] },
-                    { "seq": 10, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal", "special3"] },
-                    { "seq": 11, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 12, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 13, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 14, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 15, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 16, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 17, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 18, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 19, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 20, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 21, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 22, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 23, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal", "special2"] },
-                    { "seq": 24, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 25, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 26, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal", "special3"] },
-                    { "seq": 27, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 28, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 29, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 30, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 31, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 32, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 33, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 34, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 35, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 36, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 37, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 38, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 39, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 40, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal", "special1"] },
-                    { "seq": 41, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] }
+                    { "seq": 1, "nameCn": "葉欣海旁道", "nameEn": "YiYan Praya Road", "nameSubCn": "鑽石交易塔", "nameSubEn": "Diamond Trading Tower", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 2, "nameCn": "鑽石交易塔", "nameEn": "Diamond Trading Tower", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 3, "nameCn": "新地花園", "nameEn": "Sindy Garden", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 4, "nameCn": "新地公園", "nameEn": "Sindy Park", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 5, "nameCn": "葉角大學", "nameEn": "Leafy University", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 6, "nameCn": "葉欣警察局", "nameEn": "Leafy Police Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 7, "nameCn": "亞歷山花園", "nameEn": "Alexander Garden", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 8, "nameCn": "仙貝多層停車場", "nameEn": "Senpai Multi-Storey Car Park", "nameSubCn": "仙貝站", "nameSubEn": "Senpai Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 9, "nameCn": "亞歷山教堂", "nameEn": "Alexander Church", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 10, "nameCn": "仙貝山", "nameEn": "Senpai Hill", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 11, "nameCn": "葉欣俓", "nameEn": "Leafy Walking Trail", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 12, "nameCn": "羅力素花園二期", "nameEn": "Laws Garden 2", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 13, "nameCn": "羅力素花園一期", "nameEn": "Laws Garden 1", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 14, "nameCn": "北葉花園", "nameEn": "North Leafy Garden", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 15, "nameCn": "仙貝道", "nameEn": "Senpai Road", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 16, "nameCn": "仙貝", "nameEn": "Senpai", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 17, "nameCn": "仙貝市政大廈", "nameEn": "Senpai Municipal Services Building", "nameSubCn": "仙貝站", "nameSubEn": "Senpai Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 18, "nameCn": "紅石樓", "nameEn": "Redstone House", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 19, "nameCn": "仙貝酒店", "nameEn": "Senpai Hotel", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 20, "nameCn": "仙貝圖書館", "nameEn": "Senpai Library", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 21, "nameCn": "仙貝廣場", "nameEn": "Senpai Shopping Center", "visible": true, "stopFor": ["normal"] }
                 ],
                 "B": [
-                    { "seq": 1, "nameCn": "陽光高鐵站總站", "nameEn": "Sunshine Station Bus Terminus", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 2, "nameCn": "西區海底隧道轉車站", "nameEn": "Western Habour Tunnel Interchange", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 3, "nameCn": "北灘總站", "nameEn": "Northern Beach", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 4, "nameCn": "巨石路總站", "nameEn": "Rocky Road Bus Terminus", "nameSubCn": "北島學校村", "nameSubEn": "Northern Island School Village", "visible": false, "stopFor": ["normal"] },
+                    { "seq": 1, "nameCn": "仙貝廣場", "nameEn": "Senpai Shopping Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 2, "nameCn": "仙貝圖書館", "nameEn": "Senpai Library", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 3, "nameCn": "上灣街市", "nameEn": "Sheung Bay Market", "nameSubCn": "仙貝紀念碑花園", "nameSubEn": "The Stone of Memory Garden", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 4, "nameCn": "仙貝市政大廈", "nameEn": "Senpai Municipal Services Building", "nameSubCn": "仙貝站", "nameSubEn": "Senpai Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 5, "nameCn": "仙貝", "nameEn": "Senpai", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 6, "nameCn": "仙貝道", "nameEn": "Senpai Road", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 7, "nameCn": "北葉花園", "nameEn": "North Leafy Garden", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 8, "nameCn": "羅力素花園一期", "nameEn": "Laws Garden 1", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 9, "nameCn": "羅力素花園二期", "nameEn": "Laws Garden 2", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 10, "nameCn": "葉欣俓", "nameEn": "Leafy Walking Trail", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 11, "nameCn": "仙貝山", "nameEn": "Senpai Hill", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 12, "nameCn": "亞歷山教堂", "nameEn": "Alexander Church", "nameSubCn": "葉角大學北門", "nameSubEn": "Leafy University North Entrance", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 13, "nameCn": "仙貝多層停車場", "nameEn": "Senpai Multi-Storey Car Park", "nameSubCn": "仙貝站", "nameSubEn": "Senpai Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 14, "nameCn": "亞歷山花園", "nameEn": "Alexander Garden", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 15, "nameCn": "葉欣警察局", "nameEn": "Leafy Police Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 16, "nameCn": "葉角大學", "nameEn": "Leafy University", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 17, "nameCn": "新地公園", "nameEn": "Sindy Park", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 18, "nameCn": "新地花園", "nameEn": "Sindy Garden", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 19, "nameCn": "際巴車廠", "nameEn": "CSB Depot", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 20, "nameCn": "葉欣海旁道", "nameEn": "YiYan Praya Road", "nameSubCn": "鑽石交易塔", "nameSubEn": "Diamond Trading Tower", "visible": true, "stopFor": ["normal"] }
+                ]
+            }
+        },
+        {
+            "route": "140",
+            "textColor": "#fff",
+            "enabled": true,
+            "random": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/永巴140線",
+            "zones": ["Zone 1", "Zone 4"],
+            "operators": ["SE", "FT"],
+            "typeTags": ["CityStepped"],
+            "bound": "A,B",
+            "viaDirections": {
+                "normal": {
+                    "bound": "A,B",
+                    "A": {
+                        "viaCn": "四露谷、虹尾角、北環、中環、南環",
+                        "viaEn": "Shadow Valley, Iris Point, Northern, Central, Southern"
+                    },
+                    "B": {
+                        "viaCn": "南環、中環、北環、賴得、虹尾角、四露谷",
+                        "viaEn": "Southern, Central, Northern, Wright, Iris Point, Shadow Valley"
+                    }
+                }
+            },
+            "fares": {
+                "adult": 11.4,
+                "child": 5.7,
+                "elder": 5.7,
+                "student": 5.7,
+                "sectionFares": [
+                    {
+                        "direction": "A",
+                        "shift": ["normal"],
+                        "fromCn": "西區海底隧道轉車站", "fromEn": "Western Habour Tunnel Interchange",
+                        "toCn": "陽光碼頭", "toEn": "Sunshine Pier",
+                        "price": 7.2
+                    },
+                    {
+                        "direction": "B",
+                        "shift": ["normal"],
+                        "fromCn": "時間廊", "fromEn": "Timelapse Mall",
+                        "toCn": "長島碼頭", "toEn": "Long Island Ferry Pier",
+                        "price": 7.2
+                    }
+                ]
+            },
+            "routeType": "",
+            "routeTypeEn": "",
+            "shifts": {
+                "A": {
+                    "normal": true
+                },
+                "B": {
+                    "normal": true
+                }
+            },
+            "shiftConfig": {
+                "normal": {
+                    "label": "普通班次",
+                    "labelEn": "Regular Shift"
+                }
+            },
+            "timetable": {
+                "A": {
+                    "normal": [
+                        {
+                            "unlockLevel": 5,
+                            "routeCode": "140E",
+                            "serviceDays": "weekday",
+                            "firstTime": "05:40",
+                            "lastTime": "00:00",
+                            "interval": [
+                                { "time": "05:40 - 06:00", "interval": "10 - 12" },
+                                { "time": "06:00 - 07:00", "interval": "6 - 9" },
+                                { "time": "07:00 - 10:00", "interval": "4 - 7" },
+                                { "time": "10:00 - 17:00", "interval": "3 - 7" },
+                                { "time": "17:00 - 19:00", "interval": "3 - 5" },
+                                { "time": "19:00 - 21:00", "interval": "4 - 8" },
+                                { "time": "21:00 - 23:00", "interval": "5 - 9" },
+                                { "time": "23:00 - 00:00", "interval": "8 - 9" }
+                            ]
+                        },
+                        {
+                            "serviceDays": "saturday",
+                            "firstTime": "05:40",
+                            "lastTime": "00:25",
+                            "interval": [
+                                { "time": "05:40 - 06:00", "interval": "10" },
+                                { "time": "06:00 - 07:00", "interval": "8 - 9" },
+                                { "time": "07:00 - 10:00", "interval": "5 - 8" },
+                                { "time": "10:00 - 19:00", "interval": "3 - 5" },
+                                { "time": "19:00 - 21:00", "interval": "4 - 7" },
+                                { "time": "21:00 - 00:00", "interval": "5 - 8" },
+                                { "time": "00:10", "interval": "0" },
+                                { "time": "00:25", "interval": "0" }
+                            ]
+                        },
+                        {
+                            "serviceDays": "holiday",
+                            "firstTime": "05:40",
+                            "lastTime": "00:25",
+                            "interval": [
+                                { "time": "05:40 - 07:00", "interval": "10" },
+                                { "time": "07:00 - 10:00", "interval": "7 - 9" },
+                                { "time": "10:00 - 19:00", "interval": "3 - 5" },
+                                { "time": "19:00 - 21:00", "interval": "4 - 7" },
+                                { "time": "21:00 - 00:00", "interval": "5 - 8" },
+                                { "time": "00:10", "interval": "0" },
+                                { "time": "00:25", "interval": "0" }
+                            ]
+                        }
+                    ]
+                },
+                "B": {
+                    "normal": [
+                        {
+                            "unlockLevel": 5,
+                            "routeCode": "140W",
+                            "serviceDays": "weekday",
+                            "firstTime": "06:20",
+                            "lastTime": "01:00",
+                            "interval": [
+                                { "time": "06:20 - 07:20", "interval": "10 - 12" },
+                                { "time": "07:20 - 09:00", "interval": "7 - 10" },
+                                { "time": "09:00 - 10:00", "interval": "12 - 15" },
+                                { "time": "10:00 - 10:30", "interval": "7 - 12" },
+                                { "time": "10:30 - 17:00", "interval": "3 - 5" },
+                                { "time": "17:00 - 17:30", "interval": "2 - 5" },
+                                { "time": "17:30 - 20:00", "interval": "4 - 7" },
+                                { "time": "20:00 - 23:00", "interval": "5 - 8" },
+                                { "time": "23:30 - 00:00", "interval": "7 - 9" },
+                                { "time": "00:00 - 01:00", "interval": "15" }
+                            ]
+                        },
+                        {
+                            "serviceDays": "saturday",
+                            "firstTime": "06:20",
+                            "lastTime": "01:00",
+                            "interval": [
+                                { "time": "06:20 - 09:00", "interval": "10 - 12" },
+                                { "time": "09:00 - 10:00", "interval": "8 - 10" },
+                                { "time": "10:00 - 10:30", "interval": "4 - 8" },
+                                { "time": "10:30 - 20:00", "interval": "3 - 5" },
+                                { "time": "20:00 - 23:00", "interval": "4 - 8" },
+                                { "time": "23:30 - 00:00", "interval": "5 - 9" },
+                                { "time": "00:00 - 01:00", "interval": "7 - 12" }
+                            ]
+                        },
+                        {
+                            "serviceDays": "holiday",
+                            "firstTime": "06:20",
+                            "lastTime": "01:00",
+                            "interval": [
+                                { "time": "06:20 - 09:00", "interval": "12 - 15" },
+                                { "time": "09:00 - 10:00", "interval": "8 - 10" },
+                                { "time": "10:00 - 10:30", "interval": "4 - 8" },
+                                { "time": "10:30 - 20:00", "interval": "3 - 5" },
+                                { "time": "20:00 - 23:00", "interval": "4 - 8" },
+                                { "time": "23:30 - 00:00", "interval": "5 - 9" },
+                                { "time": "00:00 - 01:00", "interval": "7 - 12" }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "stops": {
+                "A": [
+                    { "seq": 1, "nameCn": "長島碼頭", "nameEn": "Long Island Ferry Pier", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 2, "nameCn": "文化廣場", "nameEn": "Culture Square", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 3, "nameCn": "國際碼頭", "nameEn": "Regional Pier", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 4, "nameCn": "虹尾角街市", "nameEn": "Iris Point Market", "nameSubCn": "虹尾角站, 智家坊", "nameSubEn": "Iris Point Station, I Home", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 5, "nameCn": "智家坊", "nameEn": "I Home", "nameSubCn": "虹尾角站, 彩色匯", "nameSubEn": "Iris Point Station, Rainbow Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 6, "nameCn": "宜和劇場", "nameEn": "Jardine Theater", "nameSubCn": "長島東醫院", "nameSubEn": "East Long Island Hospital", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 7, "nameCn": "藝術大廈", "nameEn": "Art Building", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 8, "nameCn": "陽光體育館", "nameEn": "Sunshine Stadium", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 9, "nameCn": "長島海濱長廊", "nameEn": "Long Island Waterfront Promenade", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 10, "nameCn": "西區海底隧道轉車站", "nameEn": "Western Habour Tunnel Interchange", "nameSubCn": "月亮灣站", "nameSubEn": "Lunar Bay Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 11, "nameCn": "北環轉車站", "nameEn": "Northern Interchange", "nameSubCn": "北環站, 天際塔", "nameSubEn": "Northern Station, Skyreach Tower", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 12, "nameCn": "楓樹里", "nameEn": "Maple Lane", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 13, "nameCn": "玻璃樓", "nameEn": "Glass Office", "nameSubCn": "冰淇路", "nameSubEn": "Pinky Road", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 14, "nameCn": "The ONE", "nameEn": "The One", "nameSubCn": "警察總部, 新紀元中心", "nameSubEn": "Police Headquarters, Ping Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 15, "nameCn": "強生街市", "nameEn": "Johnson Market", "nameSubCn": "A05, 陽光大學南環校園", "nameSubEn": "A05, Sunshine University Southern Campus", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 16, "nameCn": "南環中心", "nameEn": "The Southern", "nameSubCn": "南環坊", "nameSubEn": "Langford Place", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 17, "nameCn": "中環醫院", "nameEn": "Central Hopsital", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 18, "nameCn": "陽光站", "nameEn": "Sunshine Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 19, "nameCn": "陽光碼頭", "nameEn": "Sunshine Pier", "visible": true, "stopFor": ["normal"] }
+                ],
+                "B": [
+                    { "seq": 1, "nameCn": "陽光碼頭", "nameEn": "Sunshine Pier", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 2, "nameCn": "陽光站", "nameEn": "Sunshine Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 3, "nameCn": "中環醫院", "nameEn": "Central Hopsital", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 4, "nameCn": "南環坊", "nameEn": "Langford Place", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 5, "nameCn": "強生街市", "nameEn": "Johnson Market", "nameSubCn": "A05, 陽光大學南環校園", "nameSubEn": "A05, Sunshine University Southern Campus", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 6, "nameCn": "新紀元中心", "nameEn": "Ping Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 7, "nameCn": "玻璃樓", "nameEn": "Glass Office", "nameSubCn": "冰淇路", "nameSubEn": "Pinky Road", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 8, "nameCn": "楓樹里", "nameEn": "Maple Lane", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 9, "nameCn": "北環轉車站", "nameEn": "Northern Interchange", "nameSubCn": "北環站, 天際塔", "nameSubEn": "Northern Station, Skyreach Tower", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 10, "nameCn": "西區海底隧道轉車站", "nameEn": "Western Habour Tunnel Interchange", "nameSubCn": "月亮灣站", "nameSubEn": "Lunar Bay Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 11, "nameCn": "時間廊", "nameEn": "Timelapse Mall", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 12, "nameCn": "賴得商場", "nameEn": "Wright Shopping Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 13, "nameCn": "虹尾角站", "nameEn": "Iris Point Station", "nameSubCn": "智家坊, 彩色匯", "nameSubEn": "I Home, Rainbow Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 14, "nameCn": "宜和劇場", "nameEn": "Jardine Theater", "nameSubCn": "長島東醫院", "nameSubEn": "East Long Island Hospital", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 15, "nameCn": "藝術大廈", "nameEn": "Art Building", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 16, "nameCn": "陽光體育館", "nameEn": "Sunshine Stadium", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 17, "nameCn": "長島海濱長廊", "nameEn": "Long Island Waterfront Promenade", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 18, "nameCn": "百彩新城", "nameEn": "N Park", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 19, "nameCn": "國際碼頭", "nameEn": "Regional Pier", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 20, "nameCn": "文化廣場", "nameEn": "Culture Square", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 21, "nameCn": "長島碼頭", "nameEn": "Long Island Ferry Pier", "visible": true, "stopFor": ["normal"] }
+                ]
+            }
+        },
+        {
+            "route": "140P",
+            "textColor": "#fff",
+            "enabled": true,
+            "random": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/永巴140P線",
+            "zones": ["Zone 1", "Zone 4"],
+            "operators": ["SE", "FT"],
+            "typeTags": ["CityStepped"],
+            "bound": "A",
+            "viaDirections": {
+                "normal": {
+                    "bound": "A",
+                    "A": {
+                        "viaCn": "南環、中環、虹尾角、四露谷",
+                        "viaEn": "Southern, Central, Iris Point, Shadow Valley"
+                    }
+                }
+            },
+            "fares": {
+                "adult": 11.4,
+                "child": 5.7,
+                "elder": 5.7,
+                "student": 5.7,
+                "sectionFares": [
+                    {
+                        "direction": "A",
+                        "shift": ["normal"],
+                        "fromCn": "長島中心", "fromEn": "Long Island Center",
+                        "toCn": "長島碼頭", "toEn": "Long Island Ferry Pier",
+                        "price": 7.2
+                    }
+                ]
+            },
+            "routeType": "",
+            "routeTypeEn": "",
+            "shifts": {
+                "A": {
+                    "normal": true
+                }
+            },
+            "shiftConfig": {
+                "normal": {
+                    "label": "普通班次",
+                    "labelEn": "Regular Shift"
+                }
+            },
+            "timetable": {
+                "A": {
+                    "normal": [
+                        {
+                            "unlockRoutes": ["140", "171", "240"],
+                            "routeCode": "140PW",
+                            "serviceDays": "weekday",
+                            "firstTime": "17:30",
+                            "lastTime": "20:00",
+                            "interval": [
+                                { "time": "17:30 - 20:00", "interval": "10 - 12" }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "stops": {
+                "A": [
+                    { "seq": 1, "nameCn": "陽光碼頭", "nameEn": "Sunshine Pier", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 2, "nameCn": "陽光站", "nameEn": "Sunshine Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 3, "nameCn": "中環醫院", "nameEn": "Central Hopsital", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 4, "nameCn": "南環坊", "nameEn": "Langford Place", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 5, "nameCn": "強生街市", "nameEn": "Johnson Market", "nameSubCn": "A05, 陽光大學南環校園", "nameSubEn": "A05, Sunshine University Southern Campus", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 6, "nameCn": "新紀元中心", "nameEn": "Ping Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 7, "nameCn": "西區海底隧道轉車站", "nameEn": "Western Habour Tunnel Interchange", "nameSubCn": "月亮灣站", "nameSubEn": "Lunar Bay Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 8, "nameCn": "長島中心", "nameEn": "Long Island Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 9, "nameCn": "智家坊", "nameEn": "I Home", "nameSubCn": "虹尾角站, 彩色匯", "nameSubEn": "Iris Point Station, Rainbow Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 10, "nameCn": "宜和劇場", "nameEn": "Jardine Theater", "nameSubCn": "長島東醫院", "nameSubEn": "East Long Island Hospital", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 11, "nameCn": "藝術大廈", "nameEn": "Art Building", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 12, "nameCn": "長島海濱長廊", "nameEn": "Long Island Waterfront Promenade", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 13, "nameCn": "長島碼頭", "nameEn": "Long Island Ferry Pier", "visible": true, "stopFor": ["normal"] }
                 ]
             }
         }
