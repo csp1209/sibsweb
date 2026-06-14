@@ -1872,12 +1872,12 @@ var routeData = {
             "viaDirections": {
                 "normal": {
                     "bound": "A,B",
-                    "A": { "viaCn": "东风路、黄河路、滨海大道", "viaEn": "Dongfeng Rd, Huanghe Rd, Binhai Blvd" },
-                    "B": { "viaCn": "滨海大道、黄河路、东风路", "viaEn": "Binhai Blvd, Huanghe Rd, Dongfeng Rd" }
+                    "A": { "viaCn": "1、2、3", "viaEn": "One, Two, Three" },
+                    "B": { "viaCn": "西區海底隧道轉車站", "viaEn": "Western Harbour Tunnel Interchange" }
                 },
                 "special1": {
                     "bound": "A",
-                    "A": { "viaCn": "东风路、黄河路、滨海大道", "viaEn": "Dongfeng Rd, Huanghe Rd, Binhai Blvd" }
+                    "A": { "viaCn": "4、5、6", "viaEn": "Four, Five, Six" }
                 }
             },
             "fares": {
@@ -1913,36 +1913,18 @@ var routeData = {
                     {
                         "direction": "A",
                         "shift": ["special1"],
-                        "fromCn": "高新区", "fromEn": "Hi-Tech Zone",
-                        "toCn": "终点站", "toEn": "Terminus",
-                        "price": 12.0
-                    },
-                    {
-                        "direction": "A",
-                        "shift": ["special1"],
-                        "fromCn": "高新区", "fromEn": "Hi-Tech Zone",
-                        "toCn": "终点站", "toEn": "Terminus",
-                        "price": 2.0
-                    },
-                    {
-                        "direction": "A",
-                        "shift": ["special1"],
-                        "fromCn": "高新区", "fromEn": "Hi-Tech Zone",
-                        "toCn": "高新区", "toEn": "Hi-Tech Zone",
-                        "price": 2.0
+                        "fromCn": "fromCn", "fromEn": "fromEn",
+                        "toCn": "toCn", "toEn": "toEn",
+                        "price": 12.0,
+                        "childPrice": 7.3,
+                        "elderPrice": 7.3,
+                        "studentPrice": 7.3
                     },
                     {
                         "direction": "B",
                         "shift": ["special1"],
-                        "fromCn": "终点站", "fromEn": "Terminus",
-                        "toCn": "高新区", "toEn": "Hi-Tech Zone",
-                        "price": 2.0
-                    },
-                    {
-                        "direction": "B",
-                        "shift": ["special1"],
-                        "fromCn": "终点站", "fromEn": "Terminus",
-                        "toCn": "高新区", "toEn": "Hi-Tech Zone",
+                        "fromCn": "fromCn", "fromEn": "fromEn",
+                        "toCn": "toCn", "toEn": "toEn",
                         "price": 2.0
                     }
                 ],
@@ -1950,13 +1932,13 @@ var routeData = {
                     {
                         "direction": "A",
                         "shift": ["special1"],
-                        "startStopCn": "人民路", "startStopEn": "Hi-Tech Zone",
-                        "alightStopCn": "解放路", "alightStopEn": "Terminus",
+                        "startStopCn": "startStopCn", "startStopEn": "startStopEn",
+                        "alightStopCn": "alightStopCn", "alightStopEn": "alightStopEn",
                         "rebate": 1.5,
                         "actualFare": 2.5,
-                        "childFare": 1.4,       // 小童實際支付
-                        "elderFare": 1.0,       // 長者實際支付
-                        "studentFare": 2.0,     // 學生實際支付
+                        "childFare": 1.4,
+                        "elderFare": 1.0,
+                        "studentFare": 2.0,
                         "fullFare": 100.0,
                         "childFullFare": 50.0,
                         "elderFullFare": 40.0,
@@ -1967,25 +1949,8 @@ var routeData = {
                     {
                         "direction": "A",
                         "shift": ["special1"],
-                        "startStopCn": "人民路", "startStopEn": "Hi-Tech Zone",
-                        "alightStopCn": "人民路", "alightStopEn": "Hi-Tech Zone",
-                        "rebate": 1.5,
-                        "actualFare": 2.5,
-                        "childFare": 1.4,       // 小童實際支付
-                        "elderFare": 1.0,       // 長者實際支付
-                        "studentFare": 2.0,     // 學生實際支付
-                        "fullFare": 100.0,
-                        "childFullFare": 50.0,
-                        "elderFullFare": 40.0,
-                        "studentFullFare": 30.0,
-                        "remarkCn": "常規班次專屬優惠",
-                        "remarkEn": "Discount"
-                    },
-                    {
-                        "direction": "A",
-                        "shift": ["special1"],
-                        "startStopCn": "人民路", "startStopEn": "Hi-Tech Zone",
-                        "alightStopCn": "解放路", "alightStopEn": "Terminus",
+                        "startStopCn": "startStopCn", "startStopEn": "startStopEn",
+                        "alightStopCn": "alightStopCn", "alightStopEn": "alightStopEn",
                         "rebate": 1.5,
                         "actualFare": 2.5,
                         "remarkCn": "常規班次專屬優惠",
@@ -1994,18 +1959,8 @@ var routeData = {
                     {
                         "direction": "B",
                         "shift": ["special1"],
-                        "startStopCn": "人民路", "startStopEn": "Hi-Tech Zone",
-                        "alightStopCn": "解放路", "alightStopEn": "Terminus",
-                        "rebate": 1.5,
-                        "actualFare": 2.5,
-                        "remarkCn": "常規班次專屬優惠",
-                        "remarkEn": "Discount"
-                    },
-                    {
-                        "direction": "B",
-                        "shift": ["special1"],
-                        "startStopCn": "人民路", "startStopEn": "Hi-Tech Zone",
-                        "alightStopCn": "解放路", "alightStopEn": "Terminus",
+                        "startStopCn": "startStopCn", "startStopEn": "startStopEn",
+                        "alightStopCn": "alightStopCn", "alightStopEn": "alightStopEn",
                         "rebate": 1.5,
                         "actualFare": 2.5,
                         "remarkCn": "常規班次專屬優惠",
@@ -2041,7 +1996,11 @@ var routeData = {
                 "A": {
                     "normal": [
                         {
-                            "unlockLevel": 950,
+                            "unlockLevel": 50000,
+                            "sunshards": 5000000,
+                            "unlockRoutes": ["476", "476*", "476P", "476S", "T999"],
+                            "unlockDateCn": "10月1 - 12月1",
+                            "unlockDateEn": "1 OCT - 1 DEC",
                             "routeCode": "TEST1",
                             "serviceDays": "weekday",
                             "firstTime": "06:00",
@@ -2094,9 +2053,9 @@ var routeData = {
                             ]
                         },
                         {
-                            "serviceDays": "custom", // 指定日子
-                            "customDaysCn": "2026年10月1日 國慶日限定", // 自訂中文文字
-                            "customDaysEn": "1 Oct 2026 Only",        // 自訂英文文字,
+                            "serviceDays": "custom",
+                            "customDaysCn": "2026年10月1日 國慶日限定",
+                            "customDaysEn": "1 Oct 2026 Only",
                             "is24Hours": true,
                             "cover": true,
                             "firstTime": "08:00",
@@ -2106,9 +2065,9 @@ var routeData = {
                             ]
                         },
                         {
-                            "serviceDays": "custom", // 指定日子
-                            "customDaysCn": "2026年10月2日", // 自訂中文文字
-                            "customDaysEn": "1 Oct 2026 Only",        // 自訂英文文字,
+                            "serviceDays": "custom",
+                            "customDaysCn": "只限10月2日",
+                            "customDaysEn": "2 Oct Only",
                             "is24Hours": true,
                             "cover": false,
                             "firstTime": "08:00",
@@ -2119,8 +2078,8 @@ var routeData = {
                         },
                         {
                             "serviceDays": "custom",
-                            "customDaysCn": "特別日子only",
-                            "customDaysEn": "none",
+                            "customDaysCn": "只限特別日子",
+                            "customDaysEn": "Special Day Only",
                             "firstTime": "07:00",
                             "lastTime": "19:00",
                             "interval": [
@@ -2129,7 +2088,8 @@ var routeData = {
                         }
                     ],
                     "special1": {
-                        "unlockLevel": 1000,
+                        "unlockLevel": 10000,
+                        "sunshards": 1000000,
                         "routeCode": "TEST2",
                         "firstTime": "07:00",
                         "lastTime": "09:00",
@@ -2138,7 +2098,6 @@ var routeData = {
                         ]
                     }
                 },
-
                 "B": {
                     "normal": [
                         {
@@ -2208,51 +2167,47 @@ var routeData = {
             },
             "stops": {
                 "A": [
-                    { "seq": 1, "nameCn": "1", "nameEn": "Johnson Market", "nameSubCn": "A05, 陽光大學南環校園", "nameSubEn": "A05, Sunshine University Southern Campus", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 2, "nameCn": "2", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal", "special1"], "tempClose": true, "tempCloseReason": "idk" },
-                    { "seq": 3, "nameCn": "3", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"], "tempClose": true },
-                    { "seq": 4, "nameCn": "4", "nameEn": "Ring Road", "visible": true, "stopFor": ["normal"], "tempCloseReason": "idk" },
-                    { "seq": 5, "nameCn": "5", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 6, "nameCn": "6", "nameEn": "East Ring Road", "visible": true, "stopFor": ["special1"] },
-                    { "seq": 7, "nameCn": "7", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 8, "nameCn": "6", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 9, "nameCn": "7", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 10, "nameCn": "6", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 11, "nameCn": "7", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 12, "nameCn": "6", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 13, "nameCn": "7", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 14, "nameCn": "6", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 15, "nameCn": "7", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 16, "nameCn": "6", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 17, "nameCn": "7", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 18, "nameCn": "6", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 19, "nameCn": "7", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 20, "nameCn": "6", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 21, "nameCn": "7", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 22, "nameCn": "6", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 23, "nameCn": "7", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 24, "nameCn": "6", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 25, "nameCn": "7", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 26, "nameCn": "6", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 27, "nameCn": "7", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 28, "nameCn": "6", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 29, "nameCn": "7", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 30, "nameCn": "6", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 31, "nameCn": "7", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 32, "nameCn": "6", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 33, "nameCn": "7", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 34, "nameCn": "6", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 35, "nameCn": "7", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 36, "nameCn": "6", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 37, "nameCn": "7", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 38, "nameCn": "6", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 39, "nameCn": "7", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 40, "nameCn": "6", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 41, "nameCn": "7", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 42, "nameCn": "6", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 43, "nameCn": "7", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 44, "nameCn": "6", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal", "special1"] },
-                    { "seq": 45, "nameCn": "7", "nameEn": "East Ring Road", "visible": true, "stopFor": ["normal"] }
+                    { "seq": 1, "nameCn": "nameCn", "nameEn": "nameEn", "nameSubCn": "nameSubCn", "nameSubEn": "nameSubEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 2, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal", "special1"], "tempClose": true, "tempCloseReason": "idk" },
+                    { "seq": 3, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"], "tempClose": true },
+                    { "seq": 4, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"], "tempCloseReason": "idk" },
+                    { "seq": 5, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal", "special2"] },
+                    { "seq": 6, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["special1"] },
+                    { "seq": 7, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 8, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 9, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal", "special2"] },
+                    { "seq": 10, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal", "special3"] },
+                    { "seq": 11, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 12, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 13, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 14, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 15, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 16, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 17, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 18, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 19, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 20, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 21, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 22, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 23, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal", "special2"] },
+                    { "seq": 24, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 25, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 26, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal", "special3"] },
+                    { "seq": 27, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 28, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 29, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 30, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 31, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 32, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 33, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 34, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 35, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 36, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 37, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 38, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 39, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 40, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 41, "nameCn": "nameCn", "nameEn": "nameEn", "visible": true, "stopFor": ["normal"] }
                 ],
                 "B": [
                     { "seq": 1, "nameCn": "陽光高鐵站總站", "nameEn": "Sunshine Station Bus Terminus", "visible": true, "stopFor": ["normal"] },
