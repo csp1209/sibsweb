@@ -4,16 +4,17 @@ var routeData = {
             "route": "21",
             "textColor": "#fff",
             "enabled": true,
+            "circular": true,
             "random": true,
             "wikiLink": "https://roblox.fandom.com/zh/wiki/勞博頓快巴21線",
             "zones": ["Zone 1"],
             "operators": ["REBC"],
             "typeTags": ["Circular"],
-            "bound": "C",
+            "bound": "A",
             "viaDirections": {
                 "normal": {
-                    "bound": "C",
-                    "C": {
+                    "bound": "A",
+                    "A": {
                         "viaCn": "賴得、艾迪、^^醫院島、艾迪、賴得",
                         "viaEn": "Wright, Addi, ^^Hospital Island, Addi, Wright"
                     }
@@ -37,7 +38,7 @@ var routeData = {
                 }
             },
             "timetable": {
-                "C": {
+                "A": {
                     "normal": [
                         {
                             "unlockLevel": 46,
@@ -90,7 +91,7 @@ var routeData = {
                 }
             },
             "stops": {
-                "C": [
+                "A": [
                     { "seq": 1, "nameCn": "白鴿邨", "nameEn": "Dove Estate", "nameSubCn": "巴士車廠", "nameSubEn": "Bus Depot", "visible": true, "stopFor": ["normal"] },
                     { "seq": 2, "nameCn": "白鴿山", "nameEn": "Dove Hill", "visible": true, "stopFor": ["normal"] },
                     { "seq": 3, "nameCn": "三哥大廈", "nameEn": "Third Technology Building", "nameSubCn": "炫光集", "nameSubEn": "Neon Center", "visible": true, "stopFor": ["normal"] },
@@ -102,7 +103,7 @@ var routeData = {
                     { "seq": 9, "nameCn": "白鴿消防局", "nameEn": "Dove Fire Station", "visible": true, "stopFor": ["normal"] },
                     { "seq": 10, "nameCn": "伊迪城", "nameEn": "Eddie City", "visible": true, "stopFor": ["normal"] },
                     { "seq": 11, "nameCn": "Basketball Court", "nameEn": "", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 12, "nameCn": "阿周電視", "nameEn": "Roblox TV", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 12, "nameCn": "^^阿周電視", "nameEn": "^^Roblox TV", "visible": true, "stopFor": ["normal"] },
                     { "seq": 13, "nameCn": "西區醫院", "nameEn": "Western Hospital", "visible": true, "stopFor": ["normal"] },
                     { "seq": 14, "nameCn": "艾迪城", "nameEn": "Addi City", "visible": true, "stopFor": ["normal"] },
                     { "seq": 15, "nameCn": "白鴿消防局", "nameEn": "Dove Fire Station", "visible": true, "stopFor": ["normal"] },
@@ -303,14 +304,15 @@ var routeData = {
             },
             "shiftConfig": {
                 "normal": {
-                    "label": "普通班次",
-                    "labelEn": "Regular Shift"
+                    "label": "每日挑戰路綫",
+                    "labelEn": "Daily Challenge Route"
                 }
             },
             "timetable": {
                 "A": {
                     "normal": [
                         {
+                            "unlockLevel": 10,
                             "routeCode": "25YN",
                             "serviceDays": "custom",
                             "customDaysCn": "每日挑戰",
@@ -321,6 +323,7 @@ var routeData = {
                 "B": {
                     "normal": [
                         {
+                            "unlockLevel": 10,
                             "routeCode": "25YS",
                             "serviceDays": "custom",
                             "customDaysCn": "每日挑戰",
@@ -1237,16 +1240,17 @@ var routeData = {
             "route": "73",
             "textColor": "#fff",
             "enabled": true,
+            "circular": true,
             "random": true,
             "wikiLink": "https://roblox.fandom.com/zh/wiki/天際陽光際巴673線",
             "zones": ["Zone 7", "Zone 8"],
             "operators": ["HZ", "CSB"],
             "typeTags": ["Circular"],
-            "bound": "C",
+            "bound": "A",
             "viaDirections": {
                 "normal": {
-                    "bound": "C",
-                    "C": {
+                    "bound": "A",
+                    "A": {
                         "viaCn": "葉角灣、葉角醫院、東門、^^海西、葉角醫院、葉角灣",
                         "viaEn": "Leafy Bay, Leafy Hospital, East Door, ^^Haisey, Leafy Hospital, Leafy Bay"
                     }
@@ -1270,7 +1274,7 @@ var routeData = {
                 }
             },
             "timetable": {
-                "C": {
+                "A": {
                     "normal": [
                         {
                             "unlockLevel": 72,
@@ -1309,7 +1313,7 @@ var routeData = {
                 }
             },
             "stops": {
-                "C": [
+                "A": [
                     { "seq": 1, "nameCn": "東廠", "nameEn": "East Factory", "visible": true, "stopFor": ["normal"] },
                     { "seq": 2, "nameCn": "葉欣公園", "nameEn": "YiYan Park", "visible": true, "stopFor": ["normal"] },
                     { "seq": 3, "nameCn": "鑽石交易塔", "nameEn": "Diamond Trading Tower", "visible": true, "stopFor": ["normal"] },
@@ -2327,18 +2331,19 @@ var routeData = {
             "route": "77X",
             "textColor": "#fff",
             "enabled": true,
+            "circular": true,
             "random": true,
             "wikiLink": "https://roblox.fandom.com/zh/wiki/際巴77X線",
             "zones": ["Zone 7"],
             "operators": ["CSB"],
             "typeTags": ["Circular", "DailyChallenge"],
-            "bound": "C",
+            "bound": "A",
             "viaDirections": {
                 "normal": {
-                    "bound": "C",
-                    "C": {
-                        "viaCn": "^^仙貝多層停車場",
-                        "viaEn": "^^Senpai Multi-Storey Car Park"
+                    "bound": "A",
+                    "A": {
+                        "viaCn": "^^亞歷山花園",
+                        "viaEn": "^^Alexander Garden"
                     }
                 }
             },
@@ -2351,20 +2356,21 @@ var routeData = {
             "routeType": "",
             "routeTypeEn": "",
             "shifts": {
-                "C": {
+                "A": {
                     "normal": true
                 }
             },
             "shiftConfig": {
                 "normal": {
-                    "label": "普通班次",
-                    "labelEn": "Regular Shift"
+                    "label": "每日挑戰路綫",
+                    "labelEn": "Daily Challenge Route"
                 }
             },
             "timetable": {
-                "C": {
+                "A": {
                     "normal": [
                         {
+                            "unlockLevel": 10,
                             "routeCode": "77XA",
                             "serviceDays": "custom",
                             "customDaysCn": "每日挑戰",
@@ -2374,13 +2380,13 @@ var routeData = {
                 }
             },
             "stops": {
-                "C": [
+                "A": [
                     { "seq": 1, "nameCn": "仙貝廣場", "nameEn": "Senpai Shopping Center", "visible": true, "stopFor": ["normal"] },
                     { "seq": 2, "nameCn": "仙貝圖書館", "nameEn": "Senpai Library", "visible": true, "stopFor": ["normal"] },
                     { "seq": 3, "nameCn": "上灣街市", "nameEn": "Sheung Bay Market", "nameSubCn": "仙貝紀念碑花園", "nameSubEn": "The Stone of Memory Garden", "visible": true, "stopFor": ["normal"] },
                     { "seq": 4, "nameCn": "仙貝市政大廈", "nameEn": "Senpai Municipal Services Building", "nameSubCn": "仙貝站", "nameSubEn": "Senpai Station", "visible": true, "stopFor": ["normal"] },
                     { "seq": 5, "nameCn": "亞歷山教堂", "nameEn": "Alexander Church", "visible": true, "stopFor": ["normal"] },
-                    { "seq": 6, "nameCn": "亞歷山花園", "nameEn": "Alexander Garden", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 6, "nameCn": "^^亞歷山花園", "nameEn": "^^Alexander Garden", "visible": true, "stopFor": ["normal"] },
                     { "seq": 7, "nameCn": "仙貝市政大廈", "nameEn": "Senpai Municipal Services Building", "nameSubCn": "仙貝站", "nameSubEn": "Senpai Station", "visible": true, "stopFor": ["normal"] },
                     { "seq": 8, "nameCn": "紅石樓", "nameEn": "Redstone House", "visible": true, "stopFor": ["normal"] },
                     { "seq": 9, "nameCn": "仙貝酒店", "nameEn": "Senpai Hotel", "visible": true, "stopFor": ["normal"] },
@@ -3809,6 +3815,765 @@ var routeData = {
                     { "seq": 23, "nameCn": "新地花園", "nameEn": "Sindy Garden", "visible": true, "stopFor": ["normal"] },
                     { "seq": 24, "nameCn": "際巴車廠", "nameEn": "CSB Depot", "visible": true, "stopFor": ["normal"] },
                     { "seq": 25, "nameCn": "葉欣海旁道", "nameEn": "YiYan Praya Road", "nameSubCn": "鑽石交易塔", "nameSubEn": "Diamond Trading Tower", "visible": true, "stopFor": ["normal"] }
+                ]
+            }
+        },
+        {
+            "route": "240",
+            "textColor": "#fff",
+            "enabled": true,
+            "circular": true,
+            "random": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/永巴140線",
+            "zones": ["Zone 1", "Zone 4"],
+            "operators": ["SE", "FT"],
+            "typeTags": ["Circular", "DailyChallenge"],
+            "bound": "A",
+            "viaDirections": {
+                "normal": {
+                    "bound": "A",
+                    "A": {
+                        "viaCn": "四露谷、虹尾角、北環、中環、南環、^^陽光碼頭、賴得、虹尾角、四露谷",
+                        "viaEn": "Shadow Valley, Iris Point, Northern, Central, Southern, ^^Sunshine Pier, Wright, Iris Point, Shadow Valley"
+                    }
+                }
+            },
+            "fares": {
+                "adult": 11.4,
+                "child": 5.7,
+                "elder": 5.7,
+                "student": 5.7,
+                "sectionFares": [
+                    {
+                        "direction": "A",
+                        "shift": ["normal"],
+                        "fromCn": "賴得商場", "fromEn": "Wright Shopping Center",
+                        "toCn": "長島碼頭", "toEn": "Long Island Ferry Pier",
+                        "price": 7.2,
+                        "childPrice": 3.6,
+                        "elderPrice": 3.6,
+                        "studentPrice": 3.6
+                    }
+                ]
+            },
+            "routeType": "",
+            "routeTypeEn": "",
+            "shifts": {
+                "A": {
+                    "normal": true
+                }
+            },
+            "shiftConfig": {
+                "normal": {
+                    "label": "每日挑戰路綫",
+                    "labelEn": "Daily Challenge Route"
+                }
+            },
+            "timetable": {
+                "A": {
+                    "normal": [
+                        {
+                            "unlockLevel": 10,
+                            "routeCode": "240A",
+                            "serviceDays": "custom",
+                            "customDaysCn": "每日挑戰",
+                            "customDaysEn": "Daily Challenge"
+                        }
+                    ]
+                }
+            },
+            "stops": {
+                "A": [
+                    { "seq": 1, "nameCn": "長島碼頭", "nameEn": "Long Island Ferry Pier", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 2, "nameCn": "文化廣場", "nameEn": "Culture Square", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 3, "nameCn": "國際碼頭", "nameEn": "Regional Pier", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 4, "nameCn": "虹尾角街市", "nameEn": "Iris Point Market", "nameSubCn": "虹尾角站, 智家坊", "nameSubEn": "Iris Point Station, I Home", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 5, "nameCn": "智家坊", "nameEn": "I Home", "nameSubCn": "虹尾角站, 彩色匯", "nameSubEn": "Iris Point Station, Rainbow Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 6, "nameCn": "宜和劇場", "nameEn": "Jardine Theater", "nameSubCn": "長島東醫院", "nameSubEn": "East Long Island Hospital", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 7, "nameCn": "藝術大廈", "nameEn": "Art Building", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 8, "nameCn": "陽光體育館", "nameEn": "Sunshine Stadium", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 9, "nameCn": "長島海濱長廊", "nameEn": "Long Island Waterfront Promenade", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 10, "nameCn": "西區海底隧道轉車站", "nameEn": "Western Habour Tunnel Interchange", "nameSubCn": "月亮灣站", "nameSubEn": "Lunar Bay Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 11, "nameCn": "北環轉車站", "nameEn": "Northern Interchange", "nameSubCn": "北環站, 天際塔", "nameSubEn": "Northern Station, Skyreach Tower", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 12, "nameCn": "楓樹里", "nameEn": "Maple Lane", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 13, "nameCn": "玻璃樓", "nameEn": "Glass Office", "nameSubCn": "冰淇路", "nameSubEn": "Pinky Road", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 14, "nameCn": "The ONE", "nameEn": "The One", "nameSubCn": "警察總部, 新紀元中心", "nameSubEn": "Police Headquarters, Ping Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 15, "nameCn": "強生街市", "nameEn": "Johnson Market", "nameSubCn": "A05, 陽光大學南環校園", "nameSubEn": "A05, Sunshine University Southern Campus", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 16, "nameCn": "南環中心", "nameEn": "The Southern", "nameSubCn": "南環坊", "nameSubEn": "Langford Place", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 17, "nameCn": "中環醫院", "nameEn": "Central Hopsital", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 18, "nameCn": "陽光站", "nameEn": "Sunshine Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 19, "nameCn": "陽光碼頭", "nameEn": "Sunshine Pier", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 20, "nameCn": "賴得商場", "nameEn": "Wright Shopping Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 21, "nameCn": "虹尾角站", "nameEn": "Iris Point Station", "nameSubCn": "智家坊, 彩色匯", "nameSubEn": "I Home, Rainbow Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 22, "nameCn": "宜和劇場", "nameEn": "Jardine Theater", "nameSubCn": "長島東醫院", "nameSubEn": "East Long Island Hospital", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 23, "nameCn": "藝術大廈", "nameEn": "Art Building", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 24, "nameCn": "陽光體育館", "nameEn": "Sunshine Stadium", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 25, "nameCn": "長島海濱長廊", "nameEn": "Long Island Waterfront Promenade", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 26, "nameCn": "百彩新城", "nameEn": "N Park", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 27, "nameCn": "國際碼頭", "nameEn": "Regional Pier", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 28, "nameCn": "文化廣場", "nameEn": "Culture Square", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 29, "nameCn": "長島碼頭", "nameEn": "Long Island Ferry Pier", "visible": true, "stopFor": ["normal"] }
+                ]
+            }
+        },
+        {
+            "route": "242",
+            "textColor": "#fff",
+            "enabled": true,
+            "circular": true,
+            "random": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/永巴縱橫通勞博頓快巴142線",
+            "zones": ["Zone 1", "Zone 4"],
+            "operators": ["SE", "REBC"],
+            "typeTags": ["Circular", "DailyChallenge"],
+            "bound": "A",
+            "viaDirections": {
+                "normal": {
+                    "bound": "A",
+                    "A": {
+                        "viaCn": "賴得、北環、中環、南環、^^陽光碼頭",
+                        "viaEn": "Wright, Northern, Central, Southern, Sunshine Pier"
+                    }
+                }
+            },
+            "fares": {
+                "adult": 11.4,
+                "child": 5.7,
+                "elder": 5.7,
+                "student": 5.7,
+                "sectionFares": [
+                    {
+                        "direction": "A",
+                        "shift": ["normal"],
+                        "fromCn": "購物廊", "fromEn": "Shopping Corridor",
+                        "toCn": "白鴿邨", "toEn": "Dove Estate",
+                        "price": 5.4,
+                        "childPrice": 2.7,
+                        "elderPrice": 2.7,
+                        "studentPrice": 2.7
+                    }
+                ]
+            },
+            "routeType": "",
+            "routeTypeEn": "",
+            "shifts": {
+                "A": {
+                    "normal": true
+                }
+            },
+            "shiftConfig": {
+                "normal": {
+                    "label": "每日挑戰路綫",
+                    "labelEn": "Daily Challenge Route"
+                }
+            },
+            "timetable": {
+                "A": {
+                    "normal": [
+                        {
+                            "unlockLevel": 10,
+                            "routeCode": "242A",
+                            "serviceDays": "custom",
+                            "customDaysCn": "每日挑戰",
+                            "customDaysEn": "Daily Challenge"
+                        }
+                    ]
+                }
+            },
+            "stops": {
+                "A": [
+                    { "seq": 1, "nameCn": "白鴿邨", "nameEn": "Dove Estate", "nameSubCn": "巴士車廠", "nameSubEn": "Bus Depot", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 2, "nameCn": "白鴿山", "nameEn": "Dove Hill", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 3, "nameCn": "三哥大廈", "nameEn": "Third Technology Building", "nameSubCn": "炫光集", "nameSubEn": "Neon Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 4, "nameCn": "賴得商場", "nameEn": "Wright Shopping Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 5, "nameCn": "時間廊", "nameEn": "Timelapse Mall", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 6, "nameCn": "西區海底隧道轉車站", "nameEn": "Western Habour Tunnel Interchange", "nameSubCn": "月亮灣站", "nameSubEn": "Lunar Bay Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 7, "nameCn": "北環轉車站", "nameEn": "Northern Interchange", "nameSubCn": "北環站, 天際塔", "nameSubEn": "Northern Station, Skyreach Tower", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 8, "nameCn": "紅地磚", "nameEn": "Red Wall Road", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 9, "nameCn": "楓樹里", "nameEn": "Maple Lane", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 10, "nameCn": "玻璃樓", "nameEn": "Glass Office", "nameSubCn": "冰淇路", "nameSubEn": "Pinky Road", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 11, "nameCn": "亞特路", "nameEn": "Arctan Road", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 12, "nameCn": "中環消防局", "nameEn": "Central Fire Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 13, "nameCn": "強生街市", "nameEn": "Johnson Market", "nameSubCn": "A05, 陽光大學南環校園", "nameSubEn": "A05, Sunshine University Southern Campus", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 14, "nameCn": "南環花園二期", "nameEn": "Southern Two", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 15, "nameCn": "中環南總站", "nameEn": "Southern Central Bus Terminus", "nameSubCn": "南環花園一期", "nameSubEn": "Southern One", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 16, "nameCn": "中葉隧道行政大樓", "nameEn": "Leafy-Central Tunnel Administration Block", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 17, "nameCn": "南環文化區公園", "nameEn": "Southern Cultural District Park", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 18, "nameCn": "陽光站", "nameEn": "Sunshine Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 19, "nameCn": "陽光碼頭", "nameEn": "Sunshine Pier", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 20, "nameCn": "購物廊", "nameEn": "Shopping Corridor", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 21, "nameCn": "白鴿山", "nameEn": "Dove Hill", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 22, "nameCn": "白鴿邨", "nameEn": "Dove Estate", "nameSubCn": "巴士車廠", "nameSubEn": "Bus Depot", "visible": true, "stopFor": ["normal"] }
+                ]
+            }
+        },
+        {
+            "route": "246X",
+            "textColor": "#fff",
+            "enabled": true,
+            "random": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/永巴縱橫通勞博頓快巴246X線",
+            "zones": ["Zone 1", "Zone 4"],
+            "operators": ["SE", "REBC"],
+            "typeTags": [
+                { "type": "Circular", "shift": "normal" },
+                { "type": "Special Departure", "shift": "special1" },
+                { "type": "Limited-stop", "shift": "special2" },
+                { "type": "Special Departure", "shift": "special2" }
+            ],
+            "bound": "A",
+            "viaDirections": {
+                "normal": {
+                    "bound": "A",
+                    "A": {
+                        "viaCn": "北環、西區海底隧道、^^時間廊、伊迪城、貨櫃島、中西大橋、南環、中環",
+                        "viaEn": "Northern, Western Harbour Tunnel, ^^Timelapse Mall, Eddie City, Containers Island, Central - Western Bridge, Southern, Central"
+                    }
+                },
+                "special1": {
+                    "bound": "A",
+                    "A": {
+                        "viaCn": "北環、西區海底隧道、伊迪城",
+                        "viaEn": "Northern, Western Harbour Tunnel, Eddie City"
+                    }
+                },
+                "special2": {
+                    "bound": "A",
+                    "A": {
+                        "viaCn": "伊迪城、中西大橋、南環、中環",
+                        "viaEn": "Eddie City, Central - Western Bridge, Southern, Central"
+                    }
+                }
+            },
+            "fares": {
+                "adult": 11.4,
+                "child": 5.7,
+                "elder": 5.7,
+                "student": 5.7,
+                "overrides": [
+                    {
+                        "bound": "A",
+                        "shift": "special2",
+                        "adult": 10.8,
+                        "child": 5.4,
+                        "elder": 5.4,
+                        "student": 5.4
+                    }
+                ],
+                "sectionFares": [
+                    {
+                        "direction": "A",
+                        "shift": ["normal"],
+                        "fromCn": "南環街市", "fromEn": "Southern Market",
+                        "toCn": "東錦葵海傍路", "toEn": "Eastmallow Praya Road",
+                        "price": 7.2,
+                        "childPrice": 3.6,
+                        "elderPrice": 3.6,
+                        "studentPrice": 3.6
+                    }
+                ]
+            },
+            "routeType": "",
+            "routeTypeEn": "",
+            "shifts": {
+                "A": {
+                    "normal": true,
+                    "special1": true,
+                    "special2": true
+                }
+            },
+            "shiftConfig": {
+                "normal": {
+                    "label": "普通班次",
+                    "labelEn": "Regular Shift",
+                    circular: true
+                },
+                "special1": {
+                    "label": "146 (特別班次 1)",
+                    "labelEn": "146 (Special 1)",
+                    "color": "#f59e0b"
+                },
+                "special2": {
+                    "label": "246P (特別班次 2)",
+                    "labelEn": "246P (Special 2)",
+                    "color": "#10b981"
+                }
+            },
+            "timetable": {
+                "A": {
+                    "normal": [
+                        {
+                            "unlockLevel": 74,
+                            "routeCode": "246XA",
+                            "serviceDays": "weekday",
+                            "firstTime": "17:40",
+                            "lastTime": "18:35",
+                            "interval": [
+                                { "time": "17:40, 18:05, 18:35", "interval": "0" }
+                            ]
+                        }
+                    ],
+                    "special1": [
+                        {
+                            "unlockLevel": 74,
+                            "routeCode": "146W",
+                            "serviceDays": "weekday",
+                            "firstTime": "07:00",
+                            "lastTime": "08:55",
+                            "interval": [
+                                { "time": "07:00, 07:30, 07:50, 08:10, 08:30, 08:55", "interval": "0" }
+                            ]
+                        }
+                    ],
+                    "special2": [
+                        {
+                            "unlockLevel": 74,
+                            "routeCode": "246PE",
+                            "serviceDays": "weekday",
+                            "firstTime": "06:25",
+                            "lastTime": "09:20",
+                            "interval": [
+                                { "time": "06:25 - 06:45", "interval": "20" },
+                                { "time": "07:00 - 08:00", "interval": "10 - 12" },
+                                { "time": "08:00 - 09:00", "interval": "7 - 10" },
+                                { "time": "09:05 - 09:20", "interval": "15" }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "stops": {
+                "A": [
+                    { "seq": 1, "nameCn": "東錦葵海傍路", "nameEn": "Eastmallow Praya Road", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 2, "nameCn": "東錦葵邨陽葵屋", "nameEn": "Sunny House Eastmallow Estate", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 3, "nameCn": "東錦葵大街", "nameEn": "Eastmallow Main Street", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 4, "nameCn": "中環橋", "nameEn": "Central Bridge", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 5, "nameCn": "北環中心", "nameEn": "Northern Plaza", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 6, "nameCn": "西區海底隧道轉車站", "nameEn": "Western Habour Tunnel Interchange", "nameSubCn": "月亮灣站", "nameSubEn": "Lunar Bay Station", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 7, "nameCn": "^^時間廊", "nameEn": "^^Timelapse Mall", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 8, "nameCn": "銀行大廈", "nameEn": "Bank Tower", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 9, "nameCn": "三哥大廈", "nameEn": "Third Technology Building", "nameSubCn": "炫光集", "nameSubEn": "Neon Center", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 10, "nameCn": "購物廊", "nameEn": "Shopping Corridor", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 11, "nameCn": "白鴿消防局", "nameEn": "Dove Fire Station", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 12, "nameCn": "艾迪城", "nameEn": "Addi City", "visible": true, "stopFor": ["special2"] },
+                    { "seq": 13, "nameCn": "伊迪城", "nameEn": "Eddie City", "visible": true, "stopFor": ["normal", "special1", "special2"] },
+                    { "seq": 14, "nameCn": "貨櫃碼頭", "nameEn": "Containers Terminal", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 15, "nameCn": "貨櫃島巴士總站", "nameEn": "Containers Island Bus Terminus", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 16, "nameCn": "中西轉車站", "nameEn": "Central - Western Interchange", "visible": true, "stopFor": ["normal", "special2"] },
+                    { "seq": 17, "nameCn": "南環街市", "nameEn": "Southern Market", "nameSubCn": "南環花園, 南環坊", "nameSubEn": "Southern Garden, Langford Place", "visible": true, "stopFor": ["normal", "special2"] },
+                    { "seq": 18, "nameCn": "The ONE", "nameEn": "The One", "nameSubCn": "警察總部, 新紀元中心", "nameSubEn": "Police Headquarters, Ping Center", "visible": true, "stopFor": ["special2"] },
+                    { "seq": 19, "nameCn": "楓樹里", "nameEn": "Maple Lane", "visible": true, "stopFor": ["normal", "special2"] },
+                    { "seq": 20, "nameCn": "中環橋", "nameEn": "Central Bridge", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 21, "nameCn": "東錦葵大街", "nameEn": "Eastmallow Main Street", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 22, "nameCn": "東錦葵海傍路", "nameEn": "Eastmallow Praya Road", "visible": true, "stopFor": ["normal"] }
+                ]
+            }
+        },
+        {
+            "route": "248",
+            "textColor": "#fff",
+            "enabled": true,
+            "circular": true,
+            "random": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/永巴縱橫通勞博頓快巴148線",
+            "zones": ["Zone 1", "Zone 4"],
+            "operators": ["SE", "REBC"],
+            "typeTags": ["Circular", "DailyChallenge"],
+            "bound": "A",
+            "viaDirections": {
+                "normal": {
+                    "bound": "A",
+                    "A": {
+                        "viaCn": "北島花園、陽光大學、^^貨櫃島、醫院島、艾迪、賴得、北環、陽光大學、北島花園",
+                        "viaEn": "North Island Estate, Sunshine University, ^^Containers Island, Hospital Island, Addi, Wright, Northern, Sunshine University, North Island Estate"
+                    }
+                }
+            },
+            "fares": {
+                "adult": 12.1,
+                "child": 6.1,
+                "elder": 6.1,
+                "student": 6.1,
+                "sectionFares": [
+                    {
+                        "direction": "A",
+                        "shift": ["normal"],
+                        "fromCn": "購物廊", "fromEn": "Shopping Corridor",
+                        "toCn": "北頓市中心", "toEn": "Norton Town Center",
+                        "price": 11.4,
+                        "childPrice": 5.7,
+                        "elderPrice": 5.7,
+                        "studentPrice": 5.7
+                    },
+                    {
+                        "direction": "A",
+                        "shift": ["normal"],
+                        "fromCn": "西區海底隧道轉車站", "fromEn": "Western Habour Tunnel Interchange",
+                        "toCn": "北頓市中心", "toEn": "Norton Town Center",
+                        "price": 7.2,
+                        "childPrice": 3.6,
+                        "elderPrice": 3.6,
+                        "studentPrice": 3.6
+                    }
+                ]
+            },
+            "routeType": "",
+            "routeTypeEn": "",
+            "shifts": {
+                "A": {
+                    "normal": true
+                }
+            },
+            "shiftConfig": {
+                "normal": {
+                    "label": "每日挑戰路綫",
+                    "labelEn": "Daily Challenge Route"
+                }
+            },
+            "timetable": {
+                "A": {
+                    "normal": [
+                        {
+                            "unlockLevel": 10,
+                            "routeCode": "248A",
+                            "serviceDays": "custom",
+                            "customDaysCn": "每日挑戰",
+                            "customDaysEn": "Daily Challenge"
+                        }
+                    ]
+                }
+            },
+            "stops": {
+                "A": [
+                    { "seq": 1, "nameCn": "北頓市中心", "nameEn": "Norton Town Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 2, "nameCn": "北頓邨", "nameEn": "Norton Estate", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 3, "nameCn": "北頓花園", "nameEn": "Norton Garden", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 4, "nameCn": "綠寶石中心", "nameEn": "Emerald Plaza", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 5, "nameCn": "北頓路", "nameEn": "Norton Road", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 6, "nameCn": "北島花園", "nameEn": "North Island Estate", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 7, "nameCn": "北島花園商場", "nameEn": "NIE Shopping Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 8, "nameCn": "望環台", "nameEn": "Panorama Heights", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 9, "nameCn": "陽光大學", "nameEn": "Sunshine University", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 10, "nameCn": "^^貨櫃島巴士總站", "nameEn": "^^Containers Island Bus Terminus", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 11, "nameCn": "貨櫃碼頭", "nameEn": "Containers Terminal", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 12, "nameCn": "海苔灣", "nameEn": "Seaweed Bay", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 13, "nameCn": "貨櫃碼頭員工宿舍", "nameEn": "Containers Island Employee House", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 14, "nameCn": "三塔", "nameEn": "Triple Tower", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 15, "nameCn": "西區醫院", "nameEn": "Western Hospital", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 16, "nameCn": "艾迪城", "nameEn": "Addi City", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 17, "nameCn": "購物廊", "nameEn": "Shopping Corridor", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 18, "nameCn": "三哥大廈", "nameEn": "Third Technology Building", "nameSubCn": "炫光集", "nameSubEn": "Neon Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 19, "nameCn": "艾迪路", "nameEn": "Addi Road", "nameSubCn": "北白鴿避風塘", "nameSubEn": "North Dove Island Typhoon Shelter", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 20, "nameCn": "西區海底隧道轉車站", "nameEn": "Western Habour Tunnel Interchange", "nameSubCn": "月亮灣站", "nameSubEn": "Lunar Bay Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 21, "nameCn": "北環轉車站", "nameEn": "Northern Interchange", "nameSubCn": "北環站, 天際塔", "nameSubEn": "Northern Station, Skyreach Tower", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 22, "nameCn": "中環橋", "nameEn": "Central Bridge", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 23, "nameCn": "陽光大學", "nameEn": "Sunshine University", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 24, "nameCn": "望環台", "nameEn": "Panorama Heights", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 25, "nameCn": "北島花園商場", "nameEn": "NIE Shopping Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 26, "nameCn": "巨石路", "nameEn": "Rocky Road", "nameSubCn": "北島學校村", "nameSubEn": "North Island School Village", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 27, "nameCn": "北島花園", "nameEn": "North Island Estate", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 28, "nameCn": "北頓路", "nameEn": "Norton Road", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 29, "nameCn": "北頓碼頭", "nameEn": "Norton Ferry Pier", "nameSubCn": "北頓市中心", "nameSubEn": "Norton Town Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 30, "nameCn": "北頓花園", "nameEn": "Norton Garden", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 31, "nameCn": "北頓邨", "nameEn": "Norton Estate", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 32, "nameCn": "北頓市中心", "nameEn": "Norton Town Center", "visible": true, "stopFor": ["normal"] }
+                ]
+            }
+        },
+        {
+            "route": "270A",
+            "textColor": "#fff",
+            "enabled": true,
+            "random": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/天際陽光勞博頓快巴370A線",
+            "zones": ["Zone 1", "Zone 7"],
+            "operators": ["HZ", "REBC"],
+            "typeTags": ["DailyChallenge"],
+            "bound": "A",
+            "viaDirections": {
+                "normal": {
+                    "bound": "A",
+                    "A": {
+                        "viaCn": "虹尾角、賴得、白鴿、千葉、鎌塔",
+                        "viaEn": "Iris Point, Wright, Dove, Thousand Leaf, Kamaya"
+                    }
+                }
+            },
+            "fares": {
+                "adult": 18.2,
+                "child": 9.1,
+                "elder": 9.1,
+                "student": 9.1,
+                "sectionFares": [
+                    {
+                        "direction": "A",
+                        "shift": ["normal"],
+                        "fromCn": "第七區轉車站", "fromEn": "Zone 7 Interchange",
+                        "toCn": "仙貝廣場", "toEn": "Senpai Shopping Center",
+                        "price": 7.2,
+                        "childPrice": 3.6,
+                        "elderPrice": 3.6,
+                        "studentPrice": 3.6
+                    }
+                ]
+            },
+            "routeType": "",
+            "routeTypeEn": "",
+            "shifts": {
+                "A": {
+                    "normal": true
+                }
+            },
+            "shiftConfig": {
+                "normal": {
+                    "label": "每日挑戰路綫",
+                    "labelEn": "Daily Challenge Route"
+                }
+            },
+            "timetable": {
+                "A": {
+                    "normal": [
+                        {
+                            "unlockLevel": 10,
+                            "routeCode": "370AEM",
+                            "serviceDays": "custom",
+                            "customDaysCn": "每日挑戰",
+                            "customDaysEn": "Daily Challenge"
+                        }
+                    ]
+                }
+            },
+            "stops": {
+                "A": [
+                    { "seq": 1, "nameCn": "長島碼頭", "nameEn": "Long Island Ferry Pier", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 2, "nameCn": "文化廣場", "nameEn": "Culture Square", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 3, "nameCn": "國際碼頭", "nameEn": "Regional Pier", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 4, "nameCn": "虹尾角街市", "nameEn": "Iris Point Market", "nameSubCn": "虹尾角站, 智家坊", "nameSubEn": "Iris Point Station, I Home", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 5, "nameCn": "時間里", "nameEn": "Timelapse Lane", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 6, "nameCn": "三哥大廈", "nameEn": "Third Technology Building", "nameSubCn": "炫光集", "nameSubEn": "Neon Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 7, "nameCn": "白鴿山", "nameEn": "Dove Hill", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 8, "nameCn": "白鴿邨", "nameEn": "Dove Estate", "nameSubCn": "巴士車廠", "nameSubEn": "Bus Depot", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 9, "nameCn": "購物廊", "nameEn": "Shopping Corridor", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 10, "nameCn": "第七區轉車站", "nameEn": "Zone 7 Interchange", "nameSubCn": "千葉站", "nameSubEn": "Thousand Leaf Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 11, "nameCn": "鎌塔花園", "nameEn": "Kamaya Garden", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 12, "nameCn": "鎌塔運動場", "nameEn": "Kamaya Sports Field", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 13, "nameCn": "國際塔", "nameEn": "International Tower", "nameSubCn": "仙貝站", "nameSubEn": "Senpai Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 14, "nameCn": "仙貝紀念碑花園", "nameEn": "The Stone of Memory", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 15, "nameCn": "紅石樓", "nameEn": "Redstone House", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 16, "nameCn": "仙貝酒店", "nameEn": "Senpai Hotel", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 17, "nameCn": "仙貝圖書館", "nameEn": "Senpai Library", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 18, "nameCn": "仙貝廣場", "nameEn": "Senpai Shopping Center", "visible": true, "stopFor": ["normal"] }
+                ]
+            }
+        },
+        {
+            "route": "370",
+            "textColor": "#fff",
+            "enabled": true,
+            "random": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/天際陽光勞博頓快巴370線",
+            "zones": ["Zone 1", "Zone 7"],
+            "operators": ["HZ", "REBC"],
+            "typeTags": ["Special Departure"],
+            "bound": "A,B",
+            "viaDirections": {
+                "normal": {
+                    "bound": "A,B",
+                    "A": {
+                        "viaCn": "虹尾角、賴得、白鴿、艾迪、醫院島、海苔灣、中西大橋、第七區轉車站、鎌塔、國際塔",
+                        "viaEn": "Iris Point, Wright, Dove, Addi, Hospital Island, Seaweed Bay, Central - Western Bridge, Zone 7 Interchange, Kamaya, International Tower"
+                    },
+                    "B": {
+                        "viaCn": "國際塔、鎌塔、第七區轉車站、中西大橋、海苔灣、醫院島、艾迪、白鴿、賴得、虹尾角",
+                        "viaEn": "International Tower, Kamaya, Zone 7 Interchange, Central - Western Bridge, Seaweed Bay, Hospital Island, Addi, Dove, Wright, Iris Point"
+                    }
+                }
+            },
+            "fares": {
+                "adult": 18.2,
+                "child": 9.1,
+                "elder": 9.1,
+                "student": 9.1,
+                "sectionFares": [
+                    {
+                        "direction": "A",
+                        "shift": ["normal"],
+                        "fromCn": "第七區轉車站", "fromEn": "Zone 7 Interchange",
+                        "toCn": "仙貝廣場", "toEn": "Senpai Shopping Center",
+                        "price": 7.2,
+                        "childPrice": 3.6,
+                        "elderPrice": 3.6,
+                        "studentPrice": 3.6
+                    },
+                    {
+                        "direction": "B",
+                        "shift": ["normal"],
+                        "fromCn": "中西轉車站", "fromEn": "Central - Western Interchange",
+                        "toCn": "長島碼頭", "toEn": "Long Island Ferry Pier",
+                        "price": 7.2,
+                        "childPrice": 3.6,
+                        "elderPrice": 3.6,
+                        "studentPrice": 3.6
+                    }
+                ]
+            },
+            "routeType": "",
+            "routeTypeEn": "",
+            "shifts": {
+                "A": {
+                    "normal": true
+                },
+                "B": {
+                    "normal": true
+                }
+            },
+            "shiftConfig": {
+                "normal": {
+                    "label": "普通班次",
+                    "labelEn": "Regular Shift"
+                }
+            },
+            "timetable": {
+                "A": {
+                    "normal": [
+                        {
+                            "unlockRoutes": ["270A", "370A", "370B", "R370", "Y370"],
+                            "routeCode": "370E",
+                            "serviceDays": "weekday",
+                            "firstTime": "06:00",
+                            "lastTime": "00:15",
+                            "interval": [
+                                { "time": "06:00 - 07:30", "interval": "20" },
+                                { "time": "08:15, 09:00, 10:15", "interval": "0" },
+                                { "time": "11:00 - 13:00", "interval": "15" },
+                                { "time": "13:00 - 15:00", "interval": "12" },
+                                { "time": "15:00 - 17:00", "interval": "10" },
+                                { "time": "19:30 - 21:30", "interval": "60" },
+                                { "time": "21:30 - 23:00", "interval": "10" },
+                                { "time": "23:00 - 00:15", "interval": "15" }
+                            ]
+                        },
+                        {
+                            "serviceDays": "saturday",
+                            "firstTime": "06:00",
+                            "lastTime": "00:15",
+                            "interval": [
+                                { "time": "06:00 - 07:30", "interval": "15" },
+                                { "time": "08:15, 09:00, 10:15", "interval": "0" },
+                                { "time": "11:00 - 13:00", "interval": "12" },
+                                { "time": "13:00 - 15:00", "interval": "10" },
+                                { "time": "15:00 - 17:00", "interval": "7 - 10" },
+                                { "time": "17:00 - 18:20", "interval": "5 - 7" },
+                                { "time": "18:20 - 19:00", "interval": "8 - 10" },
+                                { "time": "19:00 - 21:30", "interval": "9 - 10" },
+                                { "time": "21:30 - 23:00", "interval": "10" },
+                                { "time": "23:00 - 00:15", "interval": "12" }
+                            ]
+                        },
+                        {
+                            "serviceDays": "holiday",
+                            "firstTime": "06:00",
+                            "lastTime": "00:15",
+                            "interval": [
+                                { "time": "06:00 - 07:30", "interval": "15" },
+                                { "time": "08:15, 09:00, 10:15", "interval": "0" },
+                                { "time": "11:00 - 13:00", "interval": "12" },
+                                { "time": "13:00 - 15:00", "interval": "10" },
+                                { "time": "15:00 - 17:00", "interval": "9 - 10" },
+                                { "time": "17:00 - 19:00", "interval": "8 - 10" },
+                                { "time": "19:00 - 21:30", "interval": "9 - 10" },
+                                { "time": "21:30 - 23:00", "interval": "10" },
+                                { "time": "23:00 - 00:15", "interval": "12" }
+                            ]
+                        }
+                    ]
+                },
+                "B": {
+                    "normal": [
+                        {
+                            "unlockRoutes": ["270A", "370A", "370B", "R370", "Y370"],
+                            "routeCode": "370W",
+                            "serviceDays": "weekday",
+                            "firstTime": "06:10",
+                            "lastTime": "23:30",
+                            "interval": [
+                                { "time": "06:10 - 07:00", "interval": "12 - 13" },
+                                { "time": "09:00 - 16:30", "interval": "12" },
+                                { "time": "16:30 - 18:50", "interval": "60" },
+                                { "time": "19:20 - 23:00", "interval": "12" },
+                                { "time": "23:00 - 23:30", "interval": "15" }
+                            ]
+                        },
+                        {
+                            "serviceDays": "weekend_holiday",
+                            "firstTime": "06:10",
+                            "lastTime": "23:30",
+                            "interval": [
+                                { "time": "06:10 - 07:00", "interval": "15" },
+                                { "time": "07:00 - 08:00", "interval": "20" },
+                                { "time": "08:00 - 08:40", "interval": "15" },
+                                { "time": "08:40 - 09:00", "interval": "20" },
+                                { "time": "09:00 - 18:50", "interval": "10" },
+                                { "time": "18:50 - 23:00", "interval": "12" },
+                                { "time": "23:00 - 23:30", "interval": "15" }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "stops": {
+                "A": [
+                    { "seq": 1, "nameCn": "長島碼頭", "nameEn": "Long Island Ferry Pier", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 2, "nameCn": "文化廣場", "nameEn": "Culture Square", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 3, "nameCn": "國際碼頭", "nameEn": "Regional Pier", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 4, "nameCn": "虹尾角街市", "nameEn": "Iris Point Market", "nameSubCn": "虹尾角站, 智家坊", "nameSubEn": "Iris Point Station, I Home", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 5, "nameCn": "時間里", "nameEn": "Timelapse Lane", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 6, "nameCn": "三哥大廈", "nameEn": "Third Technology Building", "nameSubCn": "炫光集", "nameSubEn": "Neon Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 7, "nameCn": "白鴿山", "nameEn": "Dove Hill", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 8, "nameCn": "白鴿邨", "nameEn": "Dove Estate", "nameSubCn": "巴士車廠", "nameSubEn": "Bus Depot", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 9, "nameCn": "購物廊", "nameEn": "Shopping Corridor", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 10, "nameCn": "艾迪城", "nameEn": "Addi City", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 11, "nameCn": "西區醫院", "nameEn": "Western Hospital", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 12, "nameCn": "三塔", "nameEn": "Triple Tower", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 13, "nameCn": "貨櫃碼頭員工宿舍", "nameEn": "Containers Island Employee House", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 14, "nameCn": "海苔灣", "nameEn": "Seaweed Bay", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 15, "nameCn": "貨櫃碼頭", "nameEn": "Containers Terminal", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 16, "nameCn": "中西轉車站", "nameEn": "Central - Western Interchange", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 17, "nameCn": "第七區轉車站", "nameEn": "Zone 7 Interchange", "nameSubCn": "千葉站", "nameSubEn": "Thousand Leaf Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 18, "nameCn": "鎌塔花園", "nameEn": "Kamaya Garden", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 19, "nameCn": "鎌塔運動場", "nameEn": "Kamaya Sports Field", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 20, "nameCn": "國際塔", "nameEn": "International Tower", "nameSubCn": "仙貝站", "nameSubEn": "Senpai Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 21, "nameCn": "仙貝紀念碑花園", "nameEn": "The Stone of Memory", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 22, "nameCn": "紅石樓", "nameEn": "Redstone House", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 23, "nameCn": "仙貝酒店", "nameEn": "Senpai Hotel", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 24, "nameCn": "仙貝圖書館", "nameEn": "Senpai Library", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 25, "nameCn": "仙貝廣場", "nameEn": "Senpai Shopping Center", "visible": true, "stopFor": ["normal"] }
+                ],
+                "B": [
+                    { "seq": 1, "nameCn": "仙貝廣場", "nameEn": "Senpai Shopping Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 2, "nameCn": "仙貝圖書館", "nameEn": "Senpai Library", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 3, "nameCn": "仙貝酒店", "nameEn": "Senpai Hotel", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 4, "nameCn": "黑白中心", "nameEn": "Grayscale Centre", "nameSubCn": "仙貝紀念碑花園", "nameSubEn": "The Stone of Memory", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 5, "nameCn": "國際塔", "nameEn": "International Tower", "nameSubCn": "仙貝站", "nameSubEn": "Senpai Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 6, "nameCn": "鎌塔運動場", "nameEn": "Kamaya Sports Field", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 7, "nameCn": "鎌塔花園", "nameEn": "Kamaya Garden", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 8, "nameCn": "第七區轉車站", "nameEn": "Zone 7 Interchange", "nameSubCn": "千葉站", "nameSubEn": "Thousand Leaf Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 9, "nameCn": "中西轉車站", "nameEn": "Central - Western Interchange", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 10, "nameCn": "貨櫃碼頭", "nameEn": "Containers Terminal", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 11, "nameCn": "海苔灣", "nameEn": "Seaweed Bay", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 12, "nameCn": "貨櫃碼頭員工宿舍", "nameEn": "Containers Island Employee House", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 13, "nameCn": "三塔", "nameEn": "Triple Tower", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 14, "nameCn": "西區醫院", "nameEn": "Western Hospital", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 15, "nameCn": "艾迪城", "nameEn": "Addi City", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 16, "nameCn": "購物廊", "nameEn": "Shopping Corridor", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 17, "nameCn": "白鴿山", "nameEn": "Dove Hill", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 18, "nameCn": "白鴿邨", "nameEn": "Dove Estate", "nameSubCn": "巴士車廠", "nameSubEn": "Bus Depot", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 19, "nameCn": "三哥大廈", "nameEn": "Third Technology Building", "nameSubCn": "炫光集", "nameSubEn": "Neon Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 20, "nameCn": "賴得商場", "nameEn": "Wright Shopping Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 21, "nameCn": "彩色匯", "nameEn": "Rainbow Center", "nameSubCn": "虹尾角站, 智家坊", "nameSubEn": "Iris Point Station, I Home", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 22, "nameCn": "國際碼頭", "nameEn": "Regional Pier", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 23, "nameCn": "文化廣場", "nameEn": "Culture Square", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 24, "nameCn": "長島碼頭", "nameEn": "Long Island Ferry Pier", "visible": true, "stopFor": ["normal"] }
                 ]
             }
         }
