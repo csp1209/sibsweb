@@ -5331,7 +5331,7 @@ var routeData = {
                             "interval": [
                                 { "time": "06:10 - 07:00", "interval": "20" },
                                 { "time": "07:00 - 08:00", "interval": "12" },
-                                { "time": "08:00 - 09:00", "interval": "10" - 12 },
+                                { "time": "08:00 - 09:00", "interval": "10 - 12" },
                                 { "time": "09:00 - 11:00", "interval": "10" },
                                 { "time": "11:00 - 16:40", "interval": "7 - 8" },
                                 { "time": "16:40 - 21:00", "interval": "8 - 9" },
