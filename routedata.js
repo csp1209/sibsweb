@@ -1770,19 +1770,19 @@ var routeData = {
                 "normal": {
                     "bound": "A,B",
                     "A": {
-                        "viaCn": "葉角灣、勿莫",
-                        "viaEn": "Leafy Bay Estate, Mo"
+                        "viaCn": "葉角灣、樂莫坳",
+                        "viaEn": "Leafy Bay Estate, Normal Gap"
                     },
                     "B": {
-                        "viaCn": "勿莫、葉角灣",
-                        "viaEn": "Mo, Leafy Bay"
+                        "viaCn": "樂莫坳、葉角灣",
+                        "viaEn": "Normal Gap, Leafy Bay"
                     }
                 },
                 "special1": {
                     "bound": "B",
                     "B": {
-                        "viaCn": "勿莫、安靈台、葉角灣",
-                        "viaEn": "Mo, Ambling, Leafy Bay"
+                        "viaCn": "樂莫坳、安靈台、葉角灣",
+                        "viaEn": "Normal Gap, Ambling Peak, Leafy Bay"
                     }
                 }
             },
@@ -5315,6 +5315,801 @@ var routeData = {
                     { "seq": 10, "nameCn": "中環（中日街）", "nameEn": "Central (Sun Central Street)", "visible": true, "stopFor": ["normal"] }
                 ]
             }
+        },
+        {
+            "route": "476",
+            "textColor": "#fff",
+            "enabled": true,
+            "random": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/天際陽光際巴476線",
+            "zones": ["Zone 4", "Zone 7"],
+            "operators": ["HZ", "CSB"],
+            "typeTags": [
+                { "type": "Special Departure", "bound": "A", "shift": "special1" },
+                { "type": "Special Departure", "bound": "B", "shift": "special2" },
+                { "type": "Special Departure", "bound": "B", "shift": "special3" },
+                { "type": "Special Departure", "bound": "B", "shift": "special4" }
+            ],
+            "bound": "A,B",
+            "viaDirections": {
+                "normal": {
+                    "bound": "A,B",
+                    "A": {
+                        "viaCn": "中環、南環、陽光站、千葉、葉角大學裏、葉角灣邨、樂莫坳、東門",
+                        "viaEn": "Central, Southern, Sunshine Station, Thousand Leaf, Leafy University In, Leafy Bay Estate, Normal Gap, East Door"
+                    },
+                    "B": {
+                        "viaCn": "東門、樂莫坳、葉角灣邨、葉角大學、千葉、陽光站、南環、中環",
+                        "viaEn": "East Door, Normal Gap, Leafy Bay Estate, Leafy University, Thousand Leaf, Sunshine Station, Southern, Central"
+                    }
+                },
+                "special1": {
+                    "bound": "A",
+                    "A": {
+                        "viaCn": "中環、南環、陽光站、千葉、葉角灣邨、樂莫坳、東門",
+                        "viaEn": "Central, Southern, Sunshine Station, Thousand Leaf, Leafy Bay Estate, Normal Gap, East Door"
+                    }
+                },
+                "special2": {
+                    "bound": "B",
+                    "B": {
+                        "viaCn": "東門、樂莫坳、葉角灣邨、葉角大學裏、千葉、陽光站、南環、中環",
+                        "viaEn": "East Door, Normal Gap, Leafy Bay Estate, Leafy University In, Thousand Leaf, Sunshine Station, Southern, Central"
+                    }
+                },
+                "special3": {
+                    "bound": "B",
+                    "B": {
+                        "viaCn": "東門、樂莫坳、安靈台、葉角灣邨、葉角大學、千葉、陽光站、南環、中環",
+                        "viaEn": "East Door, Normal Gap, Ambling Peak, Leafy Bay Estate, Leafy University, Thousand Leaf, Sunshine Station, Southern, Central"
+                    }
+                },
+                "special4": {
+                    "bound": "B",
+                    "B": {
+                        "viaCn": "東門、樂莫坳、安靈台、葉角灣邨、葉角大學裏、千葉、陽光站、南環、中環",
+                        "viaEn": "East Door, Normal Gap, Ambling Peak, Leafy Bay Estate, Leafy University In, Thousand Leaf, Sunshine Station, Southern, Central"
+                    }
+                }
+            },
+            "fares": {
+                "adult": 12.1,
+                "child": 6.1,
+                "elder": 6.1,
+                "student": 6.1,
+                "sectionFares": [
+                    {
+                        "direction": "A",
+                        "fromCn": "第七區轉車站", "fromEn": "Zone 7 Interchange",
+                        "toCn": "彩虹中心", "toEn": "Rainbow Estate Complex",
+                        "price": 7.2,
+                        "childPrice": 3.6,
+                        "elderPrice": 3.6,
+                        "studentPrice": 3.6
+                    },
+                    {
+                        "direction": "A",
+                        "shift": ["normal"],
+                        "fromCn": "葉角大學裏", "fromEn": "Leafy University In",
+                        "toCn": "彩虹中心", "toEn": "Rainbow Estate Complex",
+                        "price": 6.3,
+                        "childPrice": 3.2,
+                        "elderPrice": 3.2,
+                        "studentPrice": 3.2
+                    },
+                    {
+                        "direction": "A",
+                        "shift": ["special1"],
+                        "fromCn": "葉角花園", "fromEn": "Leafy Bay Garden",
+                        "toCn": "彩虹中心", "toEn": "Rainbow Estate Complex",
+                        "price": 6.3,
+                        "childPrice": 3.2,
+                        "elderPrice": 3.2,
+                        "studentPrice": 3.2
+                    },
+                    {
+                        "direction": "B",
+                        "fromCn": "中間花園", "fromEn": "Middle Garden",
+                        "toCn": "東錦葵海傍路", "toEn": "Eastmallow Praya Road",
+                        "price": 12.1,
+                        "childPrice": 6.1,
+                        "elderPrice": 6.1,
+                        "studentPrice": 6.1
+                    },
+                    {
+                        "direction": "B",
+                        "fromCn": "陽光站", "fromEn": "Sunshine Station",
+                        "toCn": "東錦葵海傍路", "toEn": "Eastmallow Praya Road",
+                        "price": 7.2,
+                        "childPrice": 3.6,
+                        "elderPrice": 3.6,
+                        "studentPrice": 3.6
+                    }
+                ],
+                "shortDistanceRebates": [
+                    {
+                        "direction": "B",
+                        "startStopCn": "彩虹中心", "startStopEn": "Rainbow Estate Complex",
+                        "alightStopCn": "勿莫街市", "alightStopEn": "Mo Market",
+                        "actualFare": 6.3,
+                        "childFare": 3.2,
+                        "elderFare": 3.2,
+                        "studentFare": 3.2,
+                        "fullFare": 12.1,
+                        "childFullFare": 6.1,
+                        "elderFullFare": 6.1,
+                        "studentFullFare": 6.1
+                    },
+                    {
+                        "direction": "B",
+                        "shift": ["normal", "special3"],
+                        "startStopCn": "彩虹中心", "startStopEn": "Rainbow Estate Complex",
+                        "alightStopCn": "葉角大學", "alightStopEn": "Leafy University",
+                        "actualFare": 6.3,
+                        "childFare": 3.2,
+                        "elderFare": 3.2,
+                        "studentFare": 3.2,
+                        "fullFare": 12.1,
+                        "childFullFare": 6.1,
+                        "elderFullFare": 6.1,
+                        "studentFullFare": 6.1
+                    },
+                    {
+                        "direction": "B",
+                        "shift": ["special2", "special4"],
+                        "startStopCn": "彩虹中心", "startStopEn": "Rainbow Estate Complex",
+                        "alightStopCn": "葉角大學裏", "alightStopEn": "Leafy University In",
+                        "actualFare": 6.3,
+                        "childFare": 3.2,
+                        "elderFare": 3.2,
+                        "studentFare": 3.2,
+                        "fullFare": 12.1,
+                        "childFullFare": 6.1,
+                        "elderFullFare": 6.1,
+                        "studentFullFare": 6.1
+                    },
+                    {
+                        "direction": "B",
+                        "shift": ["normal", "special3"],
+                        "startStopCn": "中間花園", "startStopEn": "Middle Garden",
+                        "alightStopCn": "葉角大學", "alightStopEn": "Leafy University",
+                        "actualFare": 6.3,
+                        "childFare": 3.2,
+                        "elderFare": 3.2,
+                        "studentFare": 3.2,
+                        "fullFare": 12.1,
+                        "childFullFare": 6.1,
+                        "elderFullFare": 6.1,
+                        "studentFullFare": 6.1
+                    },
+                    {
+                        "direction": "B",
+                        "shift": ["special2", "special4"],
+                        "startStopCn": "中間花園", "startStopEn": "Middle Garden",
+                        "alightStopCn": "葉角大學裏", "alightStopEn": "Leafy University In",
+                        "actualFare": 6.3,
+                        "childFare": 3.2,
+                        "elderFare": 3.2,
+                        "studentFare": 3.2,
+                        "fullFare": 12.1,
+                        "childFullFare": 6.1,
+                        "elderFullFare": 6.1,
+                        "studentFullFare": 6.1
+                    },
+                    {
+                        "direction": "B",
+                        "startStopCn": "中間花園", "startStopEn": "Middle Garden",
+                        "alightStopCn": "第七區轉車站", "alightStopEn": "Zone 7 Interchange",
+                        "actualFare": 7.2,
+                        "childFare": 3.6,
+                        "elderFare": 3.6,
+                        "studentFare": 3.6,
+                        "fullFare": 12.1,
+                        "childFullFare": 6.1,
+                        "elderFullFare": 6.1,
+                        "studentFullFare": 6.1
+                    },
+                    {
+                        "direction": "B",
+                        "shift": ["special3", "special4"],
+                        "startStopCn": "彩虹中心", "startStopEn": "Rainbow Estate Complex",
+                        "alightStopCn": "安靈台靈灰安置所", "alightStopEn": "Ambling Peak Columbarium",
+                        "actualFare": 7.2,
+                        "childFare": 3.6,
+                        "elderFare": 3.6,
+                        "studentFare": 3.6,
+                        "fullFare": 12.1,
+                        "childFullFare": 6.1,
+                        "elderFullFare": 6.1,
+                        "studentFullFare": 6.1
+                    },
+                    {
+                        "direction": "B",
+                        "shift": ["special3"],
+                        "startStopCn": "安靈台靈灰安置所", "startStopEn": "Ambling Peak Columbarium",
+                        "alightStopCn": "葉角大學", "alightStopEn": "Leafy University",
+                        "actualFare": 7.2,
+                        "childFare": 3.6,
+                        "elderFare": 3.6,
+                        "studentFare": 3.6,
+                        "fullFare": 12.1,
+                        "childFullFare": 6.1,
+                        "elderFullFare": 6.1,
+                        "studentFullFare": 6.1
+                    },
+                    {
+                        "direction": "B",
+                        "shift": ["special4"],
+                        "startStopCn": "安靈台靈灰安置所", "startStopEn": "Ambling Peak Columbarium",
+                        "alightStopCn": "葉角大學裏", "alightStopEn": "Leafy University In",
+                        "actualFare": 7.2,
+                        "childFare": 3.6,
+                        "elderFare": 3.6,
+                        "studentFare": 3.6,
+                        "fullFare": 12.1,
+                        "childFullFare": 6.1,
+                        "elderFullFare": 6.1,
+                        "studentFullFare": 6.1
+                    },
+                    {
+                        "direction": "B",
+                        "shift": ["special3", "special4"],
+                        "startStopCn": "安靈台靈灰安置所", "startStopEn": "Ambling Peak Columbarium",
+                        "alightStopCn": "第七區轉車站", "alightStopEn": "Zone 7 Interchange",
+                        "actualFare": 8.4,
+                        "childFare": 4.2,
+                        "elderFare": 4.2,
+                        "studentFare": 4.2,
+                        "fullFare": 12.1,
+                        "childFullFare": 6.1,
+                        "elderFullFare": 6.1,
+                        "studentFullFare": 6.1
+                    }
+                ]
+            },
+            "routeType": "",
+            "routeTypeEn": "",
+            "shifts": {
+                "A": {
+                    "normal": true,
+                    "special1": true,
+                    "special2": false,
+                    "special3": false,
+                    "special4": false
+                },
+                "B": {
+                    "normal": true,
+                    "special1": false,
+                    "special2": true,
+                    "special3": true,
+                    "special4": true
+                }
+            },
+            "shiftConfig": {
+                "normal": {
+                    "label": "普通班次",
+                    "labelEn": "Regular Shift"
+                },
+                "special1": {
+                    "label": "476% (特別班次 1)",
+                    "labelEn": "476% (Special 1)",
+                    "color": "#f59e0b"
+                },
+                "special2": {
+                    "label": "476* (特別班次 1)",
+                    "labelEn": "476* (Special 2)",
+                    "color": "#f59e0b"
+                },
+                "special3": {
+                    "label": "476# (特別班次 2)",
+                    "labelEn": "476# (Special 2)",
+                    "color": "#10b981"
+                },
+                "special4": {
+                    "label": "476#* (特別班次 3)",
+                    "labelEn": "476#* (Special 3)",
+                    "color": "#FFCF43"
+                }
+            },
+            "timetable": {
+                "A": {
+                    "normal": [
+                        {
+                            "unlockLevel": 56,
+                            "routeCode": "476E",
+                            "serviceDays": "weekday",
+                            "firstTime": "05:55",
+                            "lastTime": "23:00",
+                            "interval": [
+                                { "time": "05:55 - 06:40", "interval": "12" },
+                                { "time": "06:40 - 07:10", "interval": "10 - 12" },
+                                { "time": "07:10 - 07:35", "interval": "9 - 10" },
+                                { "time": "07:35 - 08:05", "interval": "10" },
+                                { "time": "08:05 - 09:05", "interval": "6 - 7" },
+                                { "time": "09:05 - 15:20", "interval": "7 - 9" },
+                                { "time": "15:20 - 16:20", "interval": "6 - 7" },
+                                { "time": "16:20 - 18:30", "interval": "8 - 9" },
+                                { "time": "18:30 - 19:00", "interval": "9 - 10" },
+                                { "time": "19:00 - 20:00", "interval": "10" },
+                                { "time": "20:00 - 22:55", "interval": "15" },
+                                { "time": "23:00", "interval": "0" }
+                            ]
+                        },
+                        {
+                            "serviceDays": "saturday",
+                            "firstTime": "05:55",
+                            "lastTime": "23:00",
+                            "interval": [
+                                { "time": "05:55 - 06:40", "interval": "12" },
+                                { "time": "06:40 - 07:10", "interval": "10" },
+                                { "time": "07:10 - 07:35", "interval": "7 - 9" },
+                                { "time": "07:35 - 08:05", "interval": "10" },
+                                { "time": "08:05 - 11:00", "interval": "8 - 9" },
+                                { "time": "11:00 - 16:20", "interval": "7 - 9" },
+                                { "time": "16:20 - 17:30", "interval": "6 - 8" },
+                                { "time": "17:30 - 18:30", "interval": "10" },
+                                { "time": "18:30 - 19:00", "interval": "10" },
+                                { "time": "19:00 - 20:00", "interval": "7 - 8" },
+                                { "time": "20:00 - 22:55", "interval": "10 - 14" },
+                                { "time": "23:00", "interval": "0" }
+                            ]
+                        },
+                        {
+                            "serviceDays": "holiday",
+                            "firstTime": "05:55",
+                            "lastTime": "23:00",
+                            "interval": [
+                                { "time": "05:55 - 06:40", "interval": "12" },
+                                { "time": "06:40 - 11:00", "interval": "10" },
+                                { "time": "11:00 - 16:20", "interval": "7 - 9" },
+                                { "time": "16:20 - 17:30", "interval": "6 - 8" },
+                                { "time": "17:30 - 18:30", "interval": "10" },
+                                { "time": "18:30 - 19:00", "interval": "10" },
+                                { "time": "19:00 - 20:00", "interval": "7 - 8" },
+                                { "time": "20:00 - 22:55", "interval": "10 - 14" },
+                                { "time": "23:00", "interval": "0" }
+                            ]
+                        }
+                    ],
+                    "special1": [
+                        {
+                            "unlockRoutes": ["476", "476P", "N476"],
+                            "routeCode": "476E2",
+                            "serviceDays": "weekday",
+                            "firstTime": "06:40",
+                            "lastTime": "23:55",
+                            "interval": [
+                                { "time": "06:40 - 07:10", "interval": "10 - 12" },
+                                { "time": "07:10 - 07:35", "interval": "9 - 10" },
+                                { "time": "19:00 - 20:00", "interval": "10" },
+                                { "time": "20:00 - 22:55", "interval": "15" },
+                                { "time": "23:00 - 23:55", "interval": "10" }
+                            ]
+                        },
+                        {
+                            "serviceDays": "weekend_holiday",
+                            "firstTime": "17:30",
+                            "lastTime": "23:55",
+                            "interval": [
+                                { "time": "17:30 - 19:00", "interval": "10" },
+                                { "time": "20:00 - 22:55", "interval": "10 - 14" },
+                                { "time": "23:00 - 23:55", "interval": "6 - 7" }
+                            ]
+                        }
+                    ]
+                },
+                "B": {
+                    "normal": [
+                        {
+                            "unlockLevel": 56,
+                            "routeCode": "476W",
+                            "serviceDays": "weekday",
+                            "firstTime": "05:30",
+                            "lastTime": "00:10",
+                            "interval": [
+                                { "time": "05:30 - 06:30", "interval": "10" },
+                                { "time": "06:30 - 07:00", "interval": "7 - 9" },
+                                { "time": "07:00 - 07:50", "interval": "5 - 6" },
+                                { "time": "07:50 - 08:40", "interval": "4 - 5" },
+                                { "time": "08:40 - 09:20", "interval": "6 - 7" },
+                                { "time": "09:20 - 15:37", "interval": "7 - 9" },
+                                { "time": "15:37 - 16:30", "interval": "5 - 6" },
+                                { "time": "16:30 - 17:05", "interval": "6 - 7" },
+                                { "time": "18:30 - 19:20", "interval": "6 - 7" },
+                                { "time": "19:20 - 20:20", "interval": "10" },
+                                { "time": "20:20 - 22:30", "interval": "10 - 12" },
+                                { "time": "22:30 - 00:10", "interval": "15" }
+                            ]
+                        },
+                        {
+                            "serviceDays": "saturday",
+                            "firstTime": "05:30",
+                            "lastTime": "00:10",
+                            "interval": [
+                                { "time": "05:30 - 06:30", "interval": "10" },
+                                { "time": "06:30 - 07:00", "interval": "8 - 9" },
+                                { "time": "07:00 - 07:50", "interval": "7" },
+                                { "time": "07:50 - 08:40", "interval": "6" },
+                                { "time": "08:40 - 09:20", "interval": "6 - 7" },
+                                { "time": "09:20 - 11:30", "interval": "8 - 9" },
+                                { "time": "11:30 - 15:37", "interval": "6 - 7" },
+                                { "time": "15:37 - 18:30", "interval": "8 - 9" },
+                                { "time": "18:30 - 19:20", "interval": "10" },
+                                { "time": "19:20 - 20:20", "interval": "12" },
+                                { "time": "20:20 - 22:30", "interval": "10 - 12" },
+                                { "time": "22:30 - 00:10", "interval": "15" }
+                            ]
+                        },
+                        {
+                            "serviceDays": "holiday",
+                            "firstTime": "05:30",
+                            "lastTime": "00:10",
+                            "interval": [
+                                { "time": "05:30 - 07:00", "interval": "10" },
+                                { "time": "07:00 - 07:50", "interval": "9" },
+                                { "time": "07:50 - 08:40", "interval": "7" },
+                                { "time": "08:40 - 09:20", "interval": "6 - 7" },
+                                { "time": "09:20 - 11:30", "interval": "8 - 9" },
+                                { "time": "11:30 - 15:37", "interval": "6 - 7" },
+                                { "time": "15:37 - 16:30", "interval": "7 - 8" },
+                                { "time": "16:30 - 18:00", "interval": "6 - 7" },
+                                { "time": "18:00 - 18:30", "interval": "8 - 9" },
+                                { "time": "18:30 - 19:20", "interval": "10" },
+                                { "time": "19:20 - 20:20", "interval": "12" },
+                                { "time": "20:20 - 22:30", "interval": "10 - 12" },
+                                { "time": "22:30 - 00:10", "interval": "15" }
+                            ]
+                        }
+                    ],
+                    "special2": [
+                        {
+                            "unlockLevel": 56,
+                            "routeCode": "476W2",
+                            "serviceDays": "weekday",
+                            "firstTime": "17:05",
+                            "lastTime": "18:30",
+                            "interval": [
+                                { "time": "17:05 - 18:30", "interval": "10" }
+                            ]
+                        }
+                    ],
+                    "special3": [
+                        {
+                            "unlockRoutes": ["476", "476P", "N476"],
+                            "routeCode": "476W3",
+                            "serviceDays": "weekday",
+                            "firstTime": "07:30",
+                            "lastTime": "19:30",
+                            "interval": [
+                                { "time": "07:30 - 16:30", "interval": "60" },
+                                { "time": "19:30", "interval": "0" }
+                            ]
+                        },
+                        {
+                            "serviceDays": "weekend_holiday",
+                            "firstTime": "07:30",
+                            "lastTime": "18:30",
+                            "interval": [
+                                { "time": "07:30 - 09:30", "interval": "60" },
+                                { "time": "10:00 - 18:30", "interval": "30" }
+                            ]
+                        }
+                    ],
+                    "special4": [
+                        {
+                            "unlockRoutes": ["476", "476P", "N476"],
+                            "routeCode": "476W4",
+                            "serviceDays": "weekday",
+                            "firstTime": "17:30",
+                            "lastTime": "18:30",
+                            "interval": [
+                                { "time": "17:30, 18:30", "interval": "0" }
+                            ]
+                        }
+                    ],
+                }
+            },
+            "stops": {
+                "A": [
+                    { "seq": 1, "nameCn": "東錦葵海傍路", "nameEn": "Eastmallow Praya Road", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 2, "nameCn": "東錦葵邨陽葵屋", "nameEn": "Sunny House Eastmallow Estate", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 3, "nameCn": "東錦葵大街", "nameEn": "Eastmallow Main Street", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 4, "nameCn": "中環橋", "nameEn": "Central Bridge", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 5, "nameCn": "楓樹里", "nameEn": "Maple Lane", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 6, "nameCn": "玻璃樓", "nameEn": "Glass Office", "nameSubCn": "冰淇路", "nameSubEn": "Pinky Road", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 7, "nameCn": "The ONE", "nameEn": "The One", "nameSubCn": "警察總部, 新紀元中心", "nameSubEn": "Police Headquarters, Ping Center", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 8, "nameCn": "強生街市", "nameEn": "Johnson Market", "nameSubCn": "A05, 陽光大學南環校園", "nameSubEn": "A05, Sunshine University Southern Campus", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 9, "nameCn": "南環中心", "nameEn": "The Southern", "nameSubCn": "南環坊", "nameSubEn": "Langford Place", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 10, "nameCn": "中環醫院", "nameEn": "Central Hopsital", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 11, "nameCn": "陽光站", "nameEn": "Sunshine Station", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 12, "nameCn": "第七區轉車站", "nameEn": "Zone 7 Interchange", "nameSubCn": "千葉站", "nameSubEn": "Thousand Leaf Station", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 13, "nameCn": "葉角大學裏", "nameEn": "Leafy University In", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 14, "nameCn": "葉角花園", "nameEn": "Leafy Bay Garden", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 15, "nameCn": "葉角灣邨商場", "nameEn": "Leafy Bay Estate Shopping Center", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 16, "nameCn": "葉角灣邨", "nameEn": "Leafy Bay Estate", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 17, "nameCn": "葉角醫院", "nameEn": "Leafy Hospital", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 18, "nameCn": "中間花園", "nameEn": "Middle Garden", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 19, "nameCn": "勿莫商場", "nameEn": "Mo Shopping Center", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 20, "nameCn": "勿莫街市", "nameEn": "Mo Market", "visible": true, "stopFor": ["normal", "special1", "special1"] },
+                    { "seq": 21, "nameCn": "東門公園", "nameEn": "East Door Park", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 22, "nameCn": "東門邨", "nameEn": "East Door Estate", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 23, "nameCn": "紅豆商場", "nameEn": "Redbean Center", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 24, "nameCn": "彩虹邨", "nameEn": "Rainbow Estate", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 25, "nameCn": "彩虹中心", "nameEn": "Rainbow Estate Complex", "visible": true, "stopFor": ["normal", "special1"] }
+                ],
+                "B": [
+                    { "seq": 1, "nameCn": "彩虹中心", "nameEn": "Rainbow Estate Complex", "visible": true, "stopFor": ["normal", "special2", "special3", "special4"] },
+                    { "seq": 2, "nameCn": "彩虹邨", "nameEn": "Rainbow Estate", "visible": true, "stopFor": ["normal", "special2", "special3", "special4"] },
+                    { "seq": 3, "nameCn": "紅豆商場", "nameEn": "Redbean Center", "visible": true, "stopFor": ["normal", "special2", "special3", "special4"] },
+                    { "seq": 4, "nameCn": "東門邨", "nameEn": "East Door Estate", "visible": true, "stopFor": ["normal", "special2", "special3", "special4"] },
+                    { "seq": 5, "nameCn": "東門公園", "nameEn": "East Door Park", "visible": true, "stopFor": ["normal", "special2", "special3", "special4"] },
+                    { "seq": 6, "nameCn": "勿莫商場", "nameEn": "Mo Shopping Center", "visible": true, "stopFor": ["normal", "special2", "special3", "special4"] },
+                    { "seq": 7, "nameCn": "勿莫街市", "nameEn": "Mo Market", "visible": true, "stopFor": ["normal", "special2", "special3", "special4"] },
+                    { "seq": 8, "nameCn": "安靈台靈灰安置所", "nameEn": "Ambling Peak Columbarium", "visible": true, "stopFor": ["special3", "special4"] },
+                    { "seq": 9, "nameCn": "中間花園", "nameEn": "Middle Garden", "visible": true, "stopFor": ["normal", "special2", "special3", "special4"] },
+                    { "seq": 10, "nameCn": "葉角醫院", "nameEn": "Leafy Hospital", "visible": true, "stopFor": ["normal", "special2", "special3", "special4"] },
+                    { "seq": 11, "nameCn": "葉角灣邨", "nameEn": "Leafy Bay Estate", "visible": true, "stopFor": ["normal", "special2", "special3", "special4"] },
+                    { "seq": 12, "nameCn": "葉角灣邨商場", "nameEn": "Leafy Bay Estate Shopping Center", "visible": true, "stopFor": ["normal", "special2", "special3", "special4"] },
+                    { "seq": 13, "nameCn": "葉角花園", "nameEn": "Leafy Bay Garden", "visible": true, "stopFor": ["normal", "special2", "special3", "special4"] },
+                    { "seq": 14, "nameCn": "葉角大學", "nameEn": "Leafy University", "visible": true, "stopFor": ["normal", "special3"] },
+                    { "seq": 15, "nameCn": "葉角大學裏", "nameEn": "Leafy University In", "visible": true, "stopFor": ["special2", "special4"] },
+                    { "seq": 16, "nameCn": "第七區轉車站", "nameEn": "Zone 7 Interchange", "nameSubCn": "千葉站", "nameSubEn": "Thousand Leaf Station", "visible": true, "stopFor": ["normal", "special2", "special3", "special4"] },
+                    { "seq": 17, "nameCn": "陽光站", "nameEn": "Sunshine Station", "visible": true, "stopFor": ["normal", "special2", "special3", "special4"] },
+                    { "seq": 18, "nameCn": "中環醫院", "nameEn": "Central Hopsital", "visible": true, "stopFor": ["normal", "special2", "special3", "special4"] },
+                    { "seq": 19, "nameCn": "南環街市", "nameEn": "Southern Market", "nameSubCn": "南環花園, 南環坊", "nameSubEn": "Southern Garden, Langford Place", "visible": true, "stopFor": ["normal", "special2", "special3", "special4"] },
+                    { "seq": 20, "nameCn": "強生街市", "nameEn": "Johnson Market", "nameSubCn": "A05, 陽光大學南環校園", "nameSubEn": "A05, Sunshine University Southern Campus", "visible": true, "stopFor": ["normal", "special2", "special3", "special4"] },
+                    { "seq": 21, "nameCn": "The ONE", "nameEn": "The One", "nameSubCn": "警察總部, 新紀元中心", "nameSubEn": "Police Headquarters, Ping Center", "visible": true, "stopFor": ["normal", "special2", "special3", "special4"] },
+                    { "seq": 22, "nameCn": "玻璃樓", "nameEn": "Glass Office", "nameSubCn": "冰淇路", "nameSubEn": "Pinky Road", "visible": true, "stopFor": ["normal", "special2", "special3", "special4"] },
+                    { "seq": 23, "nameCn": "楓樹里", "nameEn": "Maple Lane", "visible": true, "stopFor": ["normal", "special2", "special3", "special4"] },
+                    { "seq": 24, "nameCn": "中環橋", "nameEn": "Central Bridge", "visible": true, "stopFor": ["normal", "special2", "special3", "special4"] },
+                    { "seq": 25, "nameCn": "東錦葵大街", "nameEn": "Eastmallow Main Street", "visible": true, "stopFor": ["normal", "special2", "special3", "special4"] },
+                    { "seq": 26, "nameCn": "東錦葵海傍路", "nameEn": "Eastmallow Praya Road", "visible": true, "stopFor": ["normal", "special2", "special3", "special4"] }
+                ]
+            }
+        },
+        {
+            "route": "476P",
+            "textColor": "#fff",
+            "enabled": true,
+            "random": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/天際陽光際巴476P線",
+            "zones": ["Zone 4", "Zone 7"],
+            "operators": ["HZ", "CSB"],
+            "typeTags": ["Special Departure"],
+            "bound": "A",
+            "viaDirections": {
+                "normal": {
+                    "bound": "A",
+                    "A": {
+                        "viaCn": "葉角花園、葉角大學、千葉、陽光站、南環、中環",
+                        "viaEn": "Leafy Bay Garden, Leafy University, Thousand Leaf, Sunshine Station, Southern, Central"
+                    }
+                }
+            },
+            "fares": {
+                "adult": 12.1,
+                "child": 6.1,
+                "elder": 6.1,
+                "student": 6.1,
+                "sectionFares": [
+                    {
+                        "direction": "A",
+                        "fromCn": "陽光站", "fromEn": "Sunshine Station",
+                        "toCn": "東錦葵海傍路", "toEn": "Eastmallow Praya Road",
+                        "price": 7.2,
+                        "childPrice": 3.6,
+                        "elderPrice": 3.6,
+                        "studentPrice": 3.6
+                    }
+                ]
+            },
+            "routeType": "",
+            "routeTypeEn": "",
+            "shifts": {
+                "A": {
+                    "normal": true
+                }
+            },
+            "shiftConfig": {
+                "normal": {
+                    "label": "普通班次",
+                    "labelEn": "Regular Shift"
+                }
+            },
+            "timetable": {
+                "A": {
+                    "normal": [
+                        {
+                            "sunshards": 900,
+                            "routeCode": "476PW",
+                            "serviceDays": "weekday",
+                            "firstTime": "17:00",
+                            "lastTime": "18:30",
+                            "interval": [
+                                { "time": "17:00 - 18:30", "interval": "10" },
+                            ]
+                        }
+                    ]
+                }
+            },
+            "stops": {
+                "A": [
+                    { "seq": 1, "nameCn": "彩虹中心", "nameEn": "Rainbow Estate Complex", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 2, "nameCn": "葉角花園", "nameEn": "Leafy Bay Garden", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 3, "nameCn": "葉角大學裏", "nameEn": "Leafy University In", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 4, "nameCn": "第七區轉車站", "nameEn": "Zone 7 Interchange", "nameSubCn": "千葉站", "nameSubEn": "Thousand Leaf Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 5, "nameCn": "陽光站", "nameEn": "Sunshine Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 6, "nameCn": "中環醫院", "nameEn": "Central Hopsital", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 7, "nameCn": "南環街市", "nameEn": "Southern Market", "nameSubCn": "南環花園, 南環坊", "nameSubEn": "Southern Garden, Langford Place", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 8, "nameCn": "強生街市", "nameEn": "Johnson Market", "nameSubCn": "A05, 陽光大學南環校園", "nameSubEn": "A05, Sunshine University Southern Campus", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 9, "nameCn": "The ONE", "nameEn": "The One", "nameSubCn": "警察總部, 新紀元中心", "nameSubEn": "Police Headquarters, Ping Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 10, "nameCn": "玻璃樓", "nameEn": "Glass Office", "nameSubCn": "冰淇路", "nameSubEn": "Pinky Road", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 11, "nameCn": "楓樹里", "nameEn": "Maple Lane", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 12, "nameCn": "中環橋", "nameEn": "Central Bridge", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 13, "nameCn": "東錦葵大街", "nameEn": "Eastmallow Main Street", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 14, "nameCn": "東錦葵海傍路", "nameEn": "Eastmallow Praya Road", "visible": true, "stopFor": ["normal"] }
+                ]
+            }
+        },
+        {
+            "route": "476S",
+            "textColor": "#fff",
+            "enabled": true,
+            "circular": true,
+            "random": true,
+            "bansearch": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/天際陽光際巴476S線",
+            "zones": ["Zone 4", "Zone 7"],
+            "operators": ["HZ", "CSB"],
+            "typeTags": ["Festival", "Circular", "Express"],
+            "bound": "A",
+            "viaDirections": {
+                "normal": {
+                    "bound": "A",
+                    "A": {
+                        "viaCn": "千葉、^^中環、千葉",
+                        "viaEn": "Thousand Leaf, ^^Central, Thousand Leaf"
+                    }
+                }
+            },
+            "fares": {
+                "adult": 16.1,
+                "child": 8.1,
+                "elder": 8.1,
+                "student": 8.1
+            },
+            "routeType": "",
+            "routeTypeEn": "",
+            "shifts": {
+                "normal": true
+            },
+            "shiftConfig": {
+                "normal": {
+                    "label": "普通班次",
+                    "labelEn": "Regular Shift"
+                }
+            },
+            "timetable": {
+                "A": {
+                    "normal": [
+                        {
+                            "unlockLevel": 55,
+                            "routeCode": "476SA",
+                            "serviceDays": "custom",
+                            "customDaysCn": "清明節及重陽節期間",
+                            "customDaysEn": "During the Qingming Festival and Double Ninth Festival",
+                            "firstTime": "08:30",
+                            "lastTime": "19:30",
+                            "interval": [
+                                { "time": "08:30 - 18:30", "interval": "6 - 10" },
+                                { "time": "18:30 - 19:30", "interval": "10 - 12" }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "stops": {
+                "A": [
+                    { "seq": 1, "nameCn": "安靈台靈灰安置所", "nameEn": "Ambling Peak Columbarium", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 2, "nameCn": "第七區轉車站", "nameEn": "Zone 7 Interchange", "nameSubCn": "千葉站", "nameSubEn": "Thousand Leaf Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 3, "nameCn": "南環街市", "nameEn": "Southern Market", "nameSubCn": "南環花園, 南環坊", "nameSubEn": "Southern Garden, Langford Place", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 4, "nameCn": "強生街市", "nameEn": "Johnson Market", "nameSubCn": "A05, 陽光大學南環校園", "nameSubEn": "A05, Sunshine University Southern Campus", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 5, "nameCn": "^^新紀元中心", "nameEn": "^^Ping Center", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 6, "nameCn": "第七區轉車站", "nameEn": "Zone 7 Interchange", "nameSubCn": "千葉站", "nameSubEn": "Thousand Leaf Station", "visible": true, "stopFor": ["normal"] },
+                    { "seq": 7, "nameCn": "安靈台靈灰安置所", "nameEn": "Ambling Peak Columbarium", "visible": true, "stopFor": ["normal"] }
+                ]
+            }
+        },
+        {
+            "route": "476X",
+            "textColor": "#fff",
+            "enabled": true,
+            "random": true,
+            "wikiLink": "https://roblox.fandom.com/zh/wiki/天際陽光際巴476X線",
+            "zones": ["Zone 4", "Zone 7"],
+            "operators": ["HZ", "CSB"],
+            "typeTags": ["Special Departure"],
+            "bound": "A",
+            "viaDirections": {
+                "normal": {
+                    "bound": "A",
+                    "A": {
+                        "viaCn": "中環、葉角灣邨、樂莫坳、東門",
+                        "viaEn": "Central, Leafy Bay Estate, Normal Gap, East Door"
+                    }
+                }
+            },
+            "fares": {
+                "adult": 12.1,
+                "child": 6.1,
+                "elder": 6.1,
+                "student": 6.1,
+                "sectionFares": [
+                    {
+                        "direction": "A",
+                        "fromCn": "中間花園", "fromEn": "Middle Garden",
+                        "toCn": "東錦葵海傍路", "toEn": "Eastmallow Praya Road",
+                        "price": 6.3,
+                        "childPrice": 3.2,
+                        "elderPrice": 3.2,
+                        "studentPrice": 3.2
+                    }
+                ]
+            },
+            "routeType": "",
+            "routeTypeEn": "",
+            "shifts": {
+                "A": {
+                    "normal": true,
+                }
+            },
+            "shiftConfig": {
+                "normal": {
+                    "label": "普通班次",
+                    "labelEn": "Regular Shift"
+                }
+            },
+            "timetable": {
+                "A": {
+                    "normal": [
+                        {
+                            "unlockRoutes": ["476", "476P", "476S", "N476"],
+                            "routeCode": "476XE",
+                            "serviceDays": "weekday",
+                            "firstTime": "17:30",
+                            "lastTime": "19:00",
+                            "interval": [
+                                { "time": "17:30 - 18:30", "interval": "5 - 6" },
+                                { "time": "18:30 - 19:00", "interval": "6 - 7" }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "stops": {
+                "A": [
+                    { "seq": 1, "nameCn": "東錦葵海傍路", "nameEn": "Eastmallow Praya Road", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 2, "nameCn": "東錦葵邨陽葵屋", "nameEn": "Sunny House Eastmallow Estate", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 3, "nameCn": "東錦葵大街", "nameEn": "Eastmallow Main Street", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 4, "nameCn": "中環橋", "nameEn": "Central Bridge", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 5, "nameCn": "楓樹里", "nameEn": "Maple Lane", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 6, "nameCn": "玻璃樓", "nameEn": "Glass Office", "nameSubCn": "冰淇路", "nameSubEn": "Pinky Road", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 7, "nameCn": "The ONE", "nameEn": "The One", "nameSubCn": "警察總部, 新紀元中心", "nameSubEn": "Police Headquarters, Ping Center", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 8, "nameCn": "強生街市", "nameEn": "Johnson Market", "nameSubCn": "A05, 陽光大學南環校園", "nameSubEn": "A05, Sunshine University Southern Campus", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 9, "nameCn": "葉角花園", "nameEn": "Leafy Bay Garden", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 10, "nameCn": "葉角灣邨商場", "nameEn": "Leafy Bay Estate Shopping Center", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 11, "nameCn": "葉角灣邨", "nameEn": "Leafy Bay Estate", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 12, "nameCn": "葉角醫院", "nameEn": "Leafy Hospital", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 13, "nameCn": "中間花園", "nameEn": "Middle Garden", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 14, "nameCn": "勿莫商場", "nameEn": "Mo Shopping Center", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 15, "nameCn": "勿莫街市", "nameEn": "Mo Market", "visible": true, "stopFor": ["normal", "special1", "special1"] },
+                    { "seq": 16, "nameCn": "東門公園", "nameEn": "East Door Park", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 17, "nameCn": "東門邨", "nameEn": "East Door Estate", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 18, "nameCn": "紅豆商場", "nameEn": "Redbean Center", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 19, "nameCn": "彩虹邨", "nameEn": "Rainbow Estate", "visible": true, "stopFor": ["normal", "special1"] },
+                    { "seq": 20, "nameCn": "彩虹中心", "nameEn": "Rainbow Estate Complex", "visible": true, "stopFor": ["normal", "special1"] }
+                ]
+            }
         }
     ]
-}; //remove all DailyChallenge
+};
