@@ -1,6 +1,5 @@
-Sunshine Islands Bus Simulator.
-Still on progress, currently UI is done.
-Last updated: 22nd June, 2026
+This website still on progress, currently UI is almost done.
+Last updated: 23rd June, 2026
 
-Removed bounds "C"
-Removed daily-challenge routes
+Removed all bound "C"
+Removed all daily-challenge routes
