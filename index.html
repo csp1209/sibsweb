@@ -1,36 +1,40 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>陽光群島巴士路綫查詢系統 | Sunshine Islands Bus Route Inquiry System</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="loading.png">
 </head>
-
 <body>
-    <!-- 加载画面 -->
     <div id="loadingScreen" class="screen loading-screen">
         <div class="loading-container">
             <h1 class="loading-title" data-lang-key="appTitle">陽光群島巴士路綫查詢系統 | Sunshine Islands Bus Route Inquiry System
             </h1>
             <div class="loading-img-wrap">
-                <img src="loading.png" alt="加载中" class="loading-img">
+                <img src="loading.png" alt="加載中" class="loading-img">
             </div>
         </div>
-        <div class="page-id-label">testweb_pag1</div>
+        <div class="page-id-label">sibsweb_page1</div>
     </div>
-
-    <!-- 功能选择画面 -->
     <div id="funcScreen" class="screen func-screen modern-func-screen hidden">
         <div class="modern-navbar">
             <div class="nav-brand">
-                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2.5" fill="none"
-                    stroke-linecap="round" stroke-linejoin="round" class="brand-logo">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="50" height="50">
+                    <circle cx="50" cy="50" r="16" fill="#FDAE73" />
+                    <g stroke="#FDAE73" stroke-width="6" stroke-linecap="round">
+                        <line x1="50" y1="18" x2="50" y2="24" />
+                        <line x1="50" y1="18" x2="50" y2="24" transform="rotate(45 50 50)" />
+                        <line x1="50" y1="18" x2="50" y2="24" transform="rotate(90 50 50)" />
+                        <line x1="50" y1="18" x2="50" y2="24" transform="rotate(135 50 50)" />
+                        <line x1="50" y1="18" x2="50" y2="24" transform="rotate(180 50 50)" />
+                        <line x1="50" y1="18" x2="50" y2="24" transform="rotate(225 50 50)" />
+                        <line x1="50" y1="18" x2="50" y2="24" transform="rotate(270 50 50)" />
+                        <line x1="50" y1="18" x2="50" y2="24" transform="rotate(315 50 50)" />
+                    </g>
                 </svg>
-                <span class="brand-text" data-lang-key="brand">陽光群島巴士</span>
+                <span class="brand-text" data-lang-key="brand"></span>
             </div>
             <div class="nav-actions">
                 <button id="settingsBtn" class="modern-icon-btn" title="Settings">
@@ -44,14 +48,12 @@
                 </button>
             </div>
         </div>
-
         <div class="app-content func-content modern-func-content">
             <div class="hero-section">
-                <div class="hero-badge" data-lang-key="version">v0.3.11</div>
-                <h1 class="hero-title" data-lang-key="appTitle">陽光群島巴士路綫查詢系統</h1>
-                <p class="hero-subtitle" data-lang-key="funcTitle1">請選擇您需要的功能，開始您的旅程</p>
+                <div class="hero-badge" data-lang-key="version">v0.4.1</div>
+                <h1 class="hero-title" data-lang-key="appTitle"></h1>
+                <p class="hero-subtitle" data-lang-key="funcTitle1"></p>
             </div>
-
             <div class="modern-card-grid">
                 <div id="routeSelectFunc" class="modern-card">
                     <div class="card-icon-wrapper blue-gradient">
@@ -63,8 +65,8 @@
                         </svg>
                     </div>
                     <div class="card-text">
-                        <h3 data-lang-key="routeSelect">线路站点查询</h3>
-                        <p data-lang-key="routeSelectDesc">查询公交线路的站点信息、运营时间</p>
+                        <h3 data-lang-key="routeSelect"></h3>
+                        <p data-lang-key="routeSelectDesc"></p>
                     </div>
                     <div class="card-arrow">
                         <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5"
@@ -74,7 +76,6 @@
                         </svg>
                     </div>
                 </div>
-
                 <div id="updateLogFunc" class="modern-card">
                     <div class="card-icon-wrapper purple-gradient">
                         <svg viewBox="0 0 24 24" width="30" height="30" stroke="currentColor" stroke-width="2"
@@ -87,8 +88,51 @@
                         </svg>
                     </div>
                     <div class="card-text">
-                        <h3 data-lang-key="updateLog">更新日志</h3>
-                        <p data-lang-key="updateLogDesc">查看版本更新内容和优化记录</p>
+                        <h3 data-lang-key="updateLog"></h3>
+                        <p data-lang-key="updateLogDesc"></p>
+                    </div>
+                    <div class="card-arrow">
+                        <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5"
+                            fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </div>
+                </div>
+                <div id="stationSearchFunc" class="modern-card">
+                    <div class="card-icon-wrapper"
+                        style="background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); color: #059669;">
+                        <svg viewBox="0 0 24 24" width="30" height="30" stroke="currentColor" stroke-width="2"
+                            fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </div>
+                    <div class="card-text">
+                        <h3 data-lang-key="stationSearcher"></h3>
+                        <p data-lang-key="stationSearcherDec"></p>
+                    </div>
+                    <div class="card-arrow">
+                        <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5"
+                            fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </div>
+                </div>
+                <div id="p2pSearchFunc" class="modern-card">
+                    <div class="card-icon-wrapper"
+                        style="background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 100%); color: #d97706;">
+                        <svg viewBox="0 0 24 24" width="30" height="30" stroke="currentColor" stroke-width="2"
+                            fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="5" r="3"></circle>
+                            <line x1="12" y1="22" x2="12" y2="8"></line>
+                            <path d="M5 12H2a10 10 0 0 0 20 0h-3"></path>
+                        </svg>
+                    </div>
+                    <div class="card-text">
+                        <h3 data-lang-key="p2pSearch">點對點搜尋</h3>
+                        <p data-lang-key="p2pSearchDesc">智能規劃最佳乘車路線</p>
                     </div>
                     <div class="card-arrow">
                         <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5"
@@ -99,7 +143,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="social-links-container">
                 <a href="https://www.youtube.com/channel/UCy4qUq7gFDdpBgR3399RR8g" target="_blank"
                     class="social-btn youtube-btn" title="YouTube">
@@ -109,7 +152,6 @@
                     </svg>
                     <span>YouTube</span>
                 </a>
-
                 <a href="https://www.google.com/url?q=https%3A%2F%2Fdiscord.gg%2FypXG35w&sa=D&sntz=1&usg=AOvVaw32uDiYkur_QfFHrPpGwPOH"
                     target="_blank" class="social-btn discord-btn" title="Discord">
                     <svg viewBox="0 0 24 24" fill="currentColor">
@@ -118,7 +160,6 @@
                     </svg>
                     <span>Discord</span>
                 </a>
-
                 <a href="https://www.google.com/url?q=https%3A%2F%2Fwww.roblox.com%2Fgames%2F1588965415&sa=D&sntz=1&usg=AOvVaw0rMMdCBnfR7Zp4Emm_MLn0"
                     target="_blank" class="social-btn roblox-btn" title="Roblox">
                     <svg viewBox="0 0 24 24">
@@ -128,16 +169,16 @@
                     </svg>
                     <span>Roblox</span>
                 </a>
-
-                <a href="https://www.google.com/url?q=https%3A%2F%2Fwww.facebook.com%2FSunshineIslandsRblx&sa=D&sntz=1&usg=AOvVaw18X8KpdiWmXV-ODhW_S8BF" target="_blank" class="social-btn facebook-btn" title="Facebook">
+                <a href="https://www.google.com/url?q=https%3A%2F%2Fwww.facebook.com%2FSunshineIslandsRblx&sa=D&sntz=1&usg=AOvVaw18X8KpdiWmXV-ODhW_S8BF"
+                    target="_blank" class="social-btn facebook-btn" title="Facebook">
                     <svg viewBox="0 0 24 24" fill="currentColor">
                         <path
                             d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
                     </svg>
                     <span>Facebook</span>
                 </a>
-
-                <a href="https://sites.google.com/view/sunshine-islands" target="_blank" class="social-btn website-btn" title="Website">
+                <a href="https://sites.google.com/view/sunshine-islands" target="_blank" class="social-btn website-btn"
+                    title="Website">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
                         stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"></circle>
@@ -148,7 +189,6 @@
                     </svg>
                     <span>Website</span>
                 </a>
-
                 <a href="https://roblox.fandom.com/zh/wiki/%E9%99%BD%E5%85%89%E7%BE%A4%E5%B3%B6%E5%B7%B4%E5%A3%AB?variant=zh-hk"
                     target="_blank" class="social-btn wiki-btn" title="Wiki">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
@@ -159,92 +199,44 @@
                 </a>
             </div>
         </div>
-
-        <div id="settingsModal" class="modern-modal-overlay hidden">
-            <div class="timetable-panel-content">
-                <div class="timetable-panel-header-modern">
-                    <h3>設定 / Settings</h3>
-                    <button id="closeSettingsBtn" class="timetable-panel-close-modern">
-                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2"
-                            fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
-                    </button>
-                </div>
-                <div class="timetable-shift-card-modern">
-                    <div class="setting-group">
-                        <div class="setting-label">
-                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"
-                                fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <line x1="2" y1="12" x2="22" y2="12"></line>
-                                <path
-                                    d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
-                                </path>
-                            </svg>
-                            語言 / Language
-                        </div>
-                        <div class="lang-toggle-container">
-                            <button id="modalSwitchZhBtn" class="lang-toggle active" data-lang-key="zhBtn">中文</button>
-                            <button id="modalSwitchEnBtn" class="lang-toggle" data-lang-key="enBtn">English</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="page-id-label">testweb_pag2</div>
+        <div class="page-id-label">sibsweb_page2</div>
     </div>
-
-    <!-- 线路输入画面 -->
     <div id="inputScreen" class="screen input-screen hidden">
-        <button id="backToFuncBtn" class="back-btn app-back-btn" data-lang-key="backBtn">返回</button>
-
-        <div class="app-header">
-            <h1 class="app-title" data-lang-key="inputTitle">线路编号输入</h1>
-
-<div class="station-search-wrapper">
-    <!-- 新增：手機版專用召喚按鈕 -->
-    <button id="mobileSearchToggle" class="modern-mobile-search-btn">
-        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-    </button>
-    
-    <!-- 搜尋輸入框與關閉按鈕的容器 -->
-    <div id="searchContainerWrap" class="search-input-wrap">
-        <input type="text" id="stationSearchInput" >
-        <!-- 新增：手機版專用關閉按鈕 -->
-        <button id="mobileSearchClose" class="modern-mobile-close-btn">
-            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
+        <button id="backToFuncBtn" class="back-btn app-back-btn">
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
         </button>
-    </div>
-    
-    <div id="stationSearchDropdown" class="station-dropdown hidden">
-        <div class="station-dropdown-header" data-lang-key="stationSearcherHeader">所有站點列表</div>
-        <div id="stationListContainer" class="station-list-container">
-        </div>
-    </div>
-</div>
+        <div class="app-header">
+            <h1 class="app-title" data-lang-key="inputTitle"></h1>
         </div>
         <div class="app-content input-content">
-
             <div class="input-keyboard-suggest-wrap">
                 <div id="routeSuggestPanel" class="route-suggest-panel">
-                    <div class="suggest-title" data-lang-key="suggestTitle">匹配的线路</div>
+                    <div class="suggest-header-wrap"
+                        style="display: flex; justify-content: space-between; align-items: center; padding: 16px 20px 8px 20px;">
+                        <div class="suggest-title" data-lang-key="suggestTitle" style="padding: 0; margin: 0;"></div>
+                        <button id="randomRouteBtn" class="action-btn-modern"
+                            style="width: 16px; height: 16px; min-width: 16px; min-height: 16px; background: #f1f5f9; color: #2563eb;">
+                            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5"
+                                fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="16 3 21 3 21 8"></polyline>
+                                <line x1="4" y1="20" x2="21" y2="3"></line>
+                                <polyline points="21 16 21 21 16 21"></polyline>
+                                <line x1="15" y1="15" x2="21" y2="21"></line>
+                                <line x1="4" y1="4" x2="9" y2="9"></line>
+                            </svg>
+                        </button>
+                    </div>
                     <div id="suggestList" class="suggest-list custom-scrollbar-panel"></div>
                 </div>
-
                 <div class="keyboard-input-container">
                     <div class="input-container">
-                        <input type="text" id="routeNumberInput" class="custom-input" readonly placeholder="点击输入线路编号"
+                        <input type="text" id="routeNumberInput" class="custom-input" readonly placeholder="輸入路綫"
                             data-lang-key="inputPlaceholder">
                     </div>
-                    <!-- 自定义键盘 -->
                     <div id="customKeyboard" class="custom-keyboard">
                         <div class="keyboard-grid">
                             <div class="key-group">
@@ -316,20 +308,20 @@
                                 <div class="key-sub-wrap">
                                     <button class="sub-letter-btn" data-key="Y">Y</button>
                                     <button class="sub-letter-btn" data-key="Z">Z</button>
-                                    <button class="sub-letter-btn"></button>
+                                    <button class="sub-letter-btn" data-key="§">§</button>
                                 </div>
                             </div>
                             <div class="key-group">
-                                <button id="keyboardDeleteBtn" class="func-key delete-key"
-                                    data-lang-key="deleteBtn">删除</button>
+                                <button id="keyboardClearBtn" class="func-key clear-key"
+                                    data-lang-key="clearBtn"></button>
                             </div>
                             <div class="key-group">
                                 <button class="main-num-key" data-key="0">0</button>
                                 <div class="empty-sub-wrap"></div>
                             </div>
                             <div class="key-group">
-                                <button id="keyboardClearBtn" class="func-key clear-key"
-                                    data-lang-key="clearBtn">清空</button>
+                                <button id="keyboardDeleteBtn" class="func-key delete-key"
+                                    data-lang-key="deleteBtn"></button>
                             </div>
                         </div>
                         <div class="keyboard-func-group">
@@ -338,78 +330,294 @@
                 </div>
             </div>
         </div>
-        <div class="page-id-label">testweb_pag3</div>
+        <div class="page-id-label">sibsweb_page3</div>
     </div>
-
-    <!-- 站点显示画面 -->
     <div id="stopScreen" class="screen stop-screen hidden">
-        <button id="backToInputBtn" class="back-btn app-back-btn" data-lang-key="backBtn">返回</button>
+        <button id="backToInputBtn" class="back-btn app-back-btn">
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+        </button>
         <div class="app-header">
             <h1 class="app-title" id="stopPageTitle" data-lang-key="stopPageTitleWithRoute">test</h1>
         </div>
         <div class="app-content stop-content">
             <div id="stopContainer" class="stop-container">
-                <!-- 内容由JS动态渲染 -->
+
             </div>
         </div>
-        <div class="page-id-label">testweb_pag4</div>
+        <div class="page-id-label">sibsweb_page4</div>
     </div>
-
-    <!-- 在 updateLogScreen 部分添加翻译标记 -->
     <div id="updateLogScreen" class="screen update-log-screen hidden">
-        <button id="backToFuncFromLogBtn" class="back-btn app-back-btn" data-lang-key="backBtn">返回</button>
+        <button id="backToFuncFromLogBtn" class="back-btn app-back-btn">
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+        </button>
         <div class="app-header">
-            <h1 class="app-title" data-lang-key="updateLog">版本更新日志</h1>
-            <div class="app-version">v0.3.1</div>
+            <h1 class="app-title" data-lang-key="updateLog"></h1>
+            <div class="app-version">v0.4.1</div>
         </div>
         <div class="app-content log-content">
             <div id="updateLogPanel" class="update-log-panel app-card">
                 <div class="log-meta">
-                    <span class="log-version" id="logVersion" data-lang-key="logVersion">版本</span>
-                    <span class="log-time" id="logTime" data-lang-key="logTime">更新时间</span>
+                    <span class="log-version" id="logVersion" data-lang-key="logVersion"></span>
+                    <span class="log-time" id="logTime" data-lang-key="logTime"></span>
                 </div>
                 <div class="log-list" id="logList">
-                    <!-- 日志内容由JS动态渲染 -->
+
                 </div>
             </div>
         </div>
-        <div class="page-id-label">testweb_pag5</div>
+        <div class="page-id-label">sibsweb_page5</div>
+    </div>
+    <div id="stationSearchScreen" class="screen input-screen hidden">
+        <button id="backToFuncFromStationBtn" class="back-btn app-back-btn">
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+        </button>
+        <div class="app-header">
+            <h1 class="app-title" data-lang-key="stationSearcher"></h1>
+        </div>
+        <div class="app-content input-content"
+            style="display: flex; flex-direction: column; align-items: center; padding-top: 30px;">
+            <div style="width: 100%; max-width: 600px; position: relative;">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="#94a3b8" stroke-width="2.5" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round"
+                    style="position: absolute; left: 16px; top: 15px; z-index: 2;">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="stationSearchInput" class="custom-input"
+                    style="text-align: left; padding: 12px 16px 12px 46px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); position: relative; z-index: 1;"
+                    placeholder="找站點..." data-lang-key="searchStopPlaceholder">
+            </div>
+            <div id="stationListContainer" class="station-list-container"
+                style="width: 100%; max-width: 600px; margin-top: 20px; background: #fff; border-radius: 16px; box-shadow: var(--shadow-sm); padding: 10px; flex: 1; max-height: calc(100vh - 200px); overflow-y: auto;">
+            </div>
+        </div>
+        <div class="page-id-label">sibsweb_page6</div>
+    </div>
+    <div id="p2pScreen" class="screen input-screen hidden">
+        <button id="backToFuncFromP2PBtn" class="back-btn app-back-btn">
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+        </button>
+        <div class="app-header">
+            <h1 class="app-title" data-lang-key="p2pSearch">點對點搜尋</h1>
+        </div>
+        <div class="app-content input-content"
+            style="display: flex; flex-direction: column; align-items: center; padding-top: 20px;">
+
+            <div class="p2p-search-card">
+                <div class="p2p-inputs-wrapper">
+                    <div class="p2p-timeline-visual">
+                        <div class="p-dot start"></div>
+                        <div class="p-line"></div>
+                        <div class="p-dot end"></div>
+                    </div>
+
+                    <div class="p2p-inputs-main">
+                        <div class="p2p-input-group">
+                            <input type="text" id="p2pStartInput" class="p2p-custom-input"
+                                data-lang-key="p2pStartPlaceholder" placeholder="起點 " autocomplete="off">
+                            <div id="p2pStartSuggest" class="p2p-suggest-panel hidden custom-scrollbar-panel"></div>
+                        </div>
+                        <div class="p2p-divider"></div>
+                        <div class="p2p-input-group">
+                            <input type="text" id="p2pEndInput" class="p2p-custom-input"
+                                data-lang-key="p2pEndPlaceholder" placeholder="目的地" autocomplete="off">
+                            <div id="p2pEndSuggest" class="p2p-suggest-panel hidden custom-scrollbar-panel"></div>
+                        </div>
+                    </div>
+
+                    <button id="p2pSwapBtn" class="p2p-swap-btn" title="切換起訖點">
+                        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5"
+                            fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="16 3 21 3 21 8"></polyline>
+                            <line x1="4" y1="20" x2="21" y2="3"></line>
+                            <polyline points="21 16 21 21 16 21"></polyline>
+                            <line x1="15" y1="15" x2="21" y2="21"></line>
+                            <line x1="4" y1="4" x2="9" y2="9"></line>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="p2p-preferences-wrap">
+                    <label class="p2p-radio-label active">
+                        <input type="radio" name="p2pPref" value="lessTransfer" checked>
+                        <span data-lang-key="p2pLessTransfer">最少轉乘</span>
+                    </label>
+                    <label class="p2p-radio-label">
+                        <input type="radio" name="p2pPref" value="cheapest">
+                        <span data-lang-key="p2pCheapest">最便宜</span>
+                    </label>
+                </div>
+
+                <button id="p2pSearchBtn" class="p2p-submit-btn" data-lang-key="p2pPlanRoute">規劃路線</button>
+            </div>
+
+            <div class="p2p-stops-quick-pick">
+                <div class="quick-pick-header" onclick="P2PManager.toggleStopsPanel()">
+                    <span style="font-size: 14px; font-weight: 700; color: #64748b;"
+                        data-lang-key="p2pQuickPick">快速選擇站點</span>
+                    <svg id="stopsPanelArrow" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor"
+                        stroke-width="2.5" fill="none">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+                <div id="p2pStopsGrid" class="p2p-stops-grid hidden custom-scrollbar-panel"></div>
+            </div>
+
+            <div id="p2pResultContainer" class="p2p-result-container"></div>
+
+        </div>
+        <div class="page-id-label">sibsweb_page7</div>
+    </div>
+    <div id="p2pDetailScreen" class="screen stop-screen hidden">
+        <button id="backToP2PBtn" class="back-btn app-back-btn">
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+        </button>
+        <div class="app-header">
+            <h1 class="app-title" data-lang-key="p2pBoardingPass">路線詳情 (Boarding Pass)</h1>
+        </div>
+        <div class="app-content stop-content">
+            <div id="p2pDetailContainer" class="p2p-detail-container">
+            </div>
+        </div>
+        <div class="page-id-label">sibsweb_p2p_detail</div>
+    </div>
+    <div id="settingsModal" class="modern-modal-overlay hidden">
+        <div class="timetable-panel-content">
+            <div class="timetable-panel-header-modern">
+                <h3>設定 / Settings</h3>
+                <button id="closeSettingsBtn" class="timetable-panel-close-modern">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="timetable-shift-card-modern">
+                <div class="setting-group">
+                    <div class="setting-label">
+                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"
+                            fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <path
+                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                            </path>
+                        </svg>
+                        語言 / Language
+                    </div>
+                    <div class="lang-toggle-container">
+                        <button id="modalSwitchZhBtn" class="lang-toggle active" data-lang-key="zhBtn">中文</button>
+                        <button id="modalSwitchEnBtn" class="lang-toggle" data-lang-key="enBtn">English</button>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <div class="setting-label">
+                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"
+                            fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="9" y1="3" x2="9" y2="21"></line>
+                        </svg>
+                        右鍵選單 / Context Menu
+                    </div>
+                    <div class="lang-toggle-container">
+                        <button id="menuCustomBtn" class="lang-toggle active">自訂 / Custom</button>
+                        <button id="menuNativeBtn" class="lang-toggle">系統 / Native</button>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <div class="setting-label">
+                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"
+                            fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                        外觀 / Theme
+                    </div>
+                    <div class="theme-toggle-container">
+                        <button id="themeLightBtn" class="theme-toggle" title="Light Mode">
+                            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5"
+                                fill="none">
+                                <circle cx="12" cy="12" r="5"></circle>
+                                <line x1="12" y1="1" x2="12" y2="3"></line>
+                                <line x1="12" y1="21" x2="12" y2="23"></line>
+                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                <line x1="1" y1="12" x2="3" y2="12"></line>
+                                <line x1="21" y1="12" x2="23" y2="12"></line>
+                                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                            </svg>
+                        </button>
+                        <button id="themeSystemBtn" class="theme-toggle active" title="System Theme">
+                            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5"
+                                fill="none">
+                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                <line x1="8" y1="21" x2="16" y2="21"></line>
+                                <line x1="12" y1="17" x2="12" y2="21"></line>
+                            </svg>
+                        </button>
+                        <button id="themeDarkBtn" class="theme-toggle" title="Dark Mode">
+                            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5"
+                                fill="none">
+                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="customContextMenu" class="custom-context-menu hidden">
+        <div class="context-menu-item" id="ctxBackBtn">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            <span data-lang-key="backToHome">回首頁 / Home</span>
+        </div>
+        <div class="context-menu-item" id="ctxReloadBtn">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+            </svg>
+            <span data-lang-key="reloadPage">重新載入 / Reload</span>
+        </div>
+        <div class="context-menu-divider"></div>
+        <div class="context-menu-item" id="ctxSettingsBtn">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path
+                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                </path>
+            </svg>
+            <span data-lang-key="settings">設定 / Settings</span>
+        </div>
     </div>
     <script src="lang.js"></script>
     <script src="routedata.js"></script>
     <script src="updatelog.js"></script>
     <script src="script.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // 输入框点击唤醒键盘
-            const input = document.getElementById('routeNumberInput');
-            if (input) {
-                input.addEventListener('click', function () {
-                    const keyboard = document.getElementById("customKeyboard");
-                    if (keyboard) {
-                        keyboard.classList.remove("hidden");
-                        if (typeof Renderer !== 'undefined') {
-                            Renderer.initKeyboardValidity(input.value);
-                        }
-                    }
-                });
-
-                // 禁用原生键盘和粘贴
-                input.addEventListener('keydown', function (e) {
-                    e.preventDefault();
-                });
-                input.addEventListener('paste', function (e) {
-                    e.preventDefault();
-                });
-
-                // 监听输入框值变化
-                input.addEventListener('change', function () {
-                    Renderer.initKeyboardValidity(input.value);
-                    Renderer.renderRouteSuggestions(input.value);
-                });
-            }
-        });
-    </script>
 </body>
-
 </html>

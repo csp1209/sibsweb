@@ -1,4 +1,3 @@
-// ------------- 全局配置常量 -------------
 var CONFIG = {
     singleColumnSize: 10,
     pageSize: 20,
@@ -6,31 +5,30 @@ var CONFIG = {
     currentDirection: "A",
     currentRouteNum: "",
     currentRouteData: null,
+    currentRouteId: null,
     enabledShifts: [],
     loadingTime: 1,
     keyboardOpacityDisabled: '0.5',
     keyboardOpacityEnabled: '1',
     emptyTipText: {
-        'zh-CN': '暂无站点数据',
+        'zh-CN': '暫時沒有站點數據',
         'en-US': 'No stop data available'
     },
     suggestTimeout: null,
     currentLang: 'zh-CN',
-    activeFilters: { operator: null, type: null }
+    activeFilters: {
+        operator: null,
+        type: null
+    },
 };
 
-
-// ------------- 增强版语言处理工具类 -------------
 var LangHandler = {
     getText: function (key, replacements = {}) {
         const lang = CONFIG.currentLang || 'zh-CN';
-        // 兜底机制：优先当前语言 -> 中文 -> 原key
         let text = (LANG_PACK?.[lang]?.[key] || LANG_PACK?.['zh-CN']?.[key] || key);
 
-        // 修复：确保替换所有占位符，处理边界情况
         if (typeof text === 'string' && Object.keys(replacements).length > 0) {
             Object.keys(replacements).forEach(placeholder => {
-                // 使用全局替换，确保所有相同占位符都被替换
                 const regex = new RegExp(`\\{${placeholder}\\}`, 'g');
                 text = text.replace(regex, replacements[placeholder] || '');
             });
@@ -39,9 +37,7 @@ var LangHandler = {
         return text;
     },
 
-    // 批量渲染所有带data-lang-key的元素（增强版）
     renderAllTexts: function () {
-        // 更新HTML根元素lang属性，适配CSS语言样式
         document.documentElement.lang = CONFIG.currentLang;
 
         document.querySelectorAll('[data-lang-key]').forEach(el => {
@@ -57,7 +53,6 @@ var LangHandler = {
                     el.textContent = this.getText(key, replacements);
                 }
 
-                // 为语言切换添加UI过渡效果
                 el.style.opacity = '0.8';
                 setTimeout(() => {
                     el.style.opacity = '1';
@@ -68,7 +63,6 @@ var LangHandler = {
             }
         });
 
-        // 更新动态生成的空提示文本
         this.updateDynamicEmptyTips();
     },
 
@@ -96,53 +90,50 @@ var LangHandler = {
             'normal': 'normalShift',
             'special1': 'specialShift1',
             'special2': 'specialShift2',
-            'special3': 'specialShift3'
+            'special3': 'specialShift3',
+            'special4': 'specialShift4'
         };
         return this.getText(keyMap[shiftKey] || shiftKey);
     }
 };
 
-// ------------- 重置函数优化 -------------
 function resetRouteQueryState() {
-    // 1. 重置全局配置
     CONFIG.currentRouteNum = "";
+    CONFIG.currentRouteId = null;
     CONFIG.currentRouteData = null;
     CONFIG.enabledShifts = [];
     CONFIG.currentPage = 1;
     CONFIG.currentDirection = "A";
 
-    // 徹底清空鍵盤篩選器狀態
     CONFIG.activeFilters = { operator: null, type: null };
 
-    // 2. 清空线路编号输入框
     const input = document.getElementById('routeNumberInput');
     if (input) {
         input.value = '';
         Renderer.initKeyboardValidity('');
-        Renderer.renderRouteSuggestions(''); // 确保重置时也重新渲染
-        // 重置输入框占位符
+        Renderer.renderRouteSuggestions('');
         input.setAttribute('placeholder', LangHandler.getText('inputPlaceholder'));
     }
 
-    // 👇 [新增] 清空全站點搜尋框與隱藏下拉選單
-    const stationInput = document.getElementById('stationSearchInput');
-    if (stationInput) stationInput.value = '';
-    const stationDropdown = document.getElementById('stationSearchDropdown');
-    if (stationDropdown) stationDropdown.classList.add('hidden');
+    const clearBtn = document.getElementById('clearStationSearchBtn');
+    if (clearBtn) clearBtn.classList.add('hidden');
 
-    // 3. 关闭运营时间面板（如果打开）
     const timetablePanel = document.getElementById('timetablePanel');
     if (timetablePanel) timetablePanel.remove();
 
-    // 4. 重置空提示文本
     LangHandler.updateDynamicEmptyTips();
 }
 
-// ------------- 增强版页面切换控制层 -------------
 var PageController = {
-    // 初始化页面切换事件
     initPageEvents: function () {
         const self = this;
+
+        const scrollToTop = () => {
+            ['stationListContainer', 'suggestList', 'stopScreen', 'inputScreen', 'stationSearchScreen'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.scrollTop = 0;
+            });
+        };
 
         // 加载页面自动跳转到功能选择页
         setTimeout(() => {
@@ -173,12 +164,14 @@ var PageController = {
             self.showScreen('funcScreen');
             self.hideScreen('inputScreen');
             resetRouteQueryState();
+            scrollToTop();
         });
 
         document.getElementById('backToInputBtn')?.addEventListener('click', () => {
             self.showScreen('inputScreen');
             self.hideScreen('stopScreen');
             resetRouteQueryState();
+            scrollToTop();
         });
 
         document.getElementById('backToFuncFromLogBtn')?.addEventListener('click', () => {
@@ -196,6 +189,80 @@ var PageController = {
             self.showScreen('updateLogScreen');
             self.hideScreen('funcScreen');
             Renderer.renderUpdateLog();
+        });
+
+        // 功能選擇頁 - 點對點搜尋
+        document.getElementById('p2pSearchFunc')?.addEventListener('click', () => {
+            self.showScreen('p2pScreen');
+            self.hideScreen('funcScreen');
+            P2PManager.init(); // 啟動模塊
+        });
+
+        // 點對點頁面 - 返回按鈕
+        document.getElementById('backToFuncFromP2PBtn')?.addEventListener('click', () => {
+            self.showScreen('funcScreen');
+            self.hideScreen('p2pScreen');
+            // 清空搜尋狀態
+            const startIn = document.getElementById('p2pStartInput');
+            const endIn = document.getElementById('p2pEndInput');
+            const res = document.getElementById('p2pResultContainer');
+            if (startIn) startIn.value = '';
+            if (endIn) endIn.value = '';
+            if (res) res.innerHTML = '';
+        });
+
+        document.getElementById('randomRouteBtn')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            const items = Array.from(document.querySelectorAll('#suggestList .suggest-item:not(.empty-suggest)'));
+
+            if (items.length > 0) {
+                const pickableItems = [];
+                const unpickableItems = [];
+
+                // 區分可被抽中與不可被抽中的路線
+                items.forEach(item => {
+                    const routeId = item.getAttribute('data-route-id'); // [修改]
+                    const routeData = DataHandler.getRouteById(routeId); // [修改]
+
+                    if (routeData && routeData.random === false) {
+                        unpickableItems.push(item);
+                    } else {
+                        pickableItems.push(item);
+                    }
+                });
+
+                if (pickableItems.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * pickableItems.length);
+                    const selectedItem = pickableItems[randomIndex];
+
+                    // 平滑滾動到被抽中的項目
+                    selectedItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                    pickableItems.forEach((item, index) => {
+                        item.classList.remove('highlight-flash', 'highlight-flash-red', 'highlight-flash-gray');
+                        void item.offsetWidth; // 強制重繪以重啟動畫
+                        if (index === randomIndex) {
+                            item.classList.add('highlight-flash'); // 抽中：黃色
+                        } else {
+                            item.classList.add('highlight-flash-red'); // 沒抽中：紅色
+                        }
+                    });
+
+                    unpickableItems.forEach(item => {
+                        item.classList.remove('highlight-flash', 'highlight-flash-red', 'highlight-flash-gray');
+                        void item.offsetWidth;
+                        item.classList.add('highlight-flash-gray'); // 不參與：灰色
+                    });
+
+                    // 2 秒後移除所有高亮效果
+                    setTimeout(() => {
+                        items.forEach(item => {
+                            item.classList.remove('highlight-flash', 'highlight-flash-red', 'highlight-flash-gray');
+                        });
+                    }, 2000);
+                }
+            }
+
         });
 
         const settingsBtn = document.getElementById('settingsBtn');
@@ -222,14 +289,12 @@ var PageController = {
         document.getElementById('modalSwitchZhBtn')?.addEventListener('click', function () {
             this.classList.add('active');
             document.getElementById('modalSwitchEnBtn').classList.remove('active');
-            // 添加切換動畫
             this.style.transform = 'scale(1.05)';
             setTimeout(() => { this.style.transform = 'scale(1)'; }, 200);
 
             CONFIG.currentLang = 'zh-CN';
             Renderer.updatePageLang();
 
-            // 如果在搜尋頁，同步刷新建議列表
             const input = document.getElementById('routeNumberInput');
             if (input && !document.getElementById('inputScreen').classList.contains('hidden')) {
                 Renderer.renderRouteSuggestions(input.value);
@@ -239,25 +304,21 @@ var PageController = {
         document.getElementById('modalSwitchEnBtn')?.addEventListener('click', function () {
             this.classList.add('active');
             document.getElementById('modalSwitchZhBtn').classList.remove('active');
-            // 添加切換動畫
             this.style.transform = 'scale(1.05)';
             setTimeout(() => { this.style.transform = 'scale(1)'; }, 200);
 
             CONFIG.currentLang = 'en-US';
             Renderer.updatePageLang();
 
-            // 如果在搜尋頁，同步刷新建議列表
             const input = document.getElementById('routeNumberInput');
             if (input && !document.getElementById('inputScreen').classList.contains('hidden')) {
                 Renderer.renderRouteSuggestions(input.value);
             }
         });
 
-        // 增强版语言切换事件（带UI反馈 + 修复线路建议即时翻译）
         document.getElementById('switchZhBtn')?.addEventListener('click', function () {
             this.classList.add('active');
             document.getElementById('switchEnBtn').classList.remove('active');
-            // 添加切换动画
             this.style.transform = 'scale(1.1)';
             setTimeout(() => {
                 this.style.transform = 'scale(1)';
@@ -265,17 +326,15 @@ var PageController = {
             CONFIG.currentLang = 'zh-CN';
             Renderer.updatePageLang();
 
-            // 修复核心：语言切换时重新渲染线路建议列表
             const input = document.getElementById('routeNumberInput');
             if (input) {
-                Renderer.renderRouteSuggestions(input.value); // 重新渲染建议列表
+                Renderer.renderRouteSuggestions(input.value);
             }
         });
 
         document.getElementById('switchEnBtn')?.addEventListener('click', function () {
             this.classList.add('active');
             document.getElementById('switchZhBtn').classList.remove('active');
-            // 添加切换动画
             this.style.transform = 'scale(1.1)';
             setTimeout(() => {
                 this.style.transform = 'scale(1)';
@@ -283,13 +342,64 @@ var PageController = {
             CONFIG.currentLang = 'en-US';
             Renderer.updatePageLang();
 
-            // 修复核心：语言切换时重新渲染线路建议列表
             const input = document.getElementById('routeNumberInput');
             if (input) {
-                Renderer.renderRouteSuggestions(input.value); // 重新渲染建议列表
+                Renderer.renderRouteSuggestions(input.value);
             }
         });
 
+        document.getElementById('stationSearchFunc')?.addEventListener('click', () => {
+            self.showScreen('stationSearchScreen');
+            self.hideScreen('funcScreen');
+            document.getElementById('stationSearchInput').focus();
+        });
+
+        document.getElementById('backToFuncFromStationBtn')?.addEventListener('click', () => {
+            self.showScreen('funcScreen');
+            self.hideScreen('stationSearchScreen');
+
+            // 清空搜尋輸入框，確保下次進入時列表是預設的完整狀態
+            const stationInput = document.getElementById('stationSearchInput');
+            if (stationInput) {
+                stationInput.value = '';
+            }
+
+            resetRouteQueryState();
+            scrollToTop();
+        });
+
+        // 點對點詳情頁面 - 返回搜尋結果
+        document.getElementById('backToP2PBtn')?.addEventListener('click', () => {
+            self.showScreen('p2pScreen');
+            self.hideScreen('p2pDetailScreen');
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const input = document.getElementById('routeNumberInput');
+            if (input) {
+                input.addEventListener('click', function () {
+                    const keyboard = document.getElementById("customKeyboard");
+                    if (keyboard) {
+                        keyboard.classList.remove("hidden");
+                        if (typeof Renderer !== 'undefined') {
+                            Renderer.initKeyboardValidity(input.value);
+                        }
+                    }
+                });
+
+                input.addEventListener('keydown', function (e) {
+                    e.preventDefault();
+                });
+                input.addEventListener('paste', function (e) {
+                    e.preventDefault();
+                });
+
+                input.addEventListener('change', function () {
+                    Renderer.initKeyboardValidity(input.value);
+                    Renderer.renderRouteSuggestions(input.value);
+                });
+            }
+        });
     },
 
     showScreen: function (screenId) {
@@ -304,7 +414,6 @@ var PageController = {
                 screen.style.transform = 'translateY(0)';
                 screen.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
 
-                // 【核心修復】：動畫結束後，徹底清除 inline 樣式，確保 position: fixed 生效
                 setTimeout(() => {
                     if (!screen.classList.contains('hidden')) {
                         screen.style.transform = '';
@@ -333,7 +442,6 @@ var PageController = {
 
             setTimeout(() => {
                 screen.classList.add('hidden');
-                // 【核心修復】：隱藏後也必須徹底清除殘留樣式，避免下次進入時報錯
                 screen.style.opacity = '';
                 screen.style.transform = '';
                 screen.style.transition = '';
@@ -345,15 +453,62 @@ var PageController = {
 // ------------- 数据处理核心层 -------------
 var DataHandler = {
 
+    // 1. 動態綁定唯一 _id
     getValidRoutes: function () {
         if (typeof routeData === 'undefined' || !routeData || !routeData.data) return [];
         var validRoutes = [];
         for (var i = 0; i < routeData.data.length; i++) {
             if (routeData.data[i].enabled === true) {
-                validRoutes.push(routeData.data[i]);
+                var r = routeData.data[i];
+                r._id = i.toString(); // 賦予內部唯一識別碼
+                validRoutes.push(r);
             }
         }
         return validRoutes;
+    },
+
+    getRouteById: function (id) {
+        if (!id && id !== 0) return null;
+        var validRoutes = this.getValidRoutes();
+        for (var i = 0; i < validRoutes.length; i++) {
+            if (validRoutes[i]._id === id.toString()) {
+                return validRoutes[i];
+            }
+        }
+        return null;
+    },
+
+    getFirstRouteByNum: function (routeNum) {
+        if (!routeNum) return null;
+        var validRoutes = this.getValidRoutes();
+        for (var i = 0; i < validRoutes.length; i++) {
+            if (validRoutes[i].route === routeNum.toString()) {
+                return validRoutes[i];
+            }
+        }
+        return null;
+    },
+
+    getMatchedRoutes: function (currentInput) {
+        var currentInputUpper = (currentInput || '').toString().toUpperCase().trim();
+        var validRoutes = this.getValidRoutes();
+        var matchedRoutes = [];
+
+        for (var i = 0; i < validRoutes.length; i++) {
+            var routeItem = validRoutes[i];
+
+            // 結合原有的過濾條件
+            var passOperator = !CONFIG.activeFilters.operator || (routeItem.operators && routeItem.operators.includes(CONFIG.activeFilters.operator));
+            var passType = !CONFIG.activeFilters.type || (routeItem.typeTags && routeItem.typeTags.some(t => (typeof t === 'string' ? t : t.type) === CONFIG.activeFilters.type));
+
+            if (passOperator && passType) {
+                // 比對路線編號前綴
+                if (!currentInputUpper || routeItem.route.toUpperCase().startsWith(currentInputUpper)) {
+                    matchedRoutes.push(routeItem);
+                }
+            }
+        }
+        return matchedRoutes;
     },
 
     getRouteBound: function (routeItem) {
@@ -370,34 +525,14 @@ var DataHandler = {
         return "A"; // 預設防呆
     },
 
-    getValidRouteNums: function () {
-        var validRoutes = this.getValidRoutes();
-        var nums = [];
-        for (var i = 0; i < validRoutes.length; i++) {
-            nums.push(validRoutes[i].route.toUpperCase());
-        }
-        return nums;
-    },
-
-    getRouteByNum: function (routeNum) {
-        if (!routeNum || typeof routeData === 'undefined' || !routeData || !routeData.data) return null;
-        var validRoutes = this.getValidRoutes();
-        for (var i = 0; i < validRoutes.length; i++) {
-            if (validRoutes[i].route.toUpperCase() === routeNum.toUpperCase()) {
-                return validRoutes[i];
-            }
-        }
-        return null;
-    },
-
     getEnabledShifts: function (routeItem, direction = null) {
         if (!routeItem || !routeItem.shifts) return [];
         var shifts = new Set();
 
-        // 判斷是否為分方向的 shifts 結構 (例如 { "A": {"normal": true}, "B": {"normal": true} })
         var isDirectional = false;
         for (var k in routeItem.shifts) {
-            if (typeof routeItem.shifts[k] === 'object') {
+            // 如果鍵值是方向 (A, B, C)，則判定為分方向結構
+            if (k === 'A' || k === 'B' || k === 'C') {
                 isDirectional = true;
                 break;
             }
@@ -405,22 +540,28 @@ var DataHandler = {
 
         if (isDirectional) {
             if (direction && routeItem.shifts[direction]) {
-                // 如果有指定方向，僅抓取該方向開啟的班次
                 for (var key in routeItem.shifts[direction]) {
-                    if (routeItem.shifts[direction][key] === true) shifts.add(key);
+                    var val = routeItem.shifts[direction][key];
+                    if (val === true || (typeof val === 'object' && val !== null && val.enabled !== false)) {
+                        shifts.add(key);
+                    }
                 }
             } else if (!direction) {
-                // 若無指定方向（例如主頁建議列表），聯集所有方向開啟的班次
                 for (var bound in routeItem.shifts) {
-                    for (var key in routeItem.shifts[bound]) {
-                        if (routeItem.shifts[bound][key] === true) shifts.add(key);
+                    if (bound === 'A' || bound === 'B' || bound === 'C') {
+                        for (var key in routeItem.shifts[bound]) {
+                            var val = routeItem.shifts[bound][key];
+                            if (val === true || (typeof val === 'object' && val !== null && val.enabled !== false)) {
+                                shifts.add(key);
+                            }
+                        }
                     }
                 }
             }
         } else {
-            // 向下相容原本的全域扁平結構
             for (var key in routeItem.shifts) {
-                if (routeItem.shifts[key] === true) {
+                var val = routeItem.shifts[key];
+                if (val === true || (typeof val === 'object' && val !== null && val.enabled !== false)) {
                     shifts.add(key);
                 }
             }
@@ -431,22 +572,23 @@ var DataHandler = {
     getShiftConfig: function (routeItem, shiftKey) {
         if (!routeItem || !shiftKey || !routeItem.shiftConfig) {
             return {
-                label: LangHandler.getShiftLabel(shiftKey),
-                color: shiftKey === 'normal' ? '#4a90e2' : '#e53e3e'
+                label: label,
+                color: config.color || '#4a90e2',
+                textColor: config.textColor || '#ffffff'
             };
         }
 
         const config = routeItem.shiftConfig[shiftKey] || {};
         const isZh = CONFIG.currentLang === 'zh-CN' || CONFIG.currentLang === 'zh-TW';
 
-        // 核心修復：動態判斷當前語言並抓取對應的 labelEn 或 labelCn
         const label = isZh
             ? (config.labelCn || config.label || LangHandler.getShiftLabel(shiftKey))
             : (config.labelEn || config.label || LangHandler.getShiftLabel(shiftKey));
 
         return {
             label: label,
-            color: config.color || '#4a90e2'
+            color: config.color || '#4a90e2',
+            textColor: config.textColor || '#ffffff'
         };
     },
 
@@ -493,14 +635,67 @@ var DataHandler = {
         return codes;
     },
 
+    isShiftCircular: function (routeItem, shiftKey, currentDir = null) {
+        if (!routeItem) return false;
+
+        // 1. 最高優先級：明確檢查 shiftConfig 內是否設定了 circular 屬性
+        if (shiftKey && routeItem.shiftConfig && routeItem.shiftConfig[shiftKey]) {
+            if (routeItem.shiftConfig[shiftKey].circular !== undefined) {
+                return routeItem.shiftConfig[shiftKey].circular === true;
+            }
+        }
+
+        // 2. 檢查 typeTags 中是否有針對此班次的 Circular 設定
+        if (routeItem.typeTags) {
+            for (let i = 0; i < routeItem.typeTags.length; i++) {
+                let tag = routeItem.typeTags[i];
+                if (typeof tag === 'object' && tag.type === 'Circular' && tag.shift === shiftKey) {
+                    return true;
+                }
+            }
+        }
+
+        // 3. 檢查 shifts 物件內是否明確包含 circular: true
+        if (routeItem.shifts) {
+            let shiftData = null;
+            if (currentDir && routeItem.shifts[currentDir] && routeItem.shifts[currentDir][shiftKey] !== undefined) {
+                shiftData = routeItem.shifts[currentDir][shiftKey];
+            } else if (routeItem.shifts[shiftKey] !== undefined) {
+                shiftData = routeItem.shifts[shiftKey];
+            }
+            if (typeof shiftData === 'object' && shiftData !== null && shiftData.circular !== undefined) {
+                return shiftData.circular === true;
+            }
+        }
+
+        let shiftBound = null;
+        if (shiftKey && routeItem.viaDirections) {
+            if (routeItem.viaDirections[shiftKey] && routeItem.viaDirections[shiftKey].bound) {
+                shiftBound = routeItem.viaDirections[shiftKey].bound;
+            } else if (currentDir && routeItem.viaDirections[currentDir] && routeItem.viaDirections[currentDir][shiftKey] && routeItem.viaDirections[currentDir][shiftKey].bound) {
+                shiftBound = routeItem.viaDirections[currentDir][shiftKey].bound;
+            }
+        }
+
+        // 4. 根據 bound 判斷 (包含 C 則為循環)
+        if (shiftBound && shiftBound.includes('C')) return true;
+
+        // 5. 如果目前查詢的方向明確是 C，視為循環
+        if (currentDir === 'C') return true;
+
+        // 6. 根屬性相容：為防止特班錯誤繼承，只有 normal 班次才會繼承根屬性的 circular: true
+        if (routeItem.circular === true && shiftKey === 'normal') {
+            return true;
+        }
+
+        return false;
+    },
+
+    // 修改 getShiftStartEnd，改用 isShiftCircular
     getShiftStartEnd: function (routeItem, shiftKey, specificBound) {
         if (!routeItem || !shiftKey) return { start: LangHandler.getText('noInformation'), end: LangHandler.getText('noInformation') };
 
-        var targetDirection = specificBound || "A";
-        if (routeItem.bound && routeItem.bound.indexOf("C") !== -1) {
-            targetDirection = "C";
-        }
-
+        var targetDirection = specificBound || CONFIG.currentDirection || "A";
         var shiftStops = [];
         if (routeItem.stops && routeItem.stops[targetDirection]) {
             for (var i = 0; i < routeItem.stops[targetDirection].length; i++) {
@@ -511,32 +706,9 @@ var DataHandler = {
             }
         }
 
-        shiftStops.sort(function (a, b) {
-            return a.seq - b.seq;
-        });
+        shiftStops.sort(function (a, b) { return a.seq - b.seq; });
 
-        if (shiftStops.length === 0) {
-            var directions = ["A", "B", "C"];
-            for (var d = 0; d < directions.length; d++) {
-                var dir = directions[d];
-                if (dir === targetDirection || !routeItem.stops[dir]) continue;
-
-                for (var i = 0; i < routeItem.stops[dir].length; i++) {
-                    var stop = routeItem.stops[dir][i];
-                    if (stop.visible && stop.stopFor && stop.stopFor.indexOf(shiftKey) !== -1) {
-                        shiftStops.push(stop);
-                    }
-                }
-                if (shiftStops.length > 0) break;
-            }
-
-            if (shiftStops.length === 0) {
-                return { start: LangHandler.getText('noInformation'), end: LangHandler.getText('noInformation') };
-            }
-            shiftStops.sort(function (a, b) {
-                return a.seq - b.seq;
-            });
-        }
+        if (shiftStops.length === 0) return { start: LangHandler.getText('noInformation'), end: LangHandler.getText('noInformation') };
 
         const cleanStopName = (stop) => {
             if (CONFIG.currentLang === 'zh-CN') {
@@ -553,7 +725,9 @@ var DataHandler = {
             return (stop.nameCn && stop.nameCn.includes('^^')) || (stop.nameEn && stop.nameEn.includes('^^'));
         };
 
-        if (routeItem.bound && routeItem.bound.indexOf("C") !== -1) {
+        var isLoop = this.isShiftCircular(routeItem, shiftKey, targetDirection);
+
+        if (isLoop) {
             let circularEndStop = null;
             for (let i = 0; i < shiftStops.length; i++) {
                 if (isCircularEndStop(shiftStops[i])) {
@@ -561,7 +735,6 @@ var DataHandler = {
                     break;
                 }
             }
-
             if (circularEndStop) {
                 endName = cleanStopName(circularEndStop);
             }
@@ -573,156 +746,143 @@ var DataHandler = {
         };
     },
 
-    // 获取当前方向下的有效站点
-    getValidStops: function (routeItem) {
-        if (!routeItem || !routeItem.stops) return [];
+    getTimetableData: function (routeItem, direction = null) {
+        if (!routeItem || typeof routeData === 'undefined') return null;
+        var targetDirection = direction || CONFIG.currentDirection || "A";
 
-        var targetDirection = CONFIG.currentDirection;
-        var bound = this.getRouteBound(routeItem); // 使用封装好的方法
-        if (bound && bound.indexOf("C") !== -1) {
-            targetDirection = "C";
-            CONFIG.currentDirection = "C";
+        var timetableData = routeItem.timetable || routeItem.operationTime || routeItem.timeTable || null;
+        if (!timetableData) return null;
+
+        if (typeof timetableData === 'string') {
+            return { direction: targetDirection, data: { text: timetableData }, hasOtherDirection: false };
         }
 
-        var directionStops = routeItem.stops[targetDirection] || [];
-        var validStops = [];
+        if (timetableData[targetDirection]) {
+            var hasOther = Object.keys(timetableData).some(k => k !== targetDirection && ['A', 'B', 'C'].includes(k));
+            return {
+                direction: targetDirection,
+                data: timetableData[targetDirection],
+                hasOtherDirection: hasOther
+            };
+        }
 
-        for (var i = 0; i < directionStops.length; i++) {
-            var stop = directionStops[i];
-            if (stop.visible) {
-                validStops.push(stop);
+        if (typeof timetableData === 'object' && !timetableData.A && !timetableData.B && !timetableData.C) {
+            return { direction: targetDirection, data: timetableData, hasOtherDirection: false };
+        }
+
+        for (let d of ["A", "B", "C"]) {
+            if (d !== targetDirection && timetableData[d]) {
+                return { direction: d, data: timetableData[d], hasOtherDirection: true };
             }
         }
-
-        if (validStops.length === 0) {
-            for (var dir in routeItem.stops) {
-                if (routeItem.stops.hasOwnProperty(dir)) {
-                    var dirStops = routeItem.stops[dir];
-                    for (var s = 0; s < dirStops.length; s++) {
-                        var stop = dirStops[s];
-                        if (stop.visible) {
-                            validStops.push(stop);
-                        }
-                    }
-                }
-                if (validStops.length > 0) break;
-            }
-        }
-
-        validStops.sort(function (a, b) {
-            return a.seq - b.seq;
-        });
-
-        return validStops;
+        return null;
     },
 
-    // 获取当前方向下的首尾站点（修复：多语言适配）
-    getDirectionStartEndStops: function (routeItem, targetDirectionOverride) {
-        if (!routeItem) return { first: LangHandler.getText('noInformation'), last: LangHandler.getText('noInformation') };
+    getTimetableDirections: function (routeItem) {
+        if (!routeItem || !routeItem.timetable) return [];
+        var directions = [];
+        var timetableData = routeItem.timetable;
 
-        var targetDirection = targetDirectionOverride || CONFIG.currentDirection;
-        if (routeItem.bound && routeItem.bound.indexOf("C") !== -1) {
-            targetDirection = "C";
-        }
+        if (timetableData.A) directions.push("A");
+        if (timetableData.B) directions.push("B");
+        if (timetableData.C) directions.push("C");
+        return directions.length > 0 ? directions : [];
+    },
 
+    getValidStops: function (routeItem) {
+        if (!routeItem || !routeItem.stops) return [];
+        var targetDirection = CONFIG.currentDirection || "A";
         var directionStops = routeItem.stops[targetDirection] || [];
-        var validStops = [];
+        return directionStops.filter(s => s.visible);
+    },
 
-        for (var i = 0; i < directionStops.length; i++) {
-            var stop = directionStops[i];
-            if (!stop.visible) continue;
+    isRouteSupportDirectionSwitch: function (routeItem) {
+        if (!routeItem) return false;
 
-            var hasShift = false;
-            for (var j = 0; j < CONFIG.enabledShifts.length; j++) {
-                var shiftKey = CONFIG.enabledShifts[j];
-                if (stop.stopFor && stop.stopFor.indexOf(shiftKey) !== -1) {
-                    hasShift = true;
-                    break;
-                }
-            }
+        // Get the route's bounds (e.g., "A,B" or "C")
+        var boundStr = this.getRouteBound(routeItem);
+        if (!boundStr) return false;
 
-            if (hasShift) {
-                validStops.push(stop);
-            }
+        var boundsArray = boundStr.split(',');
+
+        // Filter out bounds that don't actually have any stops configured
+        var validBounds = boundsArray.filter(b =>
+            routeItem.stops &&
+            routeItem.stops[b] &&
+            routeItem.stops[b].length > 0
+        );
+
+        // If there is more than one valid direction, it supports switching
+        return validBounds.length > 1;
+    },
+
+    getDirectionStartEndStops: function (routeItem, direction = null) {
+        var targetDir = direction || CONFIG.currentDirection || "A";
+        if (!routeItem || !routeItem.stops || !routeItem.stops[targetDir]) {
+            return { first: LangHandler.getText('noInformation'), last: LangHandler.getText('noInformation') };
         }
-
-        if (validStops.length === 0) {
-            for (var i = 0; i < directionStops.length; i++) {
-                var stop = directionStops[i];
-                if (stop.visible) {
-                    validStops.push(stop);
-                }
-            }
-        }
-
-        if (validStops.length === 0) {
-            var allDirections = ["A", "B", "C"];
-            for (var d = 0; d < allDirections.length; d++) {
-                var dir = allDirections[d];
-                if (dir === targetDirection) continue;
-
-                var altDirectionStops = routeItem.stops[dir] || [];
-                for (var s = 0; s < altDirectionStops.length; s++) {
-                    var stop = altDirectionStops[s];
-                    if (stop.visible) {
-                        validStops.push(stop);
-                    }
-                }
-
-                if (validStops.length > 0) break;
-            }
-        }
-
+        var validStops = routeItem.stops[targetDir].filter(s => s.visible);
         if (validStops.length === 0) {
             return { first: LangHandler.getText('noInformation'), last: LangHandler.getText('noInformation') };
         }
 
-        validStops.sort(function (a, b) {
+        var isZh = CONFIG.currentLang === 'zh-CN' || CONFIG.currentLang === 'zh-TW';
+        var firstStop = validStops[0];
+        var lastStop = validStops[validStops.length - 1];
+
+        var firstName = isZh ? (firstStop.nameCn || '').replace(/\^\^/g, '') : ((firstStop.nameEn || firstStop.nameCn) || '').replace(/\^\^/g, '');
+        var lastName = isZh ? (lastStop.nameCn || '').replace(/\^\^/g, '') : ((lastStop.nameEn || lastStop.nameCn) || '').replace(/\^\^/g, '');
+
+        return { first: firstName, last: lastName };
+    },
+
+    isShiftEndStop: function (routeItem, stop, shiftKey) {
+        var targetDirection = CONFIG.currentDirection;
+        var isLoop = this.isShiftCircular(routeItem, shiftKey, targetDirection);
+
+        if (isLoop) {
+            var shiftStops = this.getShiftStopStops(routeItem, shiftKey);
+            if (shiftStops.length === 0) return false;
+            var lastShiftStop = shiftStops[shiftStops.length - 1];
+            return stop.seq === lastShiftStop.seq;
+        }
+
+        var shiftStops = this.getShiftStopStops(routeItem, shiftKey);
+        if (shiftStops.length === 0) return false;
+        var lastShiftStop = shiftStops[shiftStops.length - 1];
+        return stop.seq === lastShiftStop.seq;
+    },
+
+    getShiftInRangeStops: function (routeItem, shiftKey) {
+        var targetDirection = CONFIG.currentDirection;
+        var directionStops = routeItem.stops[targetDirection] || [];
+        var inRangeStops = [];
+        for (var i = 0; i < directionStops.length; i++) {
+            var stop = directionStops[i];
+            if (stop.visible && this.isStopInShiftRange(routeItem, stop, shiftKey)) {
+                inRangeStops.push(stop);
+            }
+        }
+        inRangeStops.sort(function (a, b) {
             return a.seq - b.seq;
         });
-
-        var firstName = CONFIG.currentLang === 'zh-CN'
-            ? (validStops[0].nameCn || LangHandler.getText('noInformation'))
-            : (validStops[0].nameEn || validStops[0].nameCn || LangHandler.getText('noInformation'));
-
-        var lastName = CONFIG.currentLang === 'zh-CN'
-            ? (validStops[validStops.length - 1].nameCn || LangHandler.getText('noInformation'))
-            : (validStops[validStops.length - 1].nameEn || validStops[validStops.length - 1].nameCn || LangHandler.getText('noInformation'));
-
-        if (routeItem.bound && routeItem.bound.indexOf("C") !== -1) {
-            lastName = firstName;
-        }
-
-        return {
-            first: firstName,
-            last: lastName
-        };
+        return inRangeStops;
     },
 
-    // 在 DataHandler 中更新 isRouteSupportDirectionSwitch
-    isRouteSupportDirectionSwitch: function (routeItem) {
-        if (!routeItem) return false;
-
-        var bound = this.getRouteBound(routeItem);
-        if (bound.indexOf("C") !== -1) return false;
-
-        var hasABBound = bound.indexOf("A") !== -1 && bound.indexOf("B") !== -1;
-
-        var hasAStops = false;
-        var hasBStops = false;
-        if (routeItem.stops) {
-            hasAStops = routeItem.stops.A && routeItem.stops.A.length > 0;
-            hasBStops = routeItem.stops.B && routeItem.stops.B.length > 0;
-        }
-
-        return hasABBound && hasAStops && hasBStops;
-    },
+    _shiftInfoCache: {},
 
     getAllShiftsStartEndInfo: function (routeItem) {
         if (!routeItem) return [];
 
+        const cacheKey = routeItem._id + '_' + CONFIG.currentLang;
+
+        if (this._shiftInfoCache[cacheKey]) {
+            return this._shiftInfoCache[cacheKey];
+        }
+
         var shiftInfoList = [];
         var isDirectional = false;
+
         for (var k in routeItem.shifts) {
             if (typeof routeItem.shifts[k] === 'object') {
                 isDirectional = true;
@@ -737,7 +897,9 @@ var DataHandler = {
             var shiftConfig = this.getShiftConfig(routeItem, shiftKey);
 
             var activeBounds = [];
-            if (isDirectional) {
+            if (routeItem.viaDirections && routeItem.viaDirections[shiftKey] && routeItem.viaDirections[shiftKey].bound) {
+                activeBounds = routeItem.viaDirections[shiftKey].bound.split(',');
+            } else if (isDirectional) {
                 for (var bound in routeItem.shifts) {
                     if (routeItem.shifts[bound][shiftKey] === true) activeBounds.push(bound);
                 }
@@ -746,71 +908,84 @@ var DataHandler = {
                 activeBounds = routeBound.split(',');
             }
 
-            var isLoop = routeItem.bound && routeItem.bound.indexOf("C") !== -1;
+            var validBoundsData = {};
+            activeBounds.forEach(b => {
+                var startEnd = this.getShiftStartEnd(routeItem, shiftKey, b);
+                if (startEnd.start && startEnd.start !== LangHandler.getText('noInformation')) {
+                    validBoundsData[b] = startEnd;
+                }
+            });
 
-            if (isLoop) {
-                var startEnd = this.getShiftStartEnd(routeItem, shiftKey, "C");
-                shiftInfoList.push({
-                    name: shiftConfig?.label || LangHandler.getText('shiftName') + (i + 1),
-                    start: startEnd.start,
-                    end: startEnd.end,
-                    bound: "C",
-                    color: shiftConfig?.color || '#4a90e2'
-                });
-            } else if (activeBounds.indexOf('A') !== -1 && activeBounds.indexOf('B') !== -1) {
-                var startEndA = this.getShiftStartEnd(routeItem, shiftKey, 'A');
-                var startEndB = this.getShiftStartEnd(routeItem, shiftKey, 'B');
+            var validBounds = Object.keys(validBoundsData);
 
-                // 判斷是否為完美對稱路線 (A起點=B終點 且 A終點=B起點)
+            if (validBounds.includes('A') && validBounds.includes('B')) {
+                var startEndA = validBoundsData['A'];
+                var startEndB = validBoundsData['B'];
+
                 if (startEndA.start === startEndB.end && startEndA.end === startEndB.start) {
                     shiftInfoList.push({
+                        shiftKey: shiftKey,
                         name: shiftConfig?.label || LangHandler.getText('shiftName') + (i + 1),
                         start: startEndA.start,
                         end: startEndA.end,
                         bound: "A,B",
-                        color: shiftConfig?.color || '#4a90e2'
+                        color: shiftConfig?.color || '#4a90e2',
+                        textColor: shiftConfig?.textColor || '#ffffff'
                     });
                 } else {
-                    // 若起訖點不同 (不對稱)，則將 A 與 B 獨立拆分顯示
                     shiftInfoList.push({
-                        name: (shiftConfig?.label || LangHandler.getText('shiftName') + (i + 1)),
+                        shiftKey: shiftKey,
+                        name: shiftConfig?.label || LangHandler.getText('shiftName') + (i + 1),
                         start: startEndA.start,
                         end: startEndA.end,
                         bound: "A",
-                        color: shiftConfig?.color || '#4a90e2'
+                        color: shiftConfig?.color || '#4a90e2',
+                        textColor: shiftConfig?.textColor || '#ffffff'
                     });
                     shiftInfoList.push({
-                        name: (shiftConfig?.label || LangHandler.getText('shiftName') + (i + 1)),
+                        shiftKey: shiftKey,
+                        name: shiftConfig?.label || LangHandler.getText('shiftName') + (i + 1),
                         start: startEndB.start,
                         end: startEndB.end,
                         bound: "B",
-                        color: shiftConfig?.color || '#4a90e2'
+                        color: shiftConfig?.color || '#4a90e2',
+                        textColor: shiftConfig?.textColor || '#ffffff'
+                    });
+                }
+
+                if (validBounds.includes('C')) {
+                    shiftInfoList.push({
+                        shiftKey: shiftKey,
+                        name: shiftConfig?.label || LangHandler.getText('shiftName') + (i + 1),
+                        start: validBoundsData['C'].start,
+                        end: validBoundsData['C'].end,
+                        bound: "C",
+                        color: shiftConfig?.color || '#4a90e2',
+                        textColor: shiftConfig?.textColor || '#ffffff'
                     });
                 }
             } else {
-                var targetBound = activeBounds[0] || 'A';
-                var startEnd = this.getShiftStartEnd(routeItem, shiftKey, targetBound);
-                shiftInfoList.push({
-                    name: shiftConfig?.label || LangHandler.getText('shiftName') + (i + 1),
-                    start: startEnd.start,
-                    end: startEnd.end,
-                    bound: targetBound,
-                    color: shiftConfig?.color || '#4a90e2'
+                validBounds.forEach(targetBound => {
+                    shiftInfoList.push({
+                        shiftKey: shiftKey,
+                        name: shiftConfig?.label || LangHandler.getText('shiftName') + (i + 1),
+                        start: validBoundsData[targetBound].start,
+                        end: validBoundsData[targetBound].end,
+                        bound: targetBound,
+                        color: shiftConfig?.color || '#4a90e2',
+                        textColor: shiftConfig?.textColor || '#ffffff'
+                    });
                 });
             }
         }
+        this._shiftInfoCache[cacheKey] = shiftInfoList;
         return shiftInfoList;
     },
 
     // 获取指定班次的站点列表
     getShiftStopStops: function (routeItem, shiftKey) {
         if (!routeItem || !shiftKey) return [];
-
-        var targetDirection = CONFIG.currentDirection;
-        if (routeItem.bound && routeItem.bound.indexOf("C") !== -1) {
-            targetDirection = "C";
-        }
-
+        var targetDirection = CONFIG.currentDirection || "A"; // 移除覆寫，尊重當前方向
         var directionStops = routeItem.stops[targetDirection] || [];
         var shiftStops = [];
 
@@ -832,23 +1007,14 @@ var DataHandler = {
     isShiftStartStop: function (routeItem, stop, shiftKey) {
         var shiftStops = this.getShiftStopStops(routeItem, shiftKey);
         if (shiftStops.length === 0) return false;
-        var firstShiftStop = shiftStops[0];
-        return stop.seq === firstShiftStop.seq;
+        return stop.seq === shiftStops[0].seq;
     },
 
     // 判断是否是班次终点站
     isShiftEndStop: function (routeItem, stop, shiftKey) {
-        if (routeItem.bound && routeItem.bound.indexOf("C") !== -1) {
-            var shiftStops = this.getShiftStopStops(routeItem, shiftKey);
-            if (shiftStops.length === 0) return false;
-            var lastShiftStop = shiftStops[shiftStops.length - 1];
-            return stop.seq === lastShiftStop.seq;
-        }
-
         var shiftStops = this.getShiftStopStops(routeItem, shiftKey);
         if (shiftStops.length === 0) return false;
-        var lastShiftStop = shiftStops[shiftStops.length - 1];
-        return stop.seq === lastShiftStop.seq;
+        return stop.seq === shiftStops[shiftStops.length - 1].seq;
     },
 
     // 判断站点是否在班次范围内
@@ -901,38 +1067,11 @@ var DataHandler = {
         return Math.ceil(validStops.length / CONFIG.pageSize);
     },
 
-    getMatchedRoutePrefixes: function (currentInput) {
-        var currentInputUpper = (currentInput || '').toString().toUpperCase().trim();
-        var validRoutes = this.getValidRouteNums();
-        var matchedRoutes = [];
-
-        for (var i = 0; i < validRoutes.length; i++) {
-            var routeNum = validRoutes[i];
-            var routeItem = this.getRouteByNum(routeNum);
-
-            if (!routeItem) continue;
-
-            var passOperator = !CONFIG.activeFilters.operator || (routeItem.operators && routeItem.operators.includes(CONFIG.activeFilters.operator));
-            var passType = !CONFIG.activeFilters.type || (routeItem.typeTags && routeItem.typeTags.some(t => (typeof t === 'string' ? t : t.type) === CONFIG.activeFilters.type));
-
-            if (passOperator && passType) {
-                if (!currentInputUpper || routeNum.startsWith(currentInputUpper)) {
-                    matchedRoutes.push(routeNum);
-                }
-            }
-        }
-        return matchedRoutes;
-    },
-
     // 获取运营时间数据（修复：时间表显示问题）
     getTimetableData: function (routeItem, direction = null) {
         if (!routeItem || typeof routeData === 'undefined') return null;
 
         var targetDirection = direction || CONFIG.currentDirection;
-
-        if (routeItem.bound && routeItem.bound.indexOf("C") !== -1) {
-            targetDirection = "C";
-        }
 
         // 修复：增加更多的时间数据来源适配
         var timetableData = routeItem.timetable || routeItem.operationTime || routeItem.timeTable || null;
@@ -983,10 +1122,6 @@ var DataHandler = {
         var directions = [];
         var timetableData = routeItem.timetable;
 
-        if (routeItem.bound && routeItem.bound.indexOf("C") !== -1) {
-            return ["C"];
-        }
-
         if (timetableData.A) directions.push("A");
         if (timetableData.B) directions.push("B");
 
@@ -995,10 +1130,7 @@ var DataHandler = {
 
     // 获取班次运营范围内的所有站点
     getShiftInRangeStops: function (routeItem, shiftKey) {
-        var targetDirection = CONFIG.currentDirection;
-        if (routeItem.bound && routeItem.bound.indexOf("C") !== -1) {
-            targetDirection = "C";
-        }
+        var targetDirection = CONFIG.currentDirection || "A";
         var directionStops = routeItem.stops[targetDirection] || [];
         var inRangeStops = [];
         for (var i = 0; i < directionStops.length; i++) {
@@ -1007,9 +1139,7 @@ var DataHandler = {
                 inRangeStops.push(stop);
             }
         }
-        inRangeStops.sort(function (a, b) {
-            return a.seq - b.seq;
-        });
+        inRangeStops.sort(function (a, b) { return a.seq - b.seq; });
         return inRangeStops;
     },
 
@@ -1038,9 +1168,8 @@ var DataHandler = {
         if (!routeItem) return '';
         const isZh = CONFIG.currentLang === 'zh-CN' || CONFIG.currentLang === 'zh-TW';
         return isZh ? (routeItem.routeType || '') : (routeItem.routeTypeEn || routeItem.routeType || '');
-    }, // <--- Make sure there is a comma here!
+    },
 
-    // NEW FUNCTION PLACED CORRECTLY HERE
     getRouteUnlockLevels: function (routeItem) {
         if (!routeItem || !routeItem.timetable) return [];
         var levels = [];
@@ -1051,18 +1180,31 @@ var DataHandler = {
             for (var shiftKey in shifts) {
                 var shiftData = shifts[shiftKey];
                 var level = null;
+                var sunshards = null;
+                var unlockRoutes = null;
+                var unlockDateCn = null; // 新增：中文自定義日期
+                var unlockDateEn = null; // 新增：英文自定義日期
 
                 if (Array.isArray(shiftData) && shiftData.length > 0) {
                     level = shiftData[0].unlockLevel;
+                    sunshards = shiftData[0].sunshards;
+                    unlockRoutes = shiftData[0].unlockRoutes;
+                    unlockDateCn = shiftData[0].unlockDateCn;
+                    unlockDateEn = shiftData[0].unlockDateEn;
                 } else if (shiftData && typeof shiftData === 'object') {
                     level = shiftData.unlockLevel;
+                    sunshards = shiftData.sunshards;
+                    unlockRoutes = shiftData.unlockRoutes;
+                    unlockDateCn = shiftData.unlockDateCn;
+                    unlockDateEn = shiftData.unlockDateEn;
                 }
 
-                if (level !== undefined && level !== null) {
-                    var key = bound + '-' + shiftKey + '-' + level;
+                if ((level !== undefined && level !== null) || (sunshards !== undefined && sunshards !== null) || (unlockRoutes && unlockRoutes.length > 0) || unlockDateCn || unlockDateEn) {
+                    // 將新的解鎖條件也加入 key 中以防重複計算
+                    var key = bound + '-' + shiftKey + '-' + level + '-' + sunshards + '-' + (unlockRoutes ? unlockRoutes.join(',') : '') + '-' + unlockDateCn + '-' + unlockDateEn;
                     if (!seen.has(key)) {
                         seen.add(key);
-                        levels.push({ bound: bound, shift: shiftKey, level: level });
+                        levels.push({ bound: bound, shift: shiftKey, level: level, sunshards: sunshards, routes: unlockRoutes, unlockDateCn: unlockDateCn, unlockDateEn: unlockDateEn });
                     }
                 }
             }
@@ -1073,7 +1215,7 @@ var DataHandler = {
 
 // ------------- 增强版DOM渲染层 -------------
 var Renderer = {
-// --- 新增：路線類型徽章複合渲染器 ---
+    // --- 新增：路線類型徽章複合渲染器 ---
     renderTypeBadge: function (tObj, routeItem, extraStyle = '') {
         const isZh = CONFIG.currentLang === 'zh-CN' || CONFIG.currentLang === 'zh-TW';
 
@@ -1095,10 +1237,11 @@ var Renderer = {
             if (tObj.shift) {
                 const shiftConfig = DataHandler.getShiftConfig(routeItem, tObj.shift);
                 const shiftColor = shiftConfig.color || '#4a90e2';
+                const textColor = shiftConfig.textColor || '#fff';
                 let match = shiftConfig.label.match(/^(.+?)\s*\((.+?)\)$/);
 
                 if (match) {
-                    routeBadgeStr = `<span class="route-badge" style="background-color: ${shiftColor};">${match[1].trim()}</span>`;
+                    routeBadgeStr = `<span class="route-badge" style="background-color: ${shiftColor}; --route-badge-color: ${textColor}">${match[1].trim()}</span>`;
                     shiftNameStr = match[2].trim();
                 } else {
                     shiftNameStr = shiftConfig.label;
@@ -1110,19 +1253,15 @@ var Renderer = {
             let destTextStr = '';
             if (tObj.bound) {
                 hasDestPill = true;
-                let isLoop = tObj.bound.indexOf("C") !== -1;
+                let isLoop = DataHandler.isShiftCircular(routeItem, tObj.shift, tObj.bound);
                 if (isLoop) {
                     destTextStr = isZh ? '循環線' : 'Loop';
                 } else {
-                    let destName = '';
-                    if (routeItem.stops && routeItem.stops[tObj.bound]) {
-                        const validStops = routeItem.stops[tObj.bound].filter(s => s.visible);
-                        if (validStops.length > 0) {
-                            const lastStop = validStops[validStops.length - 1];
-                            destName = isZh ? (lastStop.nameCn || '').replace(/\^\^/g, '') : ((lastStop.nameEn || lastStop.nameCn) || '').replace(/\^\^/g, '');
-                        }
+                    let destName = DataHandler.getShiftStartEnd(routeItem, tObj.shift, tObj.bound).end;
+                    if (!destName || destName === LangHandler.getText('noInformation')) {
+                        destName = DataHandler.getDirectionStartEndStops(routeItem, tObj.bound).last;
                     }
-                    destTextStr = isZh ? `往 ${destName}` : `To ${destName}`;
+                    destTextStr = isZh ? `往 ${destName}` : `to ${destName}`;
                 }
             }
 
@@ -1141,7 +1280,6 @@ var Renderer = {
                 finalPill = `<span class="dest-pill" style="background: #e2e8f0; color: #334155; padding: 2px 8px; font-size: 12px; font-weight: 600; white-space: nowrap; flex-shrink: 0;">${combinedPillText}</span>`;
             }
 
-            // 【條件判斷】：只有 route-badge、type-badge 與 bound 同時存在時，才拆成兩行
             if (routeBadgeStr !== '' && baseBadge !== '' && hasDestPill) {
                 return `<div style="display: flex; flex-direction: column; align-items: flex-start; gap: 4px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 4px; max-width: 100%; overflow-x: auto;">
                             <div style="display: inline-flex; flex-wrap: nowrap; align-items: center; gap: 4px;">
@@ -1168,16 +1306,11 @@ var Renderer = {
     },
 
     updatePageLang: function () {
-        // 1. 批量渲染静态文案
         LangHandler.renderAllTexts();
-        // 2. 更新动态文案
         this.updateDynamicLangTexts();
-        // 3. 更新运营时间面板文案
         this.updateTimetablePanelLang();
-        // 4. 更新页面标题
         this.updatePageTitle();
 
-        // 额外保障：确保建议列表的空提示文本也能更新
         const emptySuggestTip = document.getElementById('emptySuggestTip');
         const noMatchSuggestTip = document.getElementById('noMatchSuggestTip');
         if (emptySuggestTip) {
@@ -1187,18 +1320,25 @@ var Renderer = {
             noMatchSuggestTip.textContent = LangHandler.getText('noMatchSuggest');
         }
 
-        // 重新渲染鍵盤篩選器以更新多語言標題
         this.renderKeyboardFilters();
+
+        if (typeof window.triggerStationSearchLoad === 'function') {
+            const stationInput = document.getElementById('stationSearchInput');
+            window.triggerStationSearchLoad(stationInput ? stationInput.value : '');
+        }
+
+        // --- 新增：動態刷新 P2P 網格語言 ---
+        if (typeof P2PManager !== 'undefined' && P2PManager.rawStopsData && P2PManager.rawStopsData.length > 0) {
+            P2PManager.renderAllStopsGrid();
+        }
     },
 
-    // 更新页面标题（多语言适配）
     updatePageTitle: function () {
         const titleElement = document.querySelector('title');
         if (titleElement) {
             titleElement.textContent = LangHandler.getText('appTitle');
         }
 
-        // 更新加载页面标题
         const loadingTitle = document.querySelector('.loading-title');
         if (loadingTitle) {
             loadingTitle.textContent = LangHandler.getText('appTitle');
@@ -1206,7 +1346,6 @@ var Renderer = {
     },
 
     updateDynamicLangTexts: function () {
-        // 分頁信息更新
         const paginationInfo = document.querySelector('.pagination-info');
         if (paginationInfo && CONFIG.currentRouteData) {
             const validStops = DataHandler.getValidStops(CONFIG.currentRouteData);
@@ -1217,7 +1356,6 @@ var Renderer = {
             });
         }
 
-        // 更新方向切換按鈕 Title
         const directionBtn = document.querySelector('.toggle-direction-btn');
         if (directionBtn && !directionBtn.disabled && directionBtn.style.display !== 'none') {
             const key = CONFIG.currentDirection === "A" ? 'directionA' : 'directionB';
@@ -1229,14 +1367,12 @@ var Renderer = {
             }
         }
 
-        // 【新增】更新分頁左右按鈕的 Title
         const prevBtn = document.querySelector('.prev-btn');
         if (prevBtn) prevBtn.title = LangHandler.getText('prevPage');
 
         const nextBtn = document.querySelector('.next-btn');
         if (nextBtn) nextBtn.title = LangHandler.getText('nextPage');
 
-        // 更新版本信息文本
         const versionElements = document.querySelectorAll('.app-version');
         versionElements.forEach(el => {
             if (el.textContent.includes('BETA')) {
@@ -1283,10 +1419,20 @@ var Renderer = {
             mainKeys.forEach(function (key) {
                 key.disabled = true;
                 key.style.opacity = CONFIG.keyboardOpacityDisabled;
-                key.onclick = function () {
+                key.onclick = function (e) {
+                    // --- 防止連點鎖 ---
+                    var now = Date.now();
+                    // 設定 150 毫秒的冷卻時間
+                    if (Renderer._lastClickTime && (now - Renderer._lastClickTime < 150)) {
+                        return;
+                    }
+                    Renderer._lastClickTime = now;
+                    // ------------------
+
                     const input = document.getElementById('routeNumberInput');
                     if (input) {
                         input.value += this.getAttribute('data-key');
+                        // 移除 setTimeout，改為直接同步觸發，讓鍵盤狀態能瞬間更新鎖定
                         input.dispatchEvent(new Event('input'));
                     }
                 };
@@ -1297,7 +1443,15 @@ var Renderer = {
             subLetterBtns.forEach(function (btn) {
                 btn.disabled = true;
                 btn.style.opacity = CONFIG.keyboardOpacityDisabled;
-                btn.onclick = function () {
+                btn.onclick = function (e) {
+                    // --- 防止連點鎖 ---
+                    var now = Date.now();
+                    if (Renderer._lastClickTime && (now - Renderer._lastClickTime < 150)) {
+                        return;
+                    }
+                    Renderer._lastClickTime = now;
+                    // ------------------
+
                     const input = document.getElementById('routeNumberInput');
                     if (input) {
                         input.value += this.getAttribute('data-key');
@@ -1361,10 +1515,10 @@ var Renderer = {
         // 3. 處理鍵盤可按鍵的亮起邏輯 (嚴格結合最新的篩選條件)
         if (!currentInputUpper) {
             var firstChars = new Set();
-            var filteredRoutes = DataHandler.getMatchedRoutePrefixes('');
-            filteredRoutes.forEach(function (route) {
-                if (route.length > 0) {
-                    firstChars.add(route.charAt(0));
+            var filteredRoutes = DataHandler.getMatchedRoutes('');
+            filteredRoutes.forEach(function (routeItem) {
+                if (routeItem.route.length > 0) {
+                    firstChars.add(routeItem.route.charAt(0).toUpperCase());
                 }
             });
 
@@ -1388,18 +1542,17 @@ var Renderer = {
                 });
             }
 
-            // 【修復核心】：即使沒有輸入，提早結束前也必須呼叫這行，才能取消標籤上的 active 樣式！
             this.renderKeyboardFilters();
             return;
         }
 
-        var matchedRoutes = DataHandler.getMatchedRoutePrefixes(currentInputUpper);
+        var matchedRoutes = DataHandler.getMatchedRoutes(currentInputUpper);
         if (matchedRoutes.length > 0) {
             var nextChars = new Set();
-            matchedRoutes.forEach(function (route) {
-                if (route.length > currentInputUpper.length) {
-                    var nextChar = route.charAt(currentInputUpper.length);
-                    nextChars.add(nextChar);
+            matchedRoutes.forEach(function (routeItem) {
+                var rNum = routeItem.route.toUpperCase();
+                if (rNum.length > currentInputUpper.length) {
+                    nextChars.add(rNum.charAt(currentInputUpper.length));
                 }
             });
 
@@ -1434,19 +1587,9 @@ var Renderer = {
         suggestList.innerHTML = '';
 
         var currentInputUpper = (currentInput || '').toString().toUpperCase().trim();
-        var matchedRoutes = DataHandler.getMatchedRoutePrefixes(currentInputUpper);
+        var matchedRoutes = DataHandler.getMatchedRoutes(currentInputUpper);
 
-        if (CONFIG.activeFilters.operator || CONFIG.activeFilters.type) {
-            matchedRoutes = matchedRoutes.filter(routeNum => {
-                var routeItem = DataHandler.getRouteByNum(routeNum);
-                if (!routeItem) return false;
-
-                var passOperator = !CONFIG.activeFilters.operator || (routeItem.operators && routeItem.operators.includes(CONFIG.activeFilters.operator));
-                var passType = !CONFIG.activeFilters.type || (routeItem.typeTags && routeItem.typeTags.some(t => (typeof t === 'string' ? t : t.type) === CONFIG.activeFilters.type));
-
-                return passOperator && passType;
-            });
-        }
+        // [刪除] 這裡原本有一段 CONFIG.activeFilters.operator 的 redundant filter，已經刪除了，因為 getMatchedRoutes 已包含過濾邏輯
 
         if (!matchedRoutes || matchedRoutes.length === 0) {
             var emptyItem = document.createElement('div');
@@ -1463,14 +1606,14 @@ var Renderer = {
             return;
         }
 
-        matchedRoutes.forEach(function (routeNum) {
-            try {
-                var routeItem = DataHandler.getRouteByNum(routeNum);
-                if (!routeItem) return;
+        var fragment = document.createDocumentFragment();
 
+        matchedRoutes.forEach(function (routeItem) {
+            try {
+                var routeNum = routeItem.route; // 讀取顯示用的路線名稱
                 var suggestItem = document.createElement('div');
                 suggestItem.className = 'suggest-item';
-                suggestItem.setAttribute('data-route', routeNum);
+                suggestItem.setAttribute('data-route-id', routeItem._id);
 
                 var routeName = CONFIG.currentLang === 'zh-CN'
                     ? (routeItem.name || routeItem.routeNameCn || routeNum)
@@ -1485,21 +1628,24 @@ var Renderer = {
                 if (allShiftsInfo.length > 0) {
                     shiftsHtml += '';
                     allShiftsInfo.forEach(function (shiftInfo) {
-                        var isLoop = shiftInfo.bound && shiftInfo.bound.indexOf("C") !== -1;
+                        var isLoop = DataHandler.isShiftCircular(routeItem, shiftInfo.shiftKey, shiftInfo.bound);
                         var isTwoWay = shiftInfo.bound === "A,B";
-                        var separator = isLoop ? '<span class="route-loop-icon">↺</span>' :
-                            (isTwoWay ? '<span class="route-arrow-icon">⬌</span>' : '<span class="route-arrow-icon">➔</span>');
+                        var loopSvg = '<svg class="route-loop-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.59-9.36l5.67-5.67"/></svg>';
+                        var twoWaySvg = '<svg class="route-arrow-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><polyline points="8 4 4 8 8 12"></polyline><line x1="4" y1="8" x2="20" y2="8"></line><polyline points="16 20 20 16 16 12"></polyline><line x1="20" y1="16" x2="4" y2="16"></line></svg>';
+                        var arrowSvg = '<svg class="route-arrow-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>';
 
-                        // 判斷並拆分帶有括號的班次名稱
-                        let shiftNameHtml = '';
+                        var separator = isLoop ? loopSvg : (isTwoWay ? twoWaySvg : arrowSvg);
+
                         let match = shiftInfo.name.match(/^(.+?)\s*\((.+?)\)$/);
+                        let currentTextColor = shiftInfo.textColor || '#ffffff';
+
                         if (match) {
                             shiftNameHtml = `
-                                <span class="route-badge" style="background-color: ${shiftInfo.color};">${match[1].trim()}</span>
-                                <span class="suggest-shift-name" style="background-color: ${shiftInfo.color};">${match[2].trim()}</span>
+                                <span class="route-badge" style="background-color: ${shiftInfo.color}; --route-badge-bg: ${shiftInfo.color}; --route-badge-color: ${currentTextColor}; color: ${currentTextColor};">${match[1].trim()}</span>
+                                <span class="suggest-shift-name" style="background-color: ${shiftInfo.color}; color: ${currentTextColor};">${match[2].trim()}</span>
                             `;
                         } else {
-                            shiftNameHtml = `<span class="suggest-shift-name" style="background-color: ${shiftInfo.color};">${shiftInfo.name}</span>`;
+                            shiftNameHtml = `<span class="suggest-shift-name" style="background-color: ${shiftInfo.color}; color: ${currentTextColor};">${shiftInfo.name}</span>`;
                         }
 
                         shiftsHtml += `
@@ -1522,67 +1668,142 @@ var Renderer = {
 
                 var typeText = DataHandler.getRouteTypeDisplay(routeItem);
                 var firstShiftColor = '#2563eb';
+                var textColor = '#ffffff';
                 var enabledShifts = DataHandler.getEnabledShifts(routeItem);
                 if (enabledShifts && enabledShifts.length > 0) {
-                    firstShiftColor = DataHandler.getShiftConfig(routeItem, enabledShifts[0]).color || firstShiftColor;
+                    var firstConfig = DataHandler.getShiftConfig(routeItem, enabledShifts[0]);
+                    firstShiftColor = firstConfig.color || firstShiftColor;
+                    textColor = firstConfig.textColor || textColor;
                 }
-                var textColor = routeItem.textColor || '#ffffff';
                 var unlockLevels = DataHandler.getRouteUnlockLevels(routeItem);
                 var levelHtml = '';
                 if (unlockLevels.length > 0) {
-                    var levelsOnly = unlockLevels.map(l => l.level);
-                    var minLevel = Math.min(...levelsOnly);
-                    var maxLevel = Math.max(...levelsOnly);
-                    if (minLevel === maxLevel) {
-                        var levelText = LangHandler.getText('unlockLevelReq', { level: minLevel });
-                        levelHtml = `<span class="badge-common level-badge"><svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 2px; display: inline-block; vertical-align: middle;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg><i class="fas fa-lock" style="margin-right: 4px;"></i>${levelText}</span>`;
-                    } else {
-                        levelHtml = `<span class="badge-common level-badge"><svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 2px; display: inline-block; vertical-align: middle;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg><i class="fas fa-lock" style="margin-right: 4px;"></i>Lv.${minLevel} - Lv.${maxLevel}</span>`;
+                    var levelsOnly = unlockLevels.map(l => l.level).filter(l => l !== undefined && l !== null);
+                    var sunshardsOnly = unlockLevels.map(l => l.sunshards).filter(s => s !== undefined && s !== null);
+                    var routesOnly = [];
+                    unlockLevels.forEach(l => {
+                        if (l.routes && Array.isArray(l.routes)) {
+                            l.routes.forEach(r => { if (!routesOnly.includes(r)) routesOnly.push(r); });
+                        }
+                    });
+
+                    var minLevel = levelsOnly.length > 0 ? Math.min(...levelsOnly) : null;
+                    var maxLevel = levelsOnly.length > 0 ? Math.max(...levelsOnly) : null;
+                    var minSunshards = sunshardsOnly.length > 0 ? Math.min(...sunshardsOnly) : null;
+                    var maxSunshards = sunshardsOnly.length > 0 ? Math.max(...sunshardsOnly) : null;
+
+                    var parts = [];
+
+                    if (minLevel !== null) {
+                        var levelText = minLevel === maxLevel ? `Lv.${minLevel}` : `Lv.${minLevel} - ${maxLevel}`;
+                        var levelSvg = `<svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`;
+                        parts.push(`<span class="badge-common level-badge level-badge-lvl">${levelSvg}${levelText}</span>`);
+                    }
+
+                    if (minSunshards !== null) {
+                        var sunshardsText = minSunshards === maxSunshards ? minSunshards : `${minSunshards} - ${maxSunshards}`;
+                        var sunshardsSvg = `<svg viewBox="0 0 100 100" width="18" height="18" style="margin-right: 4px;"><circle cx="50" cy="50" r="16" fill="currentColor"/><g stroke="currentColor" stroke-width="6" stroke-linecap="round"><line x1="50" y1="18" x2="50" y2="24" /><line x1="50" y1="18" x2="50" y2="24" transform="rotate(45 50 50)" /><line x1="50" y1="18" x2="50" y2="24" transform="rotate(90 50 50)" /><line x1="50" y1="18" x2="50" y2="24" transform="rotate(135 50 50)" /><line x1="50" y1="18" x2="50" y2="24" transform="rotate(180 50 50)" /><line x1="50" y1="18" x2="50" y2="24" transform="rotate(225 50 50)" /><line x1="50" y1="18" x2="50" y2="24" transform="rotate(270 50 50)" /><line x1="50" y1="18" x2="50" y2="24" transform="rotate(315 50 50)" /></g></svg>`;
+                        parts.push(`<span class="badge-common level-badge level-badge-sunshards">${sunshardsSvg}${sunshardsText}</span>`);
+                    }
+
+                    if (routesOnly.length > 0) {
+                        var routesHtml = routesOnly.map(r => {
+                            var routeItemObj = DataHandler.getFirstRouteByNum(r); // [修改] 使用 getFirstRouteByNum 避免報錯
+                            var bg = '#4a90e2', txt = '#ffffff';
+                            if (routeItemObj) {
+                                var sh = DataHandler.getEnabledShifts(routeItemObj);
+                                if (sh && sh.length > 0) {
+                                    var cfg = DataHandler.getShiftConfig(routeItemObj, sh[0]);
+                                    if (cfg.color) bg = cfg.color;
+                                    if (cfg.textColor) txt = cfg.textColor;
+                                }
+                            }
+                            return `<span class="route-badge" style="--route-badge-bg: ${bg}; --route-badge-color: ${txt}; background-color: ${bg}; color: ${txt}; padding: 2px 6px; font-size: 11px; border-radius: 4px; margin-left: 2px; border: 1px solid rgba(255,255,255,0.3); box-shadow: 0 1px 2px rgba(0,0,0,0.2); min-width: auto; height: auto; line-height: 1;">${r}</span>`;
+                        }).join('');
+
+                        var routesSvg = `<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px; flex-shrink: 0;"><path d="M19 17h2l.64-2.54c.24-.959.24-1.962 0-2.92l-1.07-4.27A3 3 0 0 0 17.66 5H4a2 2 0 0 0-2 2v10h2"/><circle cx="16" cy="17" r="2"/><path d="M9 17h5"/><circle cx="7" cy="17" r="2"/></svg>`;
+                        parts.push(`<span class="badge-common level-badge level-badge-routes" style="display:inline-flex; align-items:center; flex-wrap: wrap; padding-right: 6px;">${routesSvg}${routesHtml}</span>`);
+                    }
+
+                    var uniqueDates = [];
+                    unlockLevels.forEach(l => {
+                        var isZh = CONFIG.currentLang === 'zh-CN' || CONFIG.currentLang === 'zh-TW';
+                        var dateText = isZh ? l.unlockDateCn : (l.unlockDateEn || l.unlockDateCn);
+                        if (dateText && !uniqueDates.includes(dateText)) {
+                            uniqueDates.push(dateText);
+                        }
+                    });
+
+                    if (uniqueDates.length > 0) {
+                        var dateSvg = `<svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`;
+                        uniqueDates.forEach(d => {
+                            parts.push(`<span class="badge-common level-badge level-badge-date">${dateSvg}${d}</span>`);
+                        });
+                    }
+
+                    if (parts.length > 0) {
+                        levelHtml = parts.join('');
                     }
                 }
 
                 var operatorBadgesHtml = (routeItem.operators || []).map(op => `<span class="badge-common operator-badge" data-operator="${op}">${op}</span>`).join('');
                 var typeBadgesHtml = (routeItem.typeTags || []).map(t => Renderer.renderTypeBadge(t, routeItem)).join('');
-
-                // 1. 計算當前路綫的營運商與類型標籤總數
                 const totalBadges = (routeItem.operators || []).length + (routeItem.typeTags || []).length;
-
-                // 2. 根據總數是否大於 3 來決定是否啟用分行 Class
                 const footerClass = totalBadges <= 3 ? 'suggest-badges-footer split-rows' : 'suggest-badges-footer';
 
                 suggestItem.innerHTML = `
-    <div class="suggest-route-header">
-        <span class="route-badge" style="--route-badge-bg: ${firstShiftColor}; --route-badge-color: ${textColor};">${routeName || LangHandler.getText('noInformation')}</span>
-        ${typeText ? `<span class="suggest-route-type" style="color: ${firstShiftColor}; border-color: ${firstShiftColor}4d; background: ${firstShiftColor}1a;">${typeText}</span>` : ''}
-    </div>
-    ${shiftsHtml}
-    
-    <div class="${footerClass}">
-        <div class="operator-group">
-            ${operatorBadgesHtml}
-        </div>
-        <div class="type-group">
-            ${typeBadgesHtml}
-        </div>
-        ${levelHtml ? `<div class="level-group">${levelHtml}</div>` : ''}
-    </div>
-`;
+                    <div class="suggest-route-header">
+                        <span class="route-badge" style="--route-badge-bg: ${firstShiftColor}; --route-badge-color: ${textColor};">${routeName || LangHandler.getText('noInformation')}</span>
+                        ${typeText ? `<span class="suggest-route-type" style="color: ${firstShiftColor}; border-color: ${firstShiftColor}4d; background: ${firstShiftColor}1a;">${typeText}</span>` : ''}
+                    </div>
+                    ${shiftsHtml}
+                    
+                    <div class="${footerClass}">
+                        <div class="operator-group">
+                            ${operatorBadgesHtml}
+                        </div>
+                        <div class="type-group">
+                            ${typeBadgesHtml}
+                        </div>
+                        ${levelHtml ? `<div class="level-group">${levelHtml}</div>` : ''}
+                    </div>
+                `;
 
                 suggestItem.addEventListener('click', function () {
+                    if (routeNum === 'S1' || routeNum === 'S2') {
+                        window.location.href = './travel/index.html';
+                        return;
+                    }
+
                     CONFIG.currentRouteNum = routeNum;
+                    CONFIG.currentRouteId = routeItem._id;
                     CONFIG.currentPage = 1;
-                    CONFIG.currentDirection = "A";
-                    Renderer.renderStopPage(routeNum);
+
+                    var boundStr = DataHandler.getRouteBound(routeItem) || "A";
+                    var boundsArray = boundStr.split(',');
+                    var firstBound = boundsArray[0];
+                    for (var b of boundsArray) {
+                        if (routeItem.stops && routeItem.stops[b] && routeItem.stops[b].length > 0) {
+                            firstBound = b;
+                            break;
+                        }
+                    }
+                    CONFIG.currentDirection = firstBound;
+
+                    Renderer.renderStopPage(routeItem._id);
                 });
 
-                suggestList.appendChild(suggestItem);
+                fragment.appendChild(suggestItem);
             } catch (e) {
                 console.error('渲染线路建议项失败:', routeNum, e);
             }
         });
+
+        suggestList.innerHTML = '';
+        suggestList.appendChild(fragment);
     },
 
-    renderStopPage: function (routeNum) {
+    renderStopPage: function (routeId) {
         var stopContainer = document.getElementById('stopContainer');
         var stopPageTitle = document.getElementById('stopPageTitle');
         if (!stopContainer || !stopPageTitle) return;
@@ -1591,7 +1812,7 @@ var Renderer = {
         document.getElementById('stopScreen').classList.remove('hidden');
         stopContainer.innerHTML = '';
 
-        var routeItem = DataHandler.getRouteByNum(routeNum);
+        var routeItem = DataHandler.getRouteById(routeId); // [修改] 使用 getRouteById
         if (!routeItem) {
             stopContainer.innerHTML = `<div class="empty-tip">${CONFIG.emptyTipText[CONFIG.currentLang]}</div>`;
             stopPageTitle.textContent = LangHandler.getText('stopPageTitleWithRoute', {
@@ -1608,10 +1829,6 @@ var Renderer = {
 
         var bound = DataHandler.getRouteBound(routeItem);
         var targetDirection = CONFIG.currentDirection;
-        if (bound && bound.indexOf("C") !== -1) {
-            targetDirection = "C";
-            CONFIG.currentDirection = "C";
-        }
         CONFIG.enabledShifts = DataHandler.getEnabledShifts(routeItem, targetDirection);
 
         // 綁定右上角 Header 搜尋框
@@ -1685,14 +1902,14 @@ var Renderer = {
         prevBtn.addEventListener('click', function () {
             if (CONFIG.currentPage > 1) {
                 CONFIG.currentPage--;
-                Renderer.renderStopPage(routeItem.route);
+                Renderer.renderStopPage(routeItem._id);
             }
         });
 
         nextBtn.addEventListener('click', function () {
             if (CONFIG.currentPage < totalPages) {
                 CONFIG.currentPage++;
-                Renderer.renderStopPage(routeItem.route);
+                Renderer.renderStopPage(routeItem._id);
             }
         });
 
@@ -1767,17 +1984,13 @@ var Renderer = {
 
             if (!firstStopEl || !lastStopEl) return;
 
-            // 刷新樣式
             firstStopEl.classList.remove('shift-start-stop', 'shift-arrow-top', 'shift-in-range-container');
             lastStopEl.classList.remove('shift-end-stop', 'shift-arrow-bottom');
 
-            // 【核心修復】：精確計算跨行的高度距離
             var firstRect = firstStopEl.getBoundingClientRect();
             var lastRect = lastStopEl.getBoundingClientRect();
 
-            // 【核心修復】：若有上箭頭，線條往上延伸 4px 完美接合箭頭底部
             var startTop = isAbsoluteStart ? (firstRect.height / 2) : -4;
-            // 若有下箭頭，線條往下延伸 4px 完美接合箭頭頂部
             var endBottomOffset = isAbsoluteEnd ? (lastRect.height / 2) : (lastRect.height + 4);
             var lineDistance = (lastRect.top + endBottomOffset) - (firstRect.top + startTop);
 
@@ -1800,610 +2013,71 @@ var Renderer = {
         });
     },
 
+    // ==========================================
+    // 1. 路線資訊卡 (主函式)
+    // ==========================================
     renderRouteInfoBar: function (routeItem) {
         const routeInfoBar = document.createElement('div');
         routeInfoBar.className = 'route-info-bar';
 
+        const isZh = CONFIG.currentLang === 'zh-CN' || CONFIG.currentLang === 'zh-TW';
+        const targetDirection = CONFIG.currentDirection;
+        const enabledShifts = DataHandler.getEnabledShifts(routeItem, targetDirection);
+        let isLoop = routeItem.circular === true;
+        if (enabledShifts && enabledShifts.length > 0) {
+            // 依據畫面上首個啟用的班次來決定主板面是否顯示為循環
+            isLoop = DataHandler.isShiftCircular(routeItem, enabledShifts[0], targetDirection);
+        }
+        const directionInfo = DataHandler.getDirectionStartEndStops(routeItem);
+
+        let mainRouteColor = '#4a90e2';
+        let mainTextColor = routeItem.textColor || '#ffffff';
+        if (enabledShifts && enabledShifts.length > 0) {
+            const firstShiftConfig = DataHandler.getShiftConfig(routeItem, enabledShifts[0]);
+            if (firstShiftConfig) {
+                if (firstShiftConfig.color) mainRouteColor = firstShiftConfig.color;
+                if (firstShiftConfig.textColor) mainTextColor = firstShiftConfig.textColor;
+            }
+        }
+        routeInfoBar.style.setProperty('--route-main-color', mainRouteColor);
+
         const basicInfo = document.createElement('div');
         basicInfo.className = 'route-basic-info';
 
-        // --- 動態獲取第一個班次的顏色，作為路線主色 (取消漸層，改純色) ---
-        var targetDirection = CONFIG.currentDirection;
-        if (routeItem.bound && routeItem.bound.indexOf("C") !== -1) {
-            targetDirection = "C";
-        }
-        // 核心修改：只抓取屬於當前方向啟用的班次，不顯示反向獨立班次
-        const enabledShifts = DataHandler.getEnabledShifts(routeItem, targetDirection);
+        this._buildBasicInfoElements(basicInfo, routeItem, mainRouteColor, mainTextColor, isZh, isLoop, directionInfo, enabledShifts);
+        basicInfo.appendChild(this._buildActionButtons(routeItem, mainRouteColor, mainTextColor, isZh, isLoop, directionInfo));
 
-        let mainRouteColor = '#4a90e2';
-        if (enabledShifts && enabledShifts.length > 0) {
-            const firstShiftConfig = DataHandler.getShiftConfig(routeItem, enabledShifts[0]);
-            if (firstShiftConfig && firstShiftConfig.color) {
-                mainRouteColor = firstShiftConfig.color;
-            }
-        }
+        const details = this._buildMiniTimeline(routeItem, isZh, isLoop, directionInfo, enabledShifts);
 
-        routeInfoBar.style.setProperty('--route-main-color', mainRouteColor);
+        routeInfoBar.appendChild(basicInfo);
+        routeInfoBar.appendChild(details);
 
-        const numWrap = document.createElement('div');
-        numWrap.className = 'route-num-color-wrap';
+        return routeInfoBar;
+    },
 
-        const routeNumEl = document.createElement('div');
-        routeNumEl.className = 'route-badge';
-        routeNumEl.textContent = routeItem.route;
-
-        var textColor = routeItem.textColor || '#ffffff'; // 👈 新增這行
-
-        routeNumEl.style.setProperty('--route-badge-bg', mainRouteColor);
-        routeNumEl.style.setProperty('--route-badge-color', textColor); // 👈 新增這行
-        routeNumEl.style.backgroundColor = mainRouteColor;
-
-        numWrap.appendChild(routeNumEl);
-
-        const isZh = CONFIG.currentLang === 'zh-CN' || CONFIG.currentLang === 'zh-TW';
-
-        if (routeItem.routeType || routeItem.routeTypeEn) {
-            const typeText = DataHandler.getRouteTypeDisplay(routeItem);
-            if (typeText) {
-                const typeBadge = document.createElement('div');
-                typeBadge.className = 'route-type-badge';
-                typeBadge.style.color = mainRouteColor;
-                typeBadge.style.backgroundColor = `${mainRouteColor}1A`; // 10% 透明度
-                typeBadge.textContent = typeText;
-                numWrap.appendChild(typeBadge);
-            }
-        }
-
-        const directionInfo = DataHandler.getDirectionStartEndStops(routeItem);
-        var bound = DataHandler.getRouteBound(routeItem);
-        var isLoop = bound.includes("C");
-        var isTwoWay = bound === "A,B";
-
-        const cleanDirUI = document.createElement('div');
-        cleanDirUI.className = 'clean-direction-ui';
-
-        if (isLoop) {
-            cleanDirUI.innerHTML = `
-                <span class="dir-stop">${directionInfo.first}</span>
-                <span class="dir-icon loop" style="color:${mainRouteColor}">↺</span>
-                <span class="dir-stop loop-text" style="color:${mainRouteColor}">${LangHandler.getText('loopDirection') || '循環線'}</span>
-            `;
-            cleanDirUI.style.backgroundColor = `${mainRouteColor}0D`;
-            cleanDirUI.style.borderColor = `${mainRouteColor}33`;
-        } else {
-            cleanDirUI.innerHTML = `
-                <span class="dir-stop">${directionInfo.first}</span>
-                <span class="dir-icon route-arrow-icon" style="color:#666;">➔</span>
-                <span class="dir-stop">${directionInfo.last}</span>
-            `;
-        }
-
-        const shiftTags = document.createElement('div');
-        shiftTags.className = 'route-shift-tags';
-
-        // 班次標籤取消漸變，使用純色
-        enabledShifts.forEach(shiftKey => {
-            const config = DataHandler.getShiftConfig(routeItem, shiftKey);
-            const tag = document.createElement('div');
-            tag.className = `shift-tag`;
-
-            let shiftColor = config.color || '#4a90e2';
-            tag.style.background = shiftColor; // 改為純色
-            tag.style.backgroundColor = shiftColor;
-
-            tag.innerHTML = `<span class="shift-text">${config.label}</span>`;
-            shiftTags.appendChild(tag);
-        });
-
-        const renderCenteredFareNode = (nameCn, nameEn, isZh) => {
-            const cleanCn = (nameCn || '').replace(/\^\^/g, '');
-            const cleanEn = (nameEn || '').replace(/\^\^/g, '');
-            if (isZh) {
-                return `
-            <div class="fare-node centered-stop-name">
-                <div class="stop-main-name">${cleanCn}</div>
-                ${cleanEn ? `<div class="stop-english-name">${cleanEn}</div>` : ''}
-            </div>
-        `;
-            } else {
-                return `
-            <div class="fare-node centered-stop-name">
-                <div class="stop-main-name">${cleanEn || cleanCn}</div>
-            </div>
-        `;
-            }
-        };
-
-        // --- 高級收費資訊區域 ---
-        const fareWrap = document.createElement('div');
-        fareWrap.className = 'fare-modal-body';
-
-        if (routeItem.fares) {
-            const isZh = CONFIG.currentLang === 'zh-CN' || CONFIG.currentLang === 'zh-TW';
-
-            // SVG 圖標庫 (完全取代 Emoji)
-            const arrowSvg = `<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`;
-            const infoSvg = `<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;
-
-            const fareTypes = [
-                { key: 'adult', labelZh: '成人', labelEn: 'Adult' },
-                { key: 'child', labelZh: '兒童', labelEn: 'Child' },
-                { key: 'elder', labelZh: '長者', labelEn: 'Elder' },
-                { key: 'student', labelZh: '學生', labelEn: 'Student' }
-            ];
-
-            // 1. 處理基礎收費與 Overrides (動態收費)
-            const currentDir = CONFIG.currentDirection;
-            const activeShifts = CONFIG.enabledShifts || [];
-
-            let matchedOverrides = [];
-            if (routeItem.fares.overrides) {
-                routeItem.fares.overrides.forEach(ov => {
-                    const matchBound = !ov.bound || ov.bound.includes(currentDir);
-                    const matchShift = !ov.shift || activeShifts.includes(ov.shift);
-                    if (matchBound && matchShift) {
-                        matchedOverrides.push(ov);
-                    }
-                });
-            }
-
-            const buildFareGrid = (fareData, titleText, shiftKey = null, boundKey = null) => {
-                const wrapper = document.createElement('div');
-                wrapper.className = 'modern-fare-group';
-
-                let themeColor = '#64748b'; // 默認灰色
-                if (shiftKey) {
-                    const shiftConfig = DataHandler.getShiftConfig(routeItem, shiftKey);
-                    if (shiftConfig && shiftConfig.color) themeColor = shiftConfig.color;
-                }
-
-                wrapper.style.setProperty('--fare-theme', themeColor);
-
-                let headerHtml = '';
-
-                // 如果沒有 shiftKey 且沒有 boundKey，代表是基礎常規收費，保留標題文字
-                if (!shiftKey && !boundKey) {
-                    headerHtml = `<span class="modern-fare-title">${titleText}</span>`;
-                } else {
-                    // 根據 shift 與 bound 動態組裝表頭 (取消原先的 label/labelEn)
-                    let tagsHtml = '';
-                    if (shiftKey) {
-                        const shiftConfig = DataHandler.getShiftConfig(routeItem, shiftKey);
-                        tagsHtml += `<span class="shift-tag" style="background-color: ${shiftConfig.color}; border-color: ${shiftConfig.color};">${shiftConfig.label}</span>`;
-                    }
-                    if (boundKey) {
-                        let destName = '';
-                        if (routeItem.stops && routeItem.stops[boundKey]) {
-                            const validStops = routeItem.stops[boundKey].filter(s => s.visible);
-                            if (validStops.length > 0) {
-                                const lastStop = validStops[validStops.length - 1];
-                                destName = isZh
-                                    ? (lastStop.nameCn || '').replace(/\^\^/g, '')
-                                    : ((lastStop.nameEn || lastStop.nameCn) || '').replace(/\^\^/g, '');
-                            }
-                        }
-                        const destText = isZh ? `往 ${destName}` : `To ${destName}`;
-                        tagsHtml += `<span class="dest-pill" style="margin-left: 8px; background: #f1f5f9; color: #334155; padding: 2px 12px; font-size: 13px; font-weight: 600;">${destText}</span>`;
-                    }
-                    headerHtml = `<div style="display: flex; align-items: center;">${tagsHtml}</div>`;
-                }
-
-                let gridHtml = `
-                    <div class="modern-fare-header">
-                        ${headerHtml}
-                    </div>
-                    <div class="modern-fare-grid">
-                `;
-
-                fareTypes.forEach(ft => {
-                    if (fareData[ft.key] !== undefined) {
-                        gridHtml += `
-                            <div class="modern-fare-item">
-                                <span class="fare-lbl">${isZh ? ft.labelZh : ft.labelEn}</span>
-                                <span class="fare-val"><span class="currency">$</span>${fareData[ft.key].toFixed(1)}</span>
-                            </div>
-                        `;
-                    }
-                });
-                gridHtml += `</div>`;
-                wrapper.innerHTML = gridHtml;
-                return wrapper;
-            };
-
-            // 渲染全程常規收費
-            fareWrap.appendChild(buildFareGrid(routeItem.fares, isZh ? '全程收費' : 'Full Fare'));
-
-            // 渲染 Overrides 動態收費
-            matchedOverrides.forEach(ov => {
-                // 不傳遞 ov.label，改由 shift 與 bound 動態生成表頭
-                fareWrap.appendChild(buildFareGrid(ov, null, ov.shift, ov.bound));
-            });
-
-            const renderNode = (nameCn, nameEn) => {
-                const cleanCn = (nameCn || '').replace(/\^\^/g, '');
-                const cleanEn = (nameEn || '').replace(/\^\^/g, '');
-                return `<div class="route-node-clean">
-                            <span class="node-main">${isZh ? cleanCn : (cleanEn || cleanCn)}</span>
-                            ${isZh && cleanEn ? `<span class="node-sub">${cleanEn}</span>` : ''}
-                        </div>`;
-            };
-
-            // 2. 處理分段收費
-            const validSectionFares = (routeItem.fares.sectionFares || []).filter(sf =>
-                !sf.direction || sf.direction.includes(currentDir)
-            );
-
-            if (validSectionFares.length > 0) {
-                const sectionContainer = document.createElement('div');
-                sectionContainer.className = 'modern-section-container';
-                sectionContainer.innerHTML = `<div class="modern-section-title">${isZh ? '分段收費' : 'Section Fares'}</div>`;
-
-                validSectionFares.forEach(sf => {
-                    let shiftBadgesHTML = '';
-                    const shiftArray = Array.isArray(sf.shift) ? sf.shift : (sf.shift ? [sf.shift] : []);
-                    if (shiftArray.length > 0) {
-                        shiftBadgesHTML = '<div class="modern-shift-badges" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">';
-                        shiftArray.forEach(shiftKey => {
-                            const shiftConfig = DataHandler.getShiftConfig(routeItem, shiftKey);
-                            let boundKey = sf.direction ? (sf.direction.includes(',') ? sf.direction.split(',')[0] : sf.direction) : currentDir;
-                            let destName = '';
-                            if (routeItem.stops && routeItem.stops[boundKey]) {
-                                const validStops = routeItem.stops[boundKey].filter(s => s.visible);
-                                if (validStops.length > 0) {
-                                    const lastStop = validStops[validStops.length - 1];
-                                    destName = isZh
-                                        ? (lastStop.nameCn || '').replace(/\^\^/g, '')
-                                        : ((lastStop.nameEn || lastStop.nameCn) || '').replace(/\^\^/g, '');
-                                }
-                            }
-                            const destText = isZh ? `往 ${destName}` : `To ${destName}`;
-                            shiftBadgesHTML += `
-                                <div style="display: flex; align-items: center;">
-                                    <span class="shift-tag" style="background-color: ${shiftConfig.color}; border-color: ${shiftConfig.color};">${shiftConfig.label}</span>
-                                    <span class="dest-pill" style="margin-left: 8px; background: #f1f5f9; color: #334155; padding: 2px 12px; font-size: 13px; font-weight: 600;">${destText}</span>
-                                </div>
-                            `;
-                        });
-                        shiftBadgesHTML += '</div>';
-                    }
-
-                    // 動態獲取票價，若無則預設為成人票價的一半
-                    const pAdult = sf.price;
-                    const pChild = sf.childPrice !== undefined ? sf.childPrice : pAdult / 2;
-                    const pElder = sf.elderPrice !== undefined ? sf.elderPrice : pAdult / 2;
-                    const pStudent = sf.studentPrice !== undefined ? sf.studentPrice : pAdult / 2;
-
-                    // 【優化】判斷分段收費起訖站是否完全相同
-                    const isSameNode = (sf.fromCn === sf.toCn) && (sf.fromEn === sf.toEn);
-                    const nodesHtml = isSameNode
-                        ? renderNode(sf.fromCn, sf.fromEn) // 相同則只顯示第一個站點
-                        : `${renderNode(sf.fromCn, sf.fromEn)}<div class="flow-arrow-modern">${arrowSvg}</div>${renderNode(sf.toCn, sf.toEn)}`;
-
-                    sectionContainer.innerHTML += `
-                        <div class="modern-route-card">
-                            ${shiftBadgesHTML}
-                            <div class="route-flow-modern">
-                                <div class="route-nodes-wrap">
-                                    ${nodesHtml}
-                                </div>
-                                <div class="multi-price-grid">
-                                    <div class="price-cell adult-price">
-                                        <div class="p-label">${isZh ? '成人' : 'Adult'}</div>
-                                        <div class="p-value"><span class="cur">$</span>${pAdult.toFixed(1)}</div>
-                                    </div>
-                                    <div class="price-cell sub-price">
-                                        <div class="p-label">${isZh ? '小童' : 'Child'}</div>
-                                        <div class="p-value"><span class="cur">$</span>${pChild.toFixed(1)}</div>
-                                    </div>
-                                    <div class="price-cell sub-price">
-                                        <div class="p-label">${isZh ? '長者' : 'Elder'}</div>
-                                        <div class="p-value"><span class="cur">$</span>${pElder.toFixed(1)}</div>
-                                    </div>
-                                    <div class="price-cell sub-price">
-                                        <div class="p-label">${isZh ? '學生' : 'Student'}</div>
-                                        <div class="p-value"><span class="cur">$</span>${pStudent.toFixed(1)}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-                fareWrap.appendChild(sectionContainer);
-            }
-
-            // 3. 處理短途下車回贈
-            const validRebates = (routeItem.fares.shortDistanceRebates || []).filter(sr =>
-                !sr.direction || sr.direction.includes(currentDir)
-            );
-
-            if (validRebates.length > 0) {
-                const rebateContainer = document.createElement('div');
-                rebateContainer.className = 'modern-section-container rebate-theme';
-                rebateContainer.innerHTML = `
-                    <div class="modern-section-title">
-                        <span>${isZh ? '短途下車回贈' : 'Short-distance Rebate'}</span>
-                        <span class="action-tag">${isZh ? '下車再次拍卡' : 'Tap Again on Alight'}</span>
-                    </div>
-                `;
-
-                validRebates.forEach(sr => {
-                    const remarkText = isZh ? sr.remarkCn : sr.remarkEn;
-                    let shiftBadgesHTML = '';
-                    const shiftArray = Array.isArray(sr.shift) ? sr.shift : (sr.shift ? [sr.shift] : []);
-                    if (shiftArray.length > 0) {
-                        shiftBadgesHTML = '<div class="modern-shift-badges" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">';
-                        shiftArray.forEach(shiftKey => {
-                            const shiftConfig = DataHandler.getShiftConfig(routeItem, shiftKey);
-                            let boundKey = sr.direction ? (sr.direction.includes(',') ? sr.direction.split(',')[0] : sr.direction) : currentDir;
-                            let destName = '';
-                            if (routeItem.stops && routeItem.stops[boundKey]) {
-                                const validStops = routeItem.stops[boundKey].filter(s => s.visible);
-                                if (validStops.length > 0) {
-                                    const lastStop = validStops[validStops.length - 1];
-                                    destName = isZh ? (lastStop.nameCn || '').replace(/\^\^/g, '') : ((lastStop.nameEn || lastStop.nameCn) || '').replace(/\^\^/g, '');
-                                }
-                            }
-                            const destText = isZh ? `往 ${destName}` : `To ${destName}`;
-                            shiftBadgesHTML += `
-                                <div style="display: flex; align-items: center;">
-                                    <span class="shift-tag" style="background-color: ${shiftConfig.color}; border-color: ${shiftConfig.color};">${shiftConfig.label}</span>
-                                    <span class="dest-pill" style="margin-left: 8px; background: #f1f5f9; color: #334155; padding: 2px 12px; font-size: 13px; font-weight: 600;">${destText}</span>
-                                </div>
-                            `;
-                        });
-                        shiftBadgesHTML += '</div>';
-                    }
-
-                    // 實際支付票價
-                    const fAdult = sr.actualFare;
-                    const fChild = sr.childFare !== undefined ? sr.childFare : fAdult / 2;
-                    const fElder = sr.elderFare !== undefined ? sr.elderFare : fAdult / 2;
-                    const fStudent = sr.studentFare !== undefined ? sr.studentFare : fAdult / 2;
-
-                    // 原本全程票價 (用於劃掉顯示)
-                    const oAdult = sr.fullFare || (sr.actualFare + sr.rebate);
-                    const oChild = sr.childFullFare !== undefined ? sr.childFullFare : oAdult / 2;
-                    const oElder = sr.elderFullFare !== undefined ? sr.elderFullFare : oAdult / 2;
-                    const oStudent = sr.studentFullFare !== undefined ? sr.studentFullFare : oAdult / 2;
-
-                    // 提取起訖站名稱變數
-                    const startCn = sr.startStopCn || sr.startStop;
-                    const startEn = sr.startStopEn;
-                    const alightCn = sr.alightStopCn || sr.alightStop;
-                    const alightEn = sr.alightStopEn;
-
-                    // 【優化】判斷回贈起訖站是否完全相同
-                    const isSameNodeRebate = (startCn === alightCn) && (startEn === alightEn);
-                    const rebateNodesHtml = isSameNodeRebate
-                        ? renderNode(startCn, startEn) // 相同則只顯示第一個站點
-                        : `${renderNode(startCn, startEn)}<div class="flow-arrow-modern success">${arrowSvg}</div>${renderNode(alightCn, alightEn)}`;
-
-                    rebateContainer.innerHTML += `
-                        <div class="modern-route-card rebate-card">
-                            ${shiftBadgesHTML}
-                            <div class="route-flow-modern">
-                                <div class="route-nodes-wrap">
-                                    ${rebateNodesHtml}
-                                </div>
-                                <div class="multi-price-grid rebate-grid">
-                                    <div class="price-cell adult-price">
-                                        <div class="p-label">${isZh ? '成人' : 'Adult'}</div>
-                                        <div class="p-value-wrap">
-                                            <span class="p-strike">$${oAdult.toFixed(1)}</span>
-                                            <span class="p-value success"><span class="cur">$</span>${fAdult.toFixed(1)}</span>
-                                        </div>
-                                    </div>
-                                    <div class="price-cell sub-price">
-                                        <div class="p-label">${isZh ? '小童' : 'Child'}</div>
-                                        <div class="p-value-wrap">
-                                            <span class="p-strike">$${oChild.toFixed(1)}</span>
-                                            <span class="p-value success"><span class="cur">$</span>${fChild.toFixed(1)}</span>
-                                        </div>
-                                    </div>
-                                    <div class="price-cell sub-price">
-                                        <div class="p-label">${isZh ? '長者' : 'Elder'}</div>
-                                        <div class="p-value-wrap">
-                                            <span class="p-strike">$${oElder.toFixed(1)}</span>
-                                            <span class="p-value success"><span class="cur">$</span>${fElder.toFixed(1)}</span>
-                                        </div>
-                                    </div>
-                                    <div class="price-cell sub-price">
-                                        <div class="p-label">${isZh ? '學生' : 'Student'}</div>
-                                        <div class="p-value-wrap">
-                                            <span class="p-strike">$${oStudent.toFixed(1)}</span>
-                                            <span class="p-value success"><span class="cur">$</span>${fStudent.toFixed(1)}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            ${remarkText ? `
-                            <div class="modern-remark">
-                                <span class="remark-icon">${infoSvg}</span>
-                                <span>${remarkText}</span>
-                            </div>` : ''}
-                        </div>
-                    `;
-                });
-                fareWrap.appendChild(rebateContainer);
-            }
-
-        } else {
-            fareWrap.innerHTML = `<span class="empty-data-text">${LangHandler.getText('noInformation') || '無收費資訊'}</span>`;
-        }
-
-        // 👉 構建與時間表完全一致的現代化彈窗 (Modal)
-        const oldFareOverlay = document.getElementById('fare-popup-overlay');
-        if (oldFareOverlay) oldFareOverlay.remove(); // 清除舊有的避免重複
-
-        const fareOverlay = document.createElement('div');
-        fareOverlay.id = 'fare-popup-overlay';
-        // 💡 修正 1：移除 hidden 類別，因為我們改為動態加載
-        fareOverlay.className = 'timetable-panel-overlay modern-blur';
-
-        const fareContent = document.createElement('div');
-        fareContent.className = 'timetable-panel-content';
-
-        // 關閉按鈕
-        const closeBtn = document.createElement('button');
-        closeBtn.className = 'timetable-panel-close-modern';
-        closeBtn.innerHTML = `
-            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-        `;
-        closeBtn.addEventListener('click', () => {
-            fareOverlay.remove();
-        });
-        fareContent.appendChild(closeBtn);
-
-        // 彈窗標題
-        const fareHeader = document.createElement('div');
-        fareHeader.className = 'timetable-panel-header-modern';
-        const titleText = isZh ? `<span class="route-badge" style="--route-badge-bg: ${mainRouteColor}; --route-badge-color: ${textColor}; background-color: ${mainRouteColor};">${routeItem.route}</span> 收費資訊` : `<span class="route-badge" style="--route-badge-bg: ${mainRouteColor}; --route-badge-color: ${textColor}; background-color: ${mainRouteColor};">${routeItem.route}</span> Fares`;
-        fareHeader.innerHTML = `<h2 class="panel-title-modern">${titleText}</h2>`;
-        fareContent.appendChild(fareHeader);
-
-        // 將組裝好的收費內容放入彈窗
-        fareContent.appendChild(fareWrap);
-        fareOverlay.appendChild(fareContent);
-
-        // 💡 修正 3：刪除這裡的 document.body.appendChild(fareOverlay); 
-        // 絕對不能在頁面一載入就把它塞進 body 裡！
-
-        // 點擊背景關閉
-        fareOverlay.addEventListener('click', (e) => {
-            if (e.target === fareOverlay) fareOverlay.remove(); // 💡 修正 4：點擊背景時移除
-        });
-
-        const actionsWrap = document.createElement('div');
-        actionsWrap.className = 'route-actions-wrap';
-
-        // 0. 切換方向按鈕 (紅色，位於最左側。如果是循環線則不建立此按鈕)
-        var supportSwitch = DataHandler.isRouteSupportDirectionSwitch(routeItem);
-        if (!isLoop) {
-            const directionBtn = document.createElement('button');
-            directionBtn.className = 'action-btn-modern toggle-direction-btn btn-danger-modern';
-
-            var dirKey = CONFIG.currentDirection === "A" ? 'directionA' : 'directionB';
-            directionBtn.title = `${LangHandler.getText('switchDirection')} (${LangHandler.getText(dirKey)} ➔ ${directionInfo.last})`;
-
-            // 雙向箭頭 Icon
-            directionBtn.innerHTML = `
-                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M7 10v11" />
-                    <path d="M11 17l-4 4-4-4" />
-                    <path d="M17 14V3" />
-                    <path d="M13 7l4-4 4 4" />
-                </svg>
-            `;
-
-            directionBtn.disabled = !supportSwitch;
-            if (!supportSwitch) {
-                directionBtn.style.opacity = '0.4';
-                directionBtn.style.cursor = 'not-allowed';
-            }
-
-            directionBtn.addEventListener('click', function (e) {
-                e.stopPropagation();
-                CONFIG.currentDirection = CONFIG.currentDirection === "A" ? "B" : "A";
-                CONFIG.currentPage = 1;
-                Renderer.renderStopPage(routeItem.route);
-            });
-
-            actionsWrap.appendChild(directionBtn);
-        }
-
-        const levelPopupBtn = document.createElement('button');
-        levelPopupBtn.className = 'action-btn-modern';
-        levelPopupBtn.title = isZh ? '解鎖條件' : 'Unlock Levels';
-        levelPopupBtn.innerHTML = `
-            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-            </svg>
-        `;
-        levelPopupBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            Renderer.renderLevelModal(routeItem);
-        });
-
-        const infoPopupBtn = document.createElement('button');
-        infoPopupBtn.className = 'action-btn-modern';
-        infoPopupBtn.title = isZh ? '更多資訊' : 'More Info';
-        infoPopupBtn.innerHTML = `
-            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="12" y1="16" x2="12" y2="12"></line>
-                <line x1="12" y1="8" x2="12.01" y2="8"></line>
-            </svg>
-        `;
-        infoPopupBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            Renderer.renderInfoModal(routeItem);
-        });
-
-        const farePopupBtn = document.createElement('button');
-        farePopupBtn.className = 'action-btn-modern';
-        farePopupBtn.title = isZh ? '收費資訊' : 'Fares';
-        farePopupBtn.innerHTML = `
-            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="1" x2="12" y2="23"></line>
-                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-            </svg>
-        `;
-        farePopupBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            document.body.appendChild(fareOverlay);
-        });
-
-        const timetableBtn = document.createElement('button');
-        timetableBtn.className = 'action-btn-modern';
-        timetableBtn.title = LangHandler.getText('timetableBtn') || '營運時間表';
-        timetableBtn.innerHTML = `
-            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 12"></polyline>
-            </svg>
-        `;
-        timetableBtn.addEventListener('click', () => { this.renderTimetablePanel(routeItem, CONFIG.currentDirection || 'A'); });
-
-        // 只需加入 level、info、fare、timetable。方向按鈕已在前方條件句判斷並加入了！
-        actionsWrap.appendChild(levelPopupBtn);
-        actionsWrap.appendChild(infoPopupBtn);
-        actionsWrap.appendChild(farePopupBtn);
-        actionsWrap.appendChild(timetableBtn);
-
-        // 組合基礎資訊列
-        basicInfo.appendChild(numWrap);
-        basicInfo.appendChild(cleanDirUI);
-        basicInfo.appendChild(shiftTags);
-        basicInfo.appendChild(actionsWrap);
-
+    _buildMiniTimeline: function (routeItem, isZh, isLoop, dirInfo, enabledShifts) {
         const details = document.createElement('div');
         details.className = 'route-details-modern';
 
         let nodesHTML = `
-            <div class="mini-timeline-container">
-                <div class="mini-timeline-header">
-                    <div class="mini-timeline-header-icon">
-                        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="6" cy="19" r="3"></circle>
-                            <path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"></path>
-                            <circle cx="18" cy="5" r="3"></circle>
-                        </svg>
-                    </div>
-                    <span class="title">${LangHandler.getText('viaDirection') || '班次途經路線圖'}</span>
+        <div class="mini-timeline-container">
+            <div class="mini-timeline-header">
+                <div class="mini-timeline-header-icon">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="6" cy="19" r="3"></circle>
+                        <path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"></path>
+                        <circle cx="18" cy="5" r="3"></circle>
+                    </svg>
                 </div>
-                <div class="mini-timeline-scroll-area">
-        `;
+                <span class="title">${LangHandler.getText('viaDirection') || '班次途經路線圖'}</span>
+            </div>
+            <div class="mini-timeline-scroll-area">
+    `;
 
-        // 核心修改：先過濾出真正有效且帶有途經點的班次
         let shiftGroups = [];
+        const dir = CONFIG.currentDirection || 'A';
         enabledShifts.forEach((shiftKey) => {
             const shiftConfig = DataHandler.getShiftConfig(routeItem, shiftKey);
-            const routeBound = DataHandler.getRouteBound(routeItem);
-            const dir = routeBound.includes('C') ? 'C' : (CONFIG.currentDirection || 'A');
             const shiftViaData = routeItem.viaDirections?.[dir]?.[shiftKey] || routeItem.viaDirections?.[shiftKey]?.[dir] || routeItem.viaDirections?.[shiftKey];
 
             const viaCn = shiftViaData?.viaCn || routeItem.viaDirectionCn || '';
@@ -2415,93 +2089,87 @@ var Renderer = {
         });
 
         shiftGroups.forEach((group, index) => {
-            const startTextZh = group.shiftConfig.startTextCn || '始';
-            const startTextEn = group.shiftConfig.startTextEn || 'S';
-            const viaTextZh = group.shiftConfig.viaTextCn || '➔';
-            const viaTextEn = group.shiftConfig.viaTextEn || '➔';
-            const endTextZh = group.shiftConfig.endTextCn || '終';
-            const endTextEn = group.shiftConfig.endTextEn || 'E';
+            const startIcon = `<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display: block;"><circle cx="12" cy="12" r="7"></circle><circle cx="12" cy="12" r="3" fill="currentColor"></circle></svg>`;
+            const viaIcon = `<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display: block;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`;
+            const endIcon = `<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display: block;"><circle cx="12" cy="12" r="7"></circle><rect x="9" y="9" width="6" height="6" fill="currentColor" stroke="none"></rect></svg>`;
+
+            const shiftBound = routeItem.viaDirections?.[dir]?.[group.shiftKey]?.bound || routeItem.viaDirections?.[group.shiftKey]?.bound || dir;
+            const isShiftLoop = DataHandler.isShiftCircular(routeItem, group.shiftKey, dir);
+            const shiftStartEnd = DataHandler.getShiftStartEnd(routeItem, group.shiftKey, dir);
+
+            const actualStartName = shiftStartEnd.start;
+
+            const shiftStopsForTimeline = DataHandler.getShiftStopStops(routeItem, group.shiftKey);
+            const lastStopObj = shiftStopsForTimeline.length > 0 ? shiftStopsForTimeline[shiftStopsForTimeline.length - 1] : null;
+            const actualEndName = lastStopObj ? (isZh ? (lastStopObj.nameCn || '').replace(/\^\^/g, '') : (lastStopObj.nameEn || lastStopObj.nameCn || '').replace(/\^\^/g, '')) : shiftStartEnd.end;
 
             let viaNodes = group.viaText.split(/[、,]/).map(s => s.trim()).filter(s => s && s !== LangHandler.getText('noInformation'));
-
             const allNodes = [
-                { name: directionInfo.first, type: 'start' },
+                { name: actualStartName, type: 'start' },
                 ...viaNodes.map(name => ({ name, type: 'via' })),
-                { name: directionInfo.last, type: 'end' }
+                { name: actualEndName, type: 'end' }
             ];
 
             const isHidden = index > 0 ? 'style="display: none;"' : '';
             const groupClass = index > 0 ? 'shift-timeline-group extra-shift-group' : 'shift-timeline-group';
 
             nodesHTML += `
-                <div class="${groupClass}" ${isHidden}>
-                    <div class="shift-timeline-label" style="color: ${group.shiftConfig.color}; margin-bottom: 16px;">
-                        <span class="shift-color-dot" style="background: ${group.shiftConfig.color}"></span>
-                        ${group.shiftConfig.label}
-                    </div>
-                    <div class="mini-timeline-list">
-            `;
+            <div class="${groupClass}" ${isHidden}>
+                <div class="shift-timeline-label" style="color: ${group.shiftConfig.color}; margin-bottom: 16px;">
+                    <span class="shift-color-dot" style="background: ${group.shiftConfig.color}"></span>
+                    ${group.shiftConfig.label}
+                </div>
+                <div class="mini-timeline-list">
+        `;
 
             allNodes.forEach(node => {
-                let innerText = isZh ? viaTextZh : viaTextEn;
+                let innerText = viaIcon;
                 let seqClass = 'shift-via-stop';
                 let isTurningPoint = false;
                 let displayName = node.name;
 
-                // 檢查是否為轉折點 (包含 ^^)
                 if (displayName.includes('^^')) {
                     isTurningPoint = true;
-                    displayName = displayName.replace(/\^\^/g, ''); // 清理名稱供顯示
-                }
-
-                if (isLoop && node.type === 'via') {
-                    innerText = '➔';
+                    displayName = displayName.replace(/\^\^/g, '');
                 }
 
                 if (node.type === 'start') {
-                    innerText = isZh ? startTextZh : startTextEn;
+                    innerText = startIcon;
                     seqClass = 'shift-start-stop';
                 } else if (node.type === 'end') {
-                    innerText = isZh ? endTextZh : endTextEn;
+                    innerText = endIcon;
                     seqClass = 'shift-end-stop';
                 }
 
-                // 準備轉折點專屬的 HTML 標籤
                 let tpTagHtml = '';
-                if (isLoop && isTurningPoint && node.type === 'via') {
+                if (isShiftLoop && isTurningPoint && node.type === 'via') {
                     tpTagHtml = `<div class="turning-point-tag" style="position: absolute; top: -30px; font-size: 11px; padding: 2px 8px; border-radius: 10px; background: #fee2e2; color: #ef4444; white-space: nowrap; border: 1px solid #fca5a5; font-weight: 600; box-shadow: 0 2px 4px rgba(239, 68, 68, 0.1); z-index: 10;">${isZh ? '轉折點' : 'Turning Point'}</div>`;
                 }
 
                 nodesHTML += `
-                    <div class="mini-timeline-item" style="--shift-color: ${group.shiftConfig.color};">
-                        <div class="mini-timeline-visual" style="position: relative; display: flex; justify-content: center;">
-                            ${tpTagHtml}
-                            <div class="single-shift-seq-wrap ${seqClass}" style="--shift-color: ${group.shiftConfig.color};">
-                                <div class="shift-seq-text">${innerText}</div>
-                            </div>
-                        </div>
-                        <div class="mini-timeline-info">
-                            <div class="stop-main-name">${displayName}</div>
+                <div class="mini-timeline-item" style="--shift-color: ${group.shiftConfig.color};">
+                    <div class="mini-timeline-visual" style="position: relative; display: flex; justify-content: center;">
+                        ${tpTagHtml}
+                        <div class="single-shift-seq-wrap ${seqClass}" style="--shift-color: ${group.shiftConfig.color};">
+                            <div class="shift-seq-text">${innerText}</div>
                         </div>
                     </div>
-                `;
-            });
-
-            nodesHTML += `
+                    <div class="mini-timeline-info">
+                        <div class="stop-main-name">${displayName}</div>
                     </div>
                 </div>
             `;
+            });
+            nodesHTML += `</div></div>`;
         });
-
         nodesHTML += `</div>`;
 
-        // 核心修改：判斷有效的班次陣列（有途經點）長度大於 1 才會顯示展開按鈕
         if (shiftGroups.length > 1) {
             nodesHTML += `
-                <button id="expandShiftsBtn" style="width: 100%; margin-top: 16px; padding: 12px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px; color: #64748b; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">
-                    ${isZh ? '查看其他班次 ↓' : 'View Other Shifts ↓'}
-                </button>
-            `;
+            <button id="expandShiftsBtn" style="width: 100%; margin-top: 16px; padding: 12px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px; color: #64748b; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">
+                ${isZh ? '查看其他班次 ↓' : 'View Other Shifts ↓'}
+            </button>
+        `;
         }
 
         nodesHTML += `</div>`;
@@ -2513,8 +2181,7 @@ var Renderer = {
                 let isExpanded = false;
                 btn.addEventListener('click', () => {
                     isExpanded = !isExpanded;
-                    const extraGroups = details.querySelectorAll('.extra-shift-group');
-                    extraGroups.forEach(g => {
+                    details.querySelectorAll('.extra-shift-group').forEach(g => {
                         g.style.display = isExpanded ? 'block' : 'none';
                     });
                     btn.innerHTML = isExpanded
@@ -2524,10 +2191,791 @@ var Renderer = {
             }
         }, 0);
 
-        routeInfoBar.appendChild(basicInfo);
-        routeInfoBar.appendChild(details);
+        return details;
+    },
 
-        return routeInfoBar;
+    renderInfoModal: function (routeItem) {
+        const oldOverlay = document.getElementById('info-popup-overlay');
+        if (oldOverlay) oldOverlay.remove();
+
+        const isZh = CONFIG.currentLang === 'zh-CN' || CONFIG.currentLang === 'zh-TW';
+        var mainRouteColor = '#4a90e2';
+        var textColor = routeItem.textColor || '#ffffff';
+        const enabledShifts = DataHandler.getEnabledShifts(routeItem);
+        if (enabledShifts && enabledShifts.length > 0) {
+            const firstShiftConfig = DataHandler.getShiftConfig(routeItem, enabledShifts[0]);
+            if (firstShiftConfig && firstShiftConfig.color) mainRouteColor = firstShiftConfig.color;
+        }
+
+        const overlay = document.createElement('div');
+        overlay.id = 'info-popup-overlay';
+        overlay.className = 'timetable-panel-overlay modern-blur';
+
+        const content = document.createElement('div');
+        content.className = 'timetable-panel-content';
+
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'timetable-panel-close-modern';
+        closeBtn.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+        closeBtn.addEventListener('click', () => overlay.remove());
+        content.appendChild(closeBtn);
+
+        const header = document.createElement('div');
+        header.className = 'timetable-panel-header-modern';
+        const titleText = isZh ? `<span class="route-badge" style="--route-badge-bg: ${mainRouteColor}; --route-badge-color: ${textColor}; background-color: ${mainRouteColor};">${routeItem.route}</span> 更多資訊` : `<span class="route-badge" style="--route-badge-bg: ${mainRouteColor}; --route-badge-color: ${textColor}; background-color: ${mainRouteColor};">${routeItem.route}</span> More Info`;
+        header.innerHTML = `<h2 class="panel-title-modern">${titleText}</h2>`;
+        content.appendChild(header);
+
+        const body = document.createElement('div');
+        body.className = 'fare-modal-body';
+        body.style.display = 'flex';
+        body.style.flexDirection = 'column';
+        body.style.gap = '12px';
+        body.style.padding = '8px 0';
+
+        let hasInfo = false;
+
+        const createInfoRow = (title, badgesHTML) => {
+            return `
+            <div class="info-row-container">
+                <div class="info-row-label">${title}</div>
+                <div class="info-row-badges">${badgesHTML}</div>
+            </div>`;
+        };
+        if (routeItem.zones && routeItem.zones.length > 0) {
+            hasInfo = true;
+            let badges = routeItem.zones.map(z => `<span class="badge-common zone-badge" style="font-size:13px; padding:6px 12px; margin:0;">${z}</span>`).join('');
+            body.innerHTML += createInfoRow(isZh ? '區域' : 'Zone', badges);
+        }
+        if (routeItem.operators && routeItem.operators.length > 0) {
+            hasInfo = true;
+            let badges = routeItem.operators.map(op => `<span class="badge-common operator-badge" data-operator="${op}" style="font-size:13px; padding:6px 12px; margin:0;">${op}</span>`).join('');
+            body.innerHTML += createInfoRow(isZh ? '營運商' : 'Operator', badges);
+        }
+        if (routeItem.typeTags && routeItem.typeTags.length > 0) {
+            hasInfo = true;
+            let badges = routeItem.typeTags.map(t => {
+                let typeVal = typeof t === 'string' ? t : t.type;
+                let typeKey = 'type' + typeVal.replace(/\s+/g, '');
+                let transText = LangHandler.getText(typeKey);
+                if (transText === typeKey) transText = typeVal;
+
+                let baseBadge = `<span class="badge-common type-badge" data-type="${typeVal}" style="font-size:13px; padding:6px 12px; margin:0;">${transText}</span>`;
+
+                if (typeof t === 'object' && t.shift) {
+                    let shiftConfig = DataHandler.getShiftConfig(routeItem, t.shift);
+                    let shiftLabel = shiftConfig ? shiftConfig.label : t.shift;
+                    let shiftColor = shiftConfig ? shiftConfig.color : '#4a90e2';
+
+                    let shiftTagHTML = `<span class="shift-tag" style="background-color: ${shiftColor}; border-color: ${shiftColor}; margin-left: 0;">${shiftLabel}</span>`;
+
+                    return `<div style="display: inline-flex; flex-wrap: nowrap; align-items: center; gap: 4px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 2px 4px 2px 2px; max-width: 100%; overflow-x: auto;">
+                                ${baseBadge}
+                                ${shiftTagHTML}
+                            </div>`;
+                }
+                return baseBadge;
+            }).join('');
+
+            body.innerHTML += createInfoRow(isZh ? '路線類型' : 'Route Type', `<div style="display:flex; justify-content: flex-end; flex-wrap:wrap; gap:8px;">${badges}</div>`);
+        }
+
+        var targetDirection = CONFIG.currentDirection;
+        var allRouteCodes = DataHandler.getRouteCodes(routeItem);
+        var currentRouteCodes = allRouteCodes.filter(c => !c.bound || c.bound.includes(targetDirection));
+
+        if (currentRouteCodes.length > 0) {
+            hasInfo = true;
+            let badges = '';
+
+            if (currentRouteCodes.length > 1) {
+                let badgeList = currentRouteCodes.map(c => {
+                    let shiftConfig = DataHandler.getShiftConfig(routeItem, c.shift);
+                    let shiftLabel = shiftConfig ? shiftConfig.label : c.shift;
+                    let shiftColor = shiftConfig ? shiftConfig.color : '#4a90e2';
+
+                    return `<div style="display: flex; align-items: center; gap: 8px;">
+                                <span class="shift-tag" style="background-color: ${shiftColor}; border-color: ${shiftColor};">${shiftLabel}</span>
+                                <span class="badge-common route-code-badge" style="font-size:13px; padding:6px 12px; margin:0;">${c.code}</span>
+                            </div>`;
+                }).join('');
+                badges = `<div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">${badgeList}</div>`;
+            } else {
+                let text = currentRouteCodes[0].code;
+                badges = `<span class="badge-common route-code-badge" style="font-size:13px; padding:6px 12px; margin:0;">${text}</span>`;
+            }
+            body.innerHTML += createInfoRow(isZh ? '路綫代碼' : 'Route Code', badges);
+        }
+
+        if (routeItem.wikiLink) {
+            hasInfo = true;
+            let wikiBtn = `<a href="${routeItem.wikiLink}" target="_blank" class="info-wiki-btn">
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                Wiki
+            </a>`;
+            body.innerHTML += createInfoRow(isZh ? '維基百科' : 'Wiki', wikiBtn);
+        }
+
+        if (!hasInfo) {
+            body.innerHTML = `<span style="color:#94a3b8; font-size:14px; display:block; text-align:center; padding: 20px;">${LangHandler.getText('noInformation')}</span>`;
+        }
+
+        content.appendChild(body);
+        overlay.appendChild(content);
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+        document.body.appendChild(overlay);
+    },
+
+    renderNearbyRoutesModal: function (stop, currentRouteItem) {
+        const oldOverlay = document.getElementById('nearby-routes-overlay');
+        if (oldOverlay) oldOverlay.remove();
+
+        const overlay = document.createElement('div');
+        overlay.id = 'nearby-routes-overlay';
+        overlay.className = 'timetable-panel-overlay modern-blur';
+
+        const content = document.createElement('div');
+        content.className = 'timetable-panel-content';
+
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'timetable-panel-close-modern';
+        closeBtn.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+        closeBtn.addEventListener('click', () => overlay.remove());
+        content.appendChild(closeBtn);
+
+        const isZh = CONFIG.currentLang === 'zh-CN' || CONFIG.currentLang === 'zh-TW';
+        const stopName = isZh ? stop.nameCn.replace(/\^\^/g, '') : (stop.nameEn || stop.nameCn).replace(/\^\^/g, '');
+
+        const header = document.createElement('div');
+        header.className = 'timetable-panel-header-modern';
+        header.innerHTML = `<h2 class="panel-title-modern">${stopName} <span class="dest-pill" style="background: #e2e8f0; color: #334155;">${LangHandler.getText('nearbyRoutes')}</span></h2>`;
+        content.appendChild(header);
+
+        const body = document.createElement('div');
+        body.className = 'station-list-container';
+        body.style.maxHeight = '50vh';
+        body.style.overflowY = 'auto';
+
+        const allRoutes = DataHandler.getValidRoutes();
+        const sameRouteResults = [];
+        const otherRouteResults = [];
+        const seen = new Set();
+
+        const baseCn = (stop.nameCn || '').replace(/\^\^/g, '');
+        const baseEn = (stop.nameEn || '').replace(/\^\^/g, '');
+
+        allRoutes.forEach(r => {
+            ['A', 'B', 'C'].forEach(dir => {
+                if (r.stops && r.stops[dir]) {
+                    const matchedStopIndex = r.stops[dir].findIndex(s => {
+                        if (!s.visible) return false;
+                        const sCn = (s.nameCn || '').replace(/\^\^/g, '');
+                        const sEn = (s.nameEn || '').replace(/\^\^/g, '');
+                        return sCn === baseCn || (baseEn && sEn === baseEn);
+                    });
+
+                    if (matchedStopIndex !== -1) {
+                        const matchedStop = r.stops[dir][matchedStopIndex];
+                        const key = `${r._id}-${dir}`;
+                        if (!seen.has(key)) {
+                            seen.add(key);
+                            if (!(r.route === currentRouteItem.route && dir === CONFIG.currentDirection)) {
+                                const resultObj = {
+                                    routeId: r._id,
+                                    routeNum: r.route,
+                                    direction: dir,
+                                    routeData: r,
+                                    targetSeq: matchedStop.seq,
+                                    stopFor: matchedStop.stopFor || []
+                                };
+                                if (r._id === currentRouteItem._id) {
+                                    sameRouteResults.push(resultObj);
+                                } else {
+                                    otherRouteResults.push(resultObj);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+        if (sameRouteResults.length === 0 && otherRouteResults.length === 0) {
+            body.innerHTML = `<div class="station-empty-tip">${LangHandler.getText('noInformation')}</div>`;
+        } else {
+            const renderResultItem = (result) => {
+                const routeInfo = result.routeData;
+                let shifts = DataHandler.getEnabledShifts(routeInfo, result.direction);
+
+                if (shifts && shifts.length > 0) {
+                    if (Array.isArray(result.stopFor)) {
+                        shifts = shifts.filter(shiftKey => result.stopFor.includes(shiftKey));
+                    }
+                    if (shifts.length === 0) return null;
+                }
+
+                const item = document.createElement('div');
+                item.className = 'station-item';
+                item.style.display = 'flex';
+                item.style.alignItems = 'flex-start';
+                item.style.justifyContent = 'space-between';
+                item.style.padding = '14px 16px';
+                item.style.borderBottom = '1px solid #f1f5f9';
+                item.style.cursor = 'pointer';
+
+                let shiftRowsHtml = '';
+
+                if (shifts && shifts.length > 0) {
+                    let seenExtra = new Set();
+                    shifts.forEach(shiftKey => {
+                        const shiftConfig = DataHandler.getShiftConfig(routeInfo, shiftKey);
+                        let badgeText = result.routeNum;
+                        let isNormal = (shiftKey === 'normal');
+
+                        if (!isNormal) {
+                            let match = shiftConfig.label.match(/^(.+?)\s*\((.+?)\)$/);
+                            badgeText = match ? match[1].trim() : shiftConfig.label;
+                        }
+
+                        if (!seenExtra.has(badgeText + shiftKey)) {
+                            seenExtra.add(badgeText + shiftKey);
+                            let badgeColor = shiftConfig.color || '#2563eb';
+                            let textColor = shiftConfig.textColor || '#ffffff';
+
+                            let boundKey = result.direction;
+                            let isShiftLoop = DataHandler.isShiftCircular(routeInfo, shiftKey, boundKey);
+                            let destName = isShiftLoop ? (LangHandler.getText('loopDirection') || '循環線') : DataHandler.getShiftStartEnd(routeInfo, shiftKey, boundKey).end;
+                            if (!destName || destName === LangHandler.getText('noInformation')) destName = DataHandler.getDirectionStartEndStops(routeInfo, boundKey).last;
+                            let destText = isShiftLoop ? destName : (isZh ? `往 ${destName}` : `to ${destName}`);
+
+                            let badgeHtml = `<span class="route-badge" style="--route-badge-bg: ${badgeColor}; --route-badge-color: ${textColor}; min-width: 45px;">${badgeText}</span>`;
+                            let destHtml = `<span class="dest-pill" style="margin-left: 8px; background: #f1f5f9; color: #334155; padding: 4px 12px; border-radius: 12px; font-size: 13px; font-weight: 600; flex: 1;">${destText}</span>`;
+
+                            shiftRowsHtml += `
+                            <div style="display: flex; align-items: center; width: 100%; margin-top: 6px;">
+                                ${badgeHtml}
+                                ${destHtml}
+                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="#94a3b8" stroke-width="2" fill="none" style="margin-left:auto; flex-shrink: 0;"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </div>
+                        `;
+                        }
+                    });
+                } else {
+                    let badgeHtml = `<span class="route-badge" style="--route-badge-bg: #2563eb; --route-badge-color: #ffffff;">${result.routeNum}</span>`;
+                    shiftRowsHtml = `<div style="display: flex; align-items: center; width: 100%; margin-top: 6px;">${badgeHtml}</div>`;
+                }
+
+                item.innerHTML = `
+                <div class="station-routes" style="display: flex; flex-direction: column; width: 100%; gap: 4px;">
+                    ${shiftRowsHtml}
+                </div>
+            `;
+
+                item.addEventListener('click', () => {
+                    if (result.routeNum === 'S1' || result.routeNum === 'S2') {
+                        window.location.href = './travel/index.html';
+                        return;
+                    }
+
+                    overlay.remove();
+
+                    CONFIG.currentRouteNum = result.routeNum;
+                    CONFIG.currentRouteId = result.routeId;
+                    CONFIG.currentDirection = result.direction;
+
+                    const validStops = DataHandler.getValidStops(result.routeData);
+                    let targetIndex = -1;
+                    for (let i = 0; i < validStops.length; i++) {
+                        if (validStops[i].seq === result.targetSeq) {
+                            targetIndex = i;
+                            break;
+                        }
+                    }
+                    if (targetIndex !== -1) {
+                        CONFIG.currentPage = Math.floor(targetIndex / CONFIG.pageSize) + 1;
+                    } else {
+                        CONFIG.currentPage = 1;
+                    }
+
+                    document.getElementById('stopScreen').scrollTop = 0;
+                    Renderer.renderStopPage(result.routeId);
+
+                    if (result.targetSeq !== -1) {
+                        setTimeout(() => {
+                            const targetRow = document.querySelector('.stop-row-visible[data-seq="' + result.targetSeq + '"]');
+                            if (targetRow) {
+                                targetRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                targetRow.classList.add('highlight-flash');
+                                setTimeout(() => {
+                                    targetRow.classList.remove('highlight-flash');
+                                }, 3000);
+                            }
+                        }, 350);
+                    }
+                });
+                return item;
+            };
+
+            if (sameRouteResults.length > 0) {
+                const sameRouteContainer = document.createElement('div');
+                sameRouteContainer.className = 'nearby-group-container';
+                sameRouteContainer.style.cssText = 'margin-bottom: 16px; background: #ffffff; border-radius: 12px; border: 1px solid #bfdbfe; overflow: hidden; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.05);';
+
+                const groupTitle = document.createElement('div');
+                groupTitle.style.cssText = "font-size: 13px; font-weight: 800; color: #1d4ed8; padding: 10px 16px; text-transform: uppercase; background: #eff6ff; border-bottom: 1px solid #bfdbfe; display: flex; align-items: center; gap: 6px;";
+                groupTitle.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M6 9l6 6 6-6"/></svg> ${isZh ? '同路綫' : 'Same Route'}`;
+                sameRouteContainer.appendChild(groupTitle);
+
+                sameRouteResults.forEach(r => {
+                    const el = renderResultItem(r);
+                    if (el) sameRouteContainer.appendChild(el);
+                });
+                body.appendChild(sameRouteContainer);
+            }
+
+            if (otherRouteResults.length > 0) {
+                const nearbyRouteContainer = document.createElement('div');
+                nearbyRouteContainer.className = 'nearby-group-container';
+                nearbyRouteContainer.style.cssText = 'background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);';
+
+                const groupTitle = document.createElement('div');
+                groupTitle.style.cssText = "font-size: 13px; font-weight: 800; color: #475569; padding: 10px 16px; text-transform: uppercase; background: #f8fafc; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; gap: 6px;";
+                groupTitle.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> ${isZh ? '附近路綫' : 'Nearby Routes'}`;
+                nearbyRouteContainer.appendChild(groupTitle);
+
+                otherRouteResults.forEach(r => {
+                    const el = renderResultItem(r);
+                    if (el) nearbyRouteContainer.appendChild(el);
+                });
+                body.appendChild(nearbyRouteContainer);
+            }
+        }
+
+        content.appendChild(body);
+        overlay.appendChild(content);
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+        document.body.appendChild(overlay);
+    },
+
+    // ==========================================
+    // 1-1. 渲染：標籤、方向、班次區塊
+    // ==========================================
+    _buildBasicInfoElements: function (container, routeItem, mainColor, textColor, isZh, isLoop, dirInfo, enabledShifts) {
+        const numWrap = document.createElement('div');
+        numWrap.className = 'route-num-color-wrap';
+
+        const routeNumEl = document.createElement('div');
+        routeNumEl.className = 'route-badge route-num main-route-badge';
+        routeNumEl.textContent = routeItem.route;
+        routeNumEl.style.setProperty('--route-badge-bg', mainColor);
+        routeNumEl.style.setProperty('--route-badge-color', textColor);
+        routeNumEl.style.backgroundColor = mainColor;
+        numWrap.appendChild(routeNumEl);
+
+        const typeText = DataHandler.getRouteTypeDisplay(routeItem);
+        let typeBadgeEl = null;
+        if (typeText) {
+            typeBadgeEl = document.createElement('div');
+            typeBadgeEl.className = 'route-type-badge';
+            typeBadgeEl.style.color = mainColor;
+            typeBadgeEl.style.backgroundColor = `${mainColor}1A`;
+            typeBadgeEl.textContent = typeText;
+            numWrap.appendChild(typeBadgeEl);
+        }
+
+        const cleanDirUI = document.createElement('div');
+        cleanDirUI.className = 'clean-direction-ui';
+        if (isLoop) {
+            cleanDirUI.innerHTML = `
+                <span class="dir-stop">${dirInfo.first}</span>
+                <span class="dir-icon loop" style="color:${mainColor}; display: inline-flex; align-items: center;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.59-9.36l5.67-5.67"/></svg>
+                </span>
+                <span class="dir-stop loop-text" style="color:${mainColor}">${LangHandler.getText('loopDirection') || '循環線'}</span>
+            `;
+            cleanDirUI.style.backgroundColor = `${mainColor}0D`;
+            cleanDirUI.style.borderColor = `${mainColor}33`;
+        } else {
+            cleanDirUI.innerHTML = `
+                <span class="dir-stop">${dirInfo.first}</span>
+                <span class="dir-icon route-arrow-icon" style="color:#666; display: inline-flex; align-items: center;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </span>
+                <span class="dir-stop">${dirInfo.last}</span>
+            `;
+        }
+
+        const shiftTags = document.createElement('div');
+        shiftTags.className = 'route-shift-tags';
+
+        enabledShifts.forEach(shiftKey => {
+            const config = DataHandler.getShiftConfig(routeItem, shiftKey);
+            let shiftLabel = config.label;
+            let shiftColor = config.color || '#4a90e2';
+            let shiftTextColor = config.textColor || '#ffffff';
+
+            let match = shiftLabel.match(/^(.+?)\s*\((.+?)\)$/);
+            if (match) {
+                const extraBadge = document.createElement('div');
+                extraBadge.className = 'route-badge main-route-badge';
+                extraBadge.textContent = match[1].trim();
+                extraBadge.style.setProperty('--route-badge-bg', shiftColor);
+                extraBadge.style.setProperty('--route-badge-color', shiftTextColor);
+                extraBadge.style.backgroundColor = shiftColor;
+
+                if (typeBadgeEl) {
+                    numWrap.insertBefore(extraBadge, typeBadgeEl);
+                } else {
+                    numWrap.appendChild(extraBadge);
+                }
+                shiftLabel = match[2].trim();
+            }
+
+            const tag = document.createElement('div');
+            tag.className = `shift-tag`;
+            tag.style.background = shiftColor;
+            tag.style.backgroundColor = shiftColor;
+            tag.innerHTML = `<span class="shift-text">${shiftLabel}</span>`;
+            shiftTags.appendChild(tag);
+        });
+
+        container.appendChild(numWrap);
+        container.appendChild(cleanDirUI);
+        container.appendChild(shiftTags);
+    },
+
+    // ==========================================
+    // 1-2. 渲染：操作按鈕區
+    // ==========================================
+    _buildActionButtons: function (routeItem, mainColor, textColor, isZh, isLoop, dirInfo) {
+        const actionsWrap = document.createElement('div');
+        actionsWrap.className = 'route-actions-wrap';
+
+        const supportSwitch = DataHandler.isRouteSupportDirectionSwitch(routeItem);
+
+        if (supportSwitch) {
+            const directionBtn = document.createElement('button');
+            directionBtn.className = 'action-btn-modern toggle-direction-btn btn-danger-modern';
+
+            // 動態計算下一個方向
+            var boundsArray = DataHandler.getRouteBound(routeItem).split(',');
+            boundsArray = boundsArray.filter(b => routeItem.stops && routeItem.stops[b] && routeItem.stops[b].length > 0);
+
+            var currentIndex = boundsArray.indexOf(CONFIG.currentDirection);
+            if (currentIndex === -1) currentIndex = 0;
+            var nextIndex = (currentIndex + 1) % boundsArray.length;
+            var nextDir = boundsArray[nextIndex];
+
+            var nextDirInfo = DataHandler.getDirectionStartEndStops(routeItem, nextDir);
+            var nextDest = routeItem.circular === true ? (LangHandler.getText('loopDirection') || '循環線') : nextDirInfo.last;
+
+            directionBtn.title = `${LangHandler.getText('switchDirection')} (➔ ${nextDest})`;
+            directionBtn.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v11" /><path d="M11 17l-4 4-4-4" /><path d="M17 14V3" /><path d="M13 7l4-4 4 4" /></svg>`;
+
+            directionBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                CONFIG.currentDirection = nextDir;
+                CONFIG.currentPage = 1;
+                Renderer.renderStopPage(routeItem._id);
+            });
+            actionsWrap.appendChild(directionBtn);
+        }
+
+        const levelBtn = document.createElement('button');
+        levelBtn.className = 'action-btn-modern';
+        levelBtn.title = isZh ? '解鎖條件' : 'Unlock Levels';
+        levelBtn.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`;
+        levelBtn.addEventListener('click', (e) => { e.stopPropagation(); Renderer.renderLevelModal(routeItem); });
+
+        const infoBtn = document.createElement('button');
+        infoBtn.className = 'action-btn-modern';
+        infoBtn.title = isZh ? '更多資訊' : 'More Info';
+        infoBtn.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;
+        infoBtn.addEventListener('click', (e) => { e.stopPropagation(); Renderer.renderInfoModal(routeItem); });
+
+        // 🌟 延遲加載：點擊時才執行 renderFareModal 渲染 DOM
+        const fareBtn = document.createElement('button');
+        fareBtn.className = 'action-btn-modern';
+        fareBtn.title = isZh ? '收費資訊' : 'Fares';
+        fareBtn.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>`;
+        fareBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            Renderer.renderFareModal(routeItem, mainColor, textColor);
+        });
+
+        const timeBtn = document.createElement('button');
+        timeBtn.className = 'action-btn-modern';
+        timeBtn.title = LangHandler.getText('timetableBtn');
+        timeBtn.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 12"></polyline></svg>`;
+        timeBtn.addEventListener('click', () => { this.renderTimetablePanel(routeItem, CONFIG.currentDirection || 'A'); });
+
+        actionsWrap.append(levelBtn, infoBtn, fareBtn, timeBtn);
+        return actionsWrap;
+    },
+
+    // ==========================================
+    // 1-4. 動態渲染：收費彈窗 (Lazy Initialization)
+    // ==========================================
+    renderFareModal: function (routeItem, mainRouteColor, textColor) {
+        const oldFareOverlay = document.getElementById('fare-popup-overlay');
+        if (oldFareOverlay) oldFareOverlay.remove();
+
+        const isZh = CONFIG.currentLang === 'zh-CN' || CONFIG.currentLang === 'zh-TW';
+        const currentDir = CONFIG.currentDirection;
+        const activeShifts = CONFIG.enabledShifts || [];
+
+        const fareOverlay = document.createElement('div');
+        fareOverlay.id = 'fare-popup-overlay';
+        fareOverlay.className = 'timetable-panel-overlay modern-blur';
+
+        const fareContent = document.createElement('div');
+        fareContent.className = 'timetable-panel-content';
+
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'timetable-panel-close-modern';
+        closeBtn.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+        closeBtn.addEventListener('click', () => fareOverlay.remove());
+        fareContent.appendChild(closeBtn);
+
+        const fareHeader = document.createElement('div');
+        fareHeader.className = 'timetable-panel-header-modern';
+        const routeColor = routeItem.textColor || '#ffffff';
+        const titleText = isZh ? `<span class="route-badge" style="--route-badge-bg: ${mainRouteColor}; --route-badge-color: ${routeColor}; background-color: ${mainRouteColor};">${routeItem.route}</span> 收費資訊` : `<span class="route-badge" style="--route-badge-bg: ${mainRouteColor}; --route-badge-color: ${routeColor}; background-color: ${mainRouteColor};">${routeItem.route}</span> Fares`;
+        fareHeader.innerHTML = `<h2 class="panel-title-modern">${titleText}</h2>`;
+        fareContent.appendChild(fareHeader);
+
+        const fareWrap = document.createElement('div');
+        fareWrap.className = 'fare-modal-body';
+
+        if (routeItem.fares) {
+            // 統一調用現代化 SVG
+            const ticketSvg = `<svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"></rect><path d="M8 6v12"></path></svg>`;
+            const sectionSvg = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`;
+            const rebateSvg = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h10a8 8 0 0 1 8 8v2M3 10l6 6M3 10l6-6"/></svg>`;
+            const actionTagSvg = `<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none"><rect x="2" y="6" width="20" height="12" rx="2"></rect><path d="M12 12h.01"></path></svg>`;
+            const arrowSvg = `<svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`;
+            const infoSvg = `<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;
+
+            const fareTypes = [
+                { key: 'adult', labelZh: '成人', labelEn: 'Adult', icon: `<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>` },
+                { key: 'child', labelZh: '兒童', labelEn: 'Child', icon: `<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.2" fill="none"><circle cx="12" cy="8" r="3"></circle><path d="M18 21v-2a3 3 0 0 0-3-3h-6a3 3 0 0 0-3 3v2"></path></svg>` },
+                { key: 'elder', labelZh: '長者', labelEn: 'Elder', icon: `<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="23 21 23 9 19 9"></polyline></svg>` },
+                { key: 'student', labelZh: '學生', labelEn: 'Student', icon: `<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>` }
+            ];
+
+            let matchedOverrides = [];
+            if (routeItem.fares.overrides) {
+                routeItem.fares.overrides.forEach(ov => {
+                    const matchBound = !ov.bound || ov.bound.includes(currentDir);
+                    const matchShift = !ov.shift || activeShifts.includes(ov.shift);
+                    if (matchBound && matchShift) matchedOverrides.push(ov);
+                });
+            }
+
+            // 構建全程/特惠收費網格 (新增：資料驗證機制)
+            const buildFareGrid = (fareData, titleTxt, shiftKey = null, boundKey = null) => {
+                // 檢查是否真的包含成人、小童等實際金額資料
+                const hasValidFare = fareTypes.some(ft => fareData[ft.key] !== undefined);
+                if (!hasValidFare) return null; // 如果沒有資料，直接返回 null 不渲染
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'modern-fare-group';
+
+                let headerHtml = '';
+                if (!shiftKey && !boundKey) {
+                    headerHtml = `<div class="modern-fare-title">${ticketSvg} ${titleTxt}</div>`;
+                } else {
+                    let tagsHtml = '';
+                    if (shiftKey) {
+                        const sc = DataHandler.getShiftConfig(routeItem, shiftKey);
+                        tagsHtml += `<span class="shift-tag" style="background-color: ${sc.color}; border-color: ${sc.color};">${sc.label}</span>`;
+                    }
+                    if (boundKey) {
+                        let isShiftLoop = shiftKey ? DataHandler.isShiftCircular(routeItem, shiftKey, boundKey) : false;
+                        let destName = '';
+                        if (shiftKey && !isShiftLoop) {
+                            destName = DataHandler.getShiftStartEnd(routeItem, shiftKey, boundKey).end;
+                        }
+                        if (!destName || destName === LangHandler.getText('noInformation')) {
+                            destName = DataHandler.getDirectionStartEndStops(routeItem, boundKey).last;
+                        }
+                        if (isShiftLoop) destName = isZh ? '循環線' : 'Loop';
+                        const destText = isShiftLoop ? destName : (isZh ? `往 ${destName}` : `to ${destName}`);
+                        tagsHtml += `<span class="dest-pill" style="margin-left: 8px; background: #f1f5f9; color: #334155; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">${destText}</span>`;
+                    }
+                    headerHtml = `<div style="display: flex; align-items: center;">${tagsHtml}</div>`;
+                }
+
+                let gridHtml = `<div class="modern-fare-header">${headerHtml}</div><div class="modern-fare-grid">`;
+                fareTypes.forEach(ft => {
+                    if (fareData[ft.key] !== undefined) {
+                        gridHtml += `<div class="modern-fare-item">
+                                        <span class="fare-lbl">${ft.icon} ${isZh ? ft.labelZh : ft.labelEn}</span>
+                                        <span class="fare-val"><span class="currency">$</span>${fareData[ft.key].toFixed(1)}</span>
+                                     </div>`;
+                    }
+                });
+                gridHtml += `</div>`;
+                wrapper.innerHTML = gridHtml;
+                return wrapper;
+            };
+
+            // 1. 全程收費卡片：若回傳不為 null 則加入 DOM
+            const mainFareGrid = buildFareGrid(routeItem.fares, isZh ? '全程收費' : 'Full Fare');
+            if (mainFareGrid) {
+                fareWrap.appendChild(mainFareGrid);
+            }
+
+            // 2. 特惠班次/Overrides 覆寫卡片
+            matchedOverrides.forEach(ov => {
+                const overrideGrid = buildFareGrid(ov, null, ov.shift, ov.bound);
+                if (overrideGrid) {
+                    fareWrap.appendChild(overrideGrid);
+                }
+            });
+
+            const renderNode = (nameCn, nameEn) => {
+                const cleanCn = (nameCn || '').replace(/\^\^/g, '');
+                const cleanEn = (nameEn || '').replace(/\^\^/g, '');
+                return `<div class="route-node-clean"><span class="node-main">${isZh ? cleanCn : (cleanEn || cleanCn)}</span>${isZh && cleanEn ? `<span class="node-sub">${cleanEn}</span>` : ''}</div>`;
+            };
+
+            // 3. 分段收費
+            const validSectionFares = (routeItem.fares.sectionFares || []).filter(sf => !sf.direction || sf.direction.includes(currentDir));
+            if (validSectionFares.length > 0) {
+                const sectionContainer = document.createElement('div');
+                sectionContainer.className = 'modern-section-container';
+                sectionContainer.innerHTML = `<div class="modern-section-title"><div style="display:flex; align-items:center; gap:8px;">${sectionSvg} ${isZh ? '分段收費' : 'Section Fares'}</div></div>`;
+
+                validSectionFares.forEach(sf => {
+                    let shiftBadgesHTML = '';
+                    const shiftArray = Array.isArray(sf.shift) ? sf.shift : (sf.shift ? [sf.shift] : []);
+                    if (shiftArray.length > 0) {
+                        shiftBadgesHTML = '<div class="modern-shift-badges">';
+                        shiftArray.forEach(shiftKey => {
+                            const sc = DataHandler.getShiftConfig(routeItem, shiftKey);
+                            let boundKey = sf.direction ? (sf.direction.includes(',') ? sf.direction.split(',')[0] : sf.direction) : currentDir;
+                            let isShiftLoop = DataHandler.isShiftCircular(routeItem, shiftKey, boundKey);
+                            let destName = isShiftLoop ? (LangHandler.getText('loopDirection') || '循環線') : DataHandler.getShiftStartEnd(routeItem, shiftKey, boundKey).end;
+                            if (!destName || destName === LangHandler.getText('noInformation')) destName = DataHandler.getDirectionStartEndStops(routeItem, boundKey).last;
+                            const destText = isShiftLoop ? destName : (isZh ? `往 ${destName}` : `to ${destName}`);
+                            if (routeItem.stops && routeItem.stops[boundKey]) {
+                                const validStops = routeItem.stops[boundKey].filter(s => s.visible);
+                                if (validStops.length > 0) {
+                                    const lastStop = validStops[validStops.length - 1];
+                                    destName = isZh ? (lastStop.nameCn || '').replace(/\^\^/g, '') : ((lastStop.nameEn || lastStop.nameCn) || '').replace(/\^\^/g, '');
+                                }
+                            }
+                            shiftBadgesHTML += `<div style="display: flex; align-items: center;"><span class="shift-tag" style="background-color: ${sc.color}; border-color: ${sc.color};">${sc.label}</span><span class="dest-pill" style="margin-left: 8px; background: #f1f5f9; color: #334155; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600;">${destText}</span></div>`;
+                        });
+                        shiftBadgesHTML += '</div>';
+                    }
+
+                    const pAdult = sf.price;
+                    const pChild = sf.childPrice !== undefined ? sf.childPrice : pAdult / 2;
+                    const pElder = sf.elderPrice !== undefined ? sf.elderPrice : pAdult / 2;
+                    const pStudent = sf.studentPrice !== undefined ? sf.studentPrice : pAdult / 2;
+
+                    const isSameNode = (sf.fromCn === sf.toCn) && (sf.fromEn === sf.toEn);
+                    const nodesHtml = isSameNode ? renderNode(sf.fromCn, sf.fromEn) : `${renderNode(sf.fromCn, sf.fromEn)}<div class="flow-arrow-modern">${arrowSvg}</div>${renderNode(sf.toCn, sf.toEn)}`;
+
+                    sectionContainer.innerHTML += `
+                        <div class="modern-route-card">
+                            ${shiftBadgesHTML}
+                            <div class="route-flow-modern">
+                                <div class="route-nodes-wrap">${nodesHtml}</div>
+                                <div class="multi-price-grid">
+                                    <div class="price-cell adult-price"><div class="p-label">${fareTypes[0].icon} ${isZh ? '成人' : 'Adult'}</div><div class="p-value"><span class="cur">$</span>${pAdult.toFixed(1)}</div></div>
+                                    <div class="price-cell sub-price"><div class="p-label">${fareTypes[1].icon} ${isZh ? '小童' : 'Child'}</div><div class="p-value"><span class="cur">$</span>${pChild.toFixed(1)}</div></div>
+                                    <div class="price-cell sub-price"><div class="p-label">${fareTypes[2].icon} ${isZh ? '長者' : 'Elder'}</div><div class="p-value"><span class="cur">$</span>${pElder.toFixed(1)}</div></div>
+                                    <div class="price-cell sub-price"><div class="p-label">${fareTypes[3].icon} ${isZh ? '學生' : 'Student'}</div><div class="p-value"><span class="cur">$</span>${pStudent.toFixed(1)}</div></div>
+                                </div>
+                            </div>
+                        </div>`;
+                });
+                fareWrap.appendChild(sectionContainer);
+            }
+
+            // 4. 雙向/短途下車回贈
+            const validRebates = (routeItem.fares.shortDistanceRebates || []).filter(sr => !sr.direction || sr.direction.includes(currentDir));
+            if (validRebates.length > 0) {
+                const rebateContainer = document.createElement('div');
+                rebateContainer.className = 'modern-section-container rebate-theme';
+                rebateContainer.innerHTML = `<div class="modern-section-title"><div style="display:flex; align-items:center; gap:8px;">${rebateSvg} ${isZh ? '短途分段收費' : 'Sectional Fare'}</div><span class="action-tag">${actionTagSvg} ${isZh ? '下車再次拍卡' : 'Tap Again'}</span></div>`;
+
+                validRebates.forEach(sr => {
+                    const remarkText = isZh ? sr.remarkCn : sr.remarkEn;
+                    let shiftBadgesHTML = '';
+                    const shiftArray = Array.isArray(sr.shift) ? sr.shift : (sr.shift ? [sr.shift] : []);
+                    if (shiftArray.length > 0) {
+                        shiftBadgesHTML = '<div class="modern-shift-badges">';
+                        shiftArray.forEach(shiftKey => {
+                            const sc = DataHandler.getShiftConfig(routeItem, shiftKey);
+                            let boundKey = sr.direction ? (sr.direction.includes(',') ? sr.direction.split(',')[0] : sr.direction) : currentDir;
+                            let isShiftLoop = DataHandler.isShiftCircular(routeItem, shiftKey, boundKey);
+                            let destName = isShiftLoop ? (LangHandler.getText('loopDirection') || '循環線') : DataHandler.getShiftStartEnd(routeItem, shiftKey, boundKey).end;
+                            if (!destName || destName === LangHandler.getText('noInformation')) destName = DataHandler.getDirectionStartEndStops(routeItem, boundKey).last;
+                            const destText = isShiftLoop ? destName : (isZh ? `往 ${destName}` : `to ${destName}`);
+                            if (routeItem.stops && routeItem.stops[boundKey]) {
+                                const validStops = routeItem.stops[boundKey].filter(s => s.visible);
+                                if (validStops.length > 0) {
+                                    const lastStop = validStops[validStops.length - 1];
+                                    destName = isZh ? (lastStop.nameCn || '').replace(/\^\^/g, '') : ((lastStop.nameEn || lastStop.nameCn) || '').replace(/\^\^/g, '');
+                                }
+                            }
+                            shiftBadgesHTML += `<div style="display: flex; align-items: center;"><span class="shift-tag" style="background-color: ${sc.color}; border-color: ${sc.color};">${sc.label}</span><span class="dest-pill" style="margin-left: 8px; background: #f1f5f9; color: #334155; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600;">${destText}</span></div>`;
+                        });
+                        shiftBadgesHTML += '</div>';
+                    }
+
+                    const fAdult = sr.actualFare;
+                    const fChild = sr.childFare !== undefined ? sr.childFare : fAdult / 2;
+                    const fElder = sr.elderFare !== undefined ? sr.elderFare : fAdult / 2;
+                    const fStudent = sr.studentFare !== undefined ? sr.studentFare : fAdult / 2;
+
+                    const oAdult = sr.fullFare || (sr.actualFare + sr.rebate);
+                    const oChild = sr.childFullFare !== undefined ? sr.childFullFare : oAdult / 2;
+                    const oElder = sr.elderFullFare !== undefined ? sr.elderFullFare : oAdult / 2;
+                    const oStudent = sr.studentFullFare !== undefined ? sr.studentFullFare : oAdult / 2;
+
+                    const startCn = sr.startStopCn || sr.startStop;
+                    const alightCn = sr.alightStopCn || sr.alightStop;
+                    const isSameNodeRebate = (startCn === alightCn) && (sr.startStopEn === sr.alightStopEn);
+                    const rebateNodesHtml = isSameNodeRebate ? renderNode(startCn, sr.startStopEn) : `${renderNode(startCn, sr.startStopEn)}<div class="flow-arrow-modern">${arrowSvg}</div>${renderNode(alightCn, sr.alightStopEn)}`;
+
+                    rebateContainer.innerHTML += `
+                        <div class="modern-route-card rebate-card">
+                            ${shiftBadgesHTML}
+                            <div class="route-flow-modern">
+                                <div class="route-nodes-wrap">${rebateNodesHtml}</div>
+                                <div class="multi-price-grid rebate-grid">
+                                    <div class="price-cell adult-price"><div class="p-label">${fareTypes[0].icon} ${isZh ? '成人' : 'Adult'}</div><div class="p-value-wrap"><span class="p-strike">$${oAdult.toFixed(1)}</span><span class="p-value success"><span class="cur">$</span>${fAdult.toFixed(1)}</span></div></div>
+                                    <div class="price-cell sub-price"><div class="p-label">${fareTypes[1].icon} ${isZh ? '小童' : 'Child'}</div><div class="p-value-wrap"><span class="p-strike">$${oChild.toFixed(1)}</span><span class="p-value success"><span class="cur">$</span>${fChild.toFixed(1)}</span></div></div>
+                                    <div class="price-cell sub-price"><div class="p-label">${fareTypes[2].icon} ${isZh ? '長者' : 'Elder'}</div><div class="p-value-wrap"><span class="p-strike">$${oElder.toFixed(1)}</span><span class="p-value success"><span class="cur">$</span>${fElder.toFixed(1)}</span></div></div>
+                                    <div class="price-cell sub-price"><div class="p-label">${fareTypes[3].icon} ${isZh ? '學生' : 'Student'}</div><div class="p-value-wrap"><span class="p-strike">$${oStudent.toFixed(1)}</span><span class="p-value success"><span class="cur">$</span>${fStudent.toFixed(1)}</span></div></div>
+                                </div>
+                            </div>
+                            ${remarkText ? `<div class="modern-remark"><span class="remark-icon">${infoSvg}</span><span>${remarkText}</span></div>` : ''}
+                        </div>`;
+                });
+                fareWrap.appendChild(rebateContainer);
+            }
+
+            // 5. 若上述所有區塊均未成功渲染（DOM 子節點數量為 0），則顯示空狀態
+            if (fareWrap.children.length === 0) {
+                fareWrap.innerHTML = `<span class="empty-data-text">${LangHandler.getText('noInformation') || '無收費資訊'}</span>`;
+            }
+
+        } else {
+            // 完全沒有 fares 屬性時
+            fareWrap.innerHTML = `<span class="empty-data-text">${LangHandler.getText('noInformation') || '無收費資訊'}</span>`;
+        }
+
+        fareContent.appendChild(fareWrap);
+        fareOverlay.appendChild(fareContent);
+        fareOverlay.addEventListener('click', (e) => { if (e.target === fareOverlay) fareOverlay.remove(); });
+
+        document.body.appendChild(fareOverlay);
     },
 
     renderKeyboardFilters: function () {
@@ -2543,7 +2991,7 @@ var Renderer = {
         }
 
         const filterOperators = ["CSB", "FT", "SE", "HZ", "REBC"];
-        const filterTypes = ["Overnight", "Sightseeing", "Event", "Festival", "Crew Shuttle", "University", "Express", "Limited-stop", "Circular", "Special Departure", "Stadium", "CentralAxis", "CityStepped"];
+        const filterTypes = ["Overnight", "Sightseeing", "Event", "Festival", "Crew Shuttle", "University", "Express", "Limited-stop", "Circular", "Special Departure", "Stadium", "CentralAxis", "CityStepped", "DailyChallenge"];
         const isZh = CONFIG.currentLang === 'zh-CN' || CONFIG.currentLang === 'zh-TW';
 
         filterContainer = document.createElement('div');
@@ -2664,25 +3112,32 @@ var Renderer = {
         directionBtn.className = 'action-btn-modern toggle-direction-btn';
 
         var supportSwitch = DataHandler.isRouteSupportDirectionSwitch(routeItem);
-        var isLoop = routeItem.bound && routeItem.bound.includes("C");
 
-        if (isLoop) {
-            directionBtn.style.display = 'none';
+        if (supportSwitch) {
+            var boundsArray = DataHandler.getRouteBound(routeItem).split(',');
+            boundsArray = boundsArray.filter(b => routeItem.stops && routeItem.stops[b] && routeItem.stops[b].length > 0);
+
+            var currentIndex = boundsArray.indexOf(CONFIG.currentDirection);
+            if (currentIndex === -1) currentIndex = 0;
+            var nextIndex = (currentIndex + 1) % boundsArray.length;
+            var nextDir = boundsArray[nextIndex];
+
+            var nextDirInfo = DataHandler.getDirectionStartEndStops(routeItem, nextDir);
+            var nextDest = nextDir === 'C' ? (LangHandler.getText('loopDirection') || '循環線') : nextDirInfo.last;
+
+            directionBtn.title = `${LangHandler.getText('switchDirection')} (➔ ${nextDest})`;
+            directionBtn.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v11" /><path d="M11 17l-4 4-4-4" /><path d="M17 14V3" /><path d="M13 7l4-4 4 4" /></svg>`;
+
+            directionBtn.addEventListener('click', function () {
+                CONFIG.currentDirection = nextDir;
+                CONFIG.currentPage = 1;
+                Renderer.renderStopPage(routeItem._id);
+            });
         } else {
-            var directionInfo = DataHandler.getDirectionStartEndStops(routeItem);
-            var dirKey = CONFIG.currentDirection === "A" ? 'directionA' : 'directionB';
-
-            directionBtn.title = `${LangHandler.getText('switchDirection')} (${LangHandler.getText(dirKey)} ➔ ${directionInfo.last})`;
-
-            // 【修改點1】改為上下雙向平行箭頭
-            directionBtn.innerHTML = `
-                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M7 10v11" />
-                    <path d="M11 17l-4 4-4-4" />
-                    <path d="M17 14V3" />
-                    <path d="M13 7l4-4 4 4" />
-                </svg>
-            `;
+            directionBtn.style.opacity = '0.4';
+            directionBtn.style.cursor = 'not-allowed';
+            directionBtn.disabled = true;
+            directionBtn.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v11" /><path d="M11 17l-4 4-4-4" /><path d="M17 14V3" /><path d="M13 7l4-4 4 4" /></svg>`;
         }
 
         directionBtn.disabled = !supportSwitch;
@@ -2694,10 +3149,9 @@ var Renderer = {
         directionBtn.addEventListener('click', function () {
             CONFIG.currentDirection = CONFIG.currentDirection === "A" ? "B" : "A";
             CONFIG.currentPage = 1;
-            Renderer.renderStopPage(routeItem.route);
+            Renderer.renderStopPage(routeItem._id);
         });
 
-        // 【修改點2】翻新 Pagination 區塊，賦予 modern-pagination 樣式
         var paginationControl = document.createElement('div');
         paginationControl.className = 'pagination-control modern-pagination';
 
@@ -2746,14 +3200,14 @@ var Renderer = {
         prevBtn.addEventListener('click', function () {
             if (CONFIG.currentPage > 1) {
                 CONFIG.currentPage--;
-                Renderer.renderStopPage(routeItem.route);
+                Renderer.renderStopPage(routeItem._id);
             }
         });
 
         nextBtn.addEventListener('click', function () {
             if (CONFIG.currentPage < totalPages) {
                 CONFIG.currentPage++;
-                Renderer.renderStopPage(routeItem.route);
+                Renderer.renderStopPage(routeItem._id);
             }
         });
 
@@ -2790,14 +3244,14 @@ var Renderer = {
         const table = document.createElement('table');
         table.className = 'stop-table';
 
-        // 表頭
         const thead = document.createElement('thead');
         thead.innerHTML = `
         <tr>
             <th data-lang-key="stopNumber" style="text-align: center;">${LangHandler.getText('stopNumber')}</th>
             <th data-lang-key="stopName">${LangHandler.getText('stopName')}</th>
+            <th data-lang-key="" style="text-align: center;">${LangHandler.getText('')}</th>
         </tr>
-    `;
+    `; //nearbyRoutes
         table.appendChild(thead);
 
         const tbody = document.createElement('tbody');
@@ -2858,30 +3312,94 @@ var Renderer = {
         row.appendChild(seqCell);
 
         // === 站名格 ===
+        // === 站名格 ===
         const nameCell = document.createElement('td');
         const nameContainer = document.createElement('div');
         nameContainer.className = 'stop-name-container';
 
-        this.renderStopName(nameContainer, stop);
+        const nameHeader = document.createElement('div');
+        nameHeader.className = 'stop-name-header';
 
-        // 臨時關閉標記
+        const isZh = CONFIG.currentLang === 'zh-CN';
+
+        // 1. 主站名
+        const mainName = document.createElement('span');
+        mainName.className = 'stop-main-name';
+        const nameCn = (stop.nameCn || '').replace(/\^\^/g, '');
+        const nameEn = (stop.nameEn || '').replace(/\^\^/g, '');
+        mainName.textContent = isZh ? nameCn : (nameEn || nameCn);
+
+        const primarySubName = isZh ? stop.nameSubCn : stop.nameSubEn;
+        if (primarySubName) {
+            const mainSub = document.createElement('span');
+            mainSub.className = 'stop-sub-name';
+            mainSub.textContent = `(${primarySubName})`;
+            mainName.appendChild(mainSub);
+        }
+        nameHeader.appendChild(mainName);
+
+        // 2. 標籤群組
+        const tagGroup = document.createElement('div');
+        tagGroup.className = 'stop-tag-group';
+
+        if ((stop.nameCn && stop.nameCn.includes('^^')) || (stop.nameEn && stop.nameEn.includes('^^'))) {
+            const tag = document.createElement('span');
+            tag.className = 'turning-point-tag';
+            tag.textContent = isZh ? '轉折點' : 'Turning Point';
+            tagGroup.appendChild(tag);
+        }
+
         if (stop.tempClose) {
-            const tempTag = document.createElement('div');
+            const tempTag = document.createElement('span');
             tempTag.className = 'temp-close-tag';
             tempTag.setAttribute('data-lang-key', 'tempClose');
             tempTag.textContent = LangHandler.getText('tempClose');
-            nameContainer.appendChild(tempTag);
+            tagGroup.appendChild(tempTag);
+        }
 
-            if (stop.tempCloseReason) {
-                const reason = document.createElement('div');
-                reason.className = 'temp-close-reason';
-                reason.textContent = stop.tempCloseReason;
-                nameContainer.appendChild(reason);
+        if (tagGroup.childNodes.length > 0) {
+            nameHeader.appendChild(tagGroup);
+        }
+
+        nameContainer.appendChild(nameHeader);
+
+        // 3. 英文站名
+        if (isZh && stop.nameEn) {
+            const enName = document.createElement('div');
+            enName.className = 'stop-english-name';
+            enName.textContent = stop.nameEn.replace(/\^\^/g, '');
+
+            if (stop.nameSubEn) {
+                const enSub = document.createElement('span');
+                enSub.className = 'stop-sub-name';
+                enSub.textContent = `(${stop.nameSubEn})`;
+                enName.appendChild(enSub);
             }
+            nameContainer.appendChild(enName);
+        }
+
+        // 4. 臨時關閉原因
+        if (stop.tempClose && stop.tempCloseReason) {
+            const reason = document.createElement('div');
+            reason.className = 'temp-close-reason';
+            reason.textContent = stop.tempCloseReason;
+            nameContainer.appendChild(reason);
         }
 
         nameCell.appendChild(nameContainer);
         row.appendChild(nameCell);
+
+        const actionCell = document.createElement('td');
+        actionCell.style.textAlign = 'center';
+        const nearbyBtn = document.createElement('button');
+        nearbyBtn.className = 'action-btn-modern nearby-btn';
+        nearbyBtn.style.margin = '0 auto';
+        nearbyBtn.title = LangHandler.getText('nearbyRoutes');
+        nearbyBtn.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>`;
+        nearbyBtn.onclick = () => Renderer.renderNearbyRoutesModal(stop, routeItem);
+
+        actionCell.appendChild(nearbyBtn);
+        row.appendChild(actionCell);
 
         return row;
     },
@@ -2926,7 +3444,6 @@ var Renderer = {
             enName.className = 'stop-english-name';
             enName.textContent = stop.nameEn.replace(/\^\^/g, '');
 
-            // 【核心修改】：中文模式下，英文的 main-name 旁邊顯示 sub-name
             if (stop.nameSubEn) {
                 const enSub = document.createElement('span');
                 enSub.className = 'stop-sub-name';
@@ -2969,14 +3486,21 @@ var Renderer = {
 
         // 獲取目的地名稱
         let destName = '';
-        if (routeItem.stops && routeItem.stops[direction]) {
-            const validStops = routeItem.stops[direction].filter(s => s.visible);
-            if (validStops.length > 0) {
-                const lastStop = validStops[validStops.length - 1];
-                destName = CONFIG.currentLang === 'zh-CN' || CONFIG.currentLang === 'zh-TW'
-                    ? (lastStop.nameCn || '').replace(/\^\^/g, '')
-                    : ((lastStop.nameEn || lastStop.nameCn) || '').replace(/\^\^/g, '');
+        let isDirLoop = false;
+        const enabledShiftsForDir = DataHandler.getEnabledShifts(routeItem, direction);
+        if (enabledShiftsForDir && enabledShiftsForDir.length > 0) {
+            isDirLoop = DataHandler.isShiftCircular(routeItem, enabledShiftsForDir[0], direction);
+            if (!isDirLoop) {
+                destName = DataHandler.getShiftStartEnd(routeItem, enabledShiftsForDir[0], direction).end;
+                destName = CONFIG.currentLang === 'zh-CN' || CONFIG.currentLang === 'zh-TW' ? `往 ${destName}` : `to ${destName}`;
             }
+        }
+        if (!destName || destName === LangHandler.getText('noInformation')) {
+            destName = DataHandler.getDirectionStartEndStops(routeItem, direction).last;
+            destName = CONFIG.currentLang === 'zh-CN' || CONFIG.currentLang === 'zh-TW' ? `往 ${destName}` : `to ${destName}`;
+        }
+        if (isDirLoop) {
+            destName = CONFIG.currentLang === 'zh-CN' || CONFIG.currentLang === 'zh-TW' ? '循環線' : 'Loop';
         }
 
         // 獲取該路線第一個班次的顏色
@@ -2984,8 +3508,9 @@ var Renderer = {
         const enabledShifts = DataHandler.getEnabledShifts(routeItem);
         if (enabledShifts && enabledShifts.length > 0) {
             const firstShiftConfig = DataHandler.getShiftConfig(routeItem, enabledShifts[0]);
-            if (firstShiftConfig && firstShiftConfig.color) {
-                mainRouteColor = firstShiftConfig.color;
+            if (firstShiftConfig) {
+                if (firstShiftConfig.color) mainRouteColor = firstShiftConfig.color;
+                if (firstShiftConfig.textColor) textColor = firstShiftConfig.textColor;
             }
         }
 
@@ -2995,11 +3520,14 @@ var Renderer = {
 
         // 綁定主色與文字顏色到 route-badge 的背景
         const titleText = CONFIG.currentLang === 'zh-CN' || CONFIG.currentLang === 'zh-TW'
-            ? `<span class="route-badge" style="--route-badge-bg: ${mainRouteColor}; --route-badge-color: ${textColor}; background-color: ${mainRouteColor};">${routeItem.route}</span> 營運時間表 <span class="dest-pill">往 ${destName}</span>`
-            : `<span class="route-badge" style="--route-badge-bg: ${mainRouteColor}; --route-badge-color: ${textColor}; background-color: ${mainRouteColor};">${routeItem.route}</span> Timetable <span class="dest-pill">To ${destName}</span>`;
+            ? `<span class="route-badge" style="--route-badge-bg: ${mainRouteColor}; --route-badge-color: ${textColor}; background-color: ${mainRouteColor};">${routeItem.route}</span> 營運時間表 <span class="dest-pill">${destName}</span>`
+            : `<span class="route-badge" style="--route-badge-bg: ${mainRouteColor}; --route-badge-color: ${textColor}; background-color: ${mainRouteColor};">${routeItem.route}</span> Timetable <span class="dest-pill">${destName}</span>`;
 
         header.innerHTML = `<h2 class="panel-title-modern">${titleText}</h2>`;
         panelContent.appendChild(header);
+
+        const scrollPanel = document.createElement('div');
+        scrollPanel.className = 'timetable-scroll-panel custom-scrollbar-panel';
 
         // 循環渲染班次
         if (timetableData.data && Object.keys(timetableData.data).length > 0) {
@@ -3127,7 +3655,6 @@ var Renderer = {
                         const intervalContainer = document.createElement('div');
                         intervalContainer.className = 'interval-container-modern';
 
-                        // 【新增 1】：獲取起點名稱並新增表頭
                         const dirInfo = DataHandler.getDirectionStartEndStops(routeItem, direction);
                         const startName = dirInfo.first;
                         const headerRow = document.createElement('div');
@@ -3150,7 +3677,6 @@ var Renderer = {
                     `;
                         intervalContainer.appendChild(headerRow);
 
-                        // 【新增 2】：定義 SVG Icon
                         const clockSvg = `<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px; vertical-align: text-bottom;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 12"></polyline></svg>`;
 
                         shift.interval.forEach(intv => {
@@ -3176,21 +3702,22 @@ var Renderer = {
                     card.appendChild(daySection);
                 });
 
-                panelContent.appendChild(card);
+                scrollPanel.appendChild(card);
 
-                // 【新增】：如果後面還有其他班次 (如 special1)，則加上一條優雅的分隔線
                 if (shiftIndex < shiftKeys.length - 1) {
                     const separator = document.createElement('div');
                     separator.className = 'shift-card-separator';
-                    panelContent.appendChild(separator);
+                    scrollPanel.appendChild(separator);
                 }
             });
         } else {
             const emptyTip = document.createElement('div');
             emptyTip.className = 'empty-tip-modern';
             emptyTip.textContent = CONFIG.emptyTipText[CONFIG.currentLang] || '暫無數據';
-            panelContent.appendChild(emptyTip);
+            scrollPanel.appendChild(emptyTip);
         }
+
+        panelContent.appendChild(scrollPanel);
         panelOverlay.appendChild(panelContent);
         document.body.appendChild(panelOverlay);
 
@@ -3243,179 +3770,88 @@ var Renderer = {
             unlockLevels.forEach(l => {
                 var shiftConfig = DataHandler.getShiftConfig(routeItem, l.shift);
                 var shiftLabel = shiftConfig ? shiftConfig.label : l.shift;
-                var shiftColor = shiftConfig ? shiftConfig.color : '#4a90e2';
+                var shiftColor = shiftConfig && shiftConfig.color ? shiftConfig.color : '#4a90e2';
+                var shiftTextColor = shiftConfig && shiftConfig.textColor ? shiftConfig.textColor : '#ffffff';
 
-                // 動態獲取該解鎖條件對應的路線方向起迄站點
-                var dirInfo = DataHandler.getDirectionStartEndStops(routeItem, l.bound);
-                var isLoop = l.bound.indexOf("C") !== -1;
+                var shiftStartEnd = DataHandler.getShiftStartEnd(routeItem, l.shift, l.bound);
+                let isShiftLoop = DataHandler.isShiftCircular(routeItem, l.shift, l.bound);
 
-                var separator = isLoop
-                    ? `<span class="dir-icon loop" style="color:${shiftColor}">↺</span>`
-                    : `<span class="dir-icon" style="color:#94a3b8">➔</span>`;
+                // 加入現代美觀的 SVG 箭頭與循環圖示
+                var separator = isShiftLoop
+                    ? `<span class="dir-icon loop" style="color:${shiftColor}; display: inline-flex; align-items: center;"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.59-9.36l5.67-5.67"/></svg></span>`
+                    : `<span class="dir-icon" style="color:#94a3b8; display: inline-flex; align-items: center;"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>`;
 
-                var destText = isLoop ? (LangHandler.getText('loopDirection') || '循環線') : dirInfo.last;
+                var destText = isShiftLoop ? (LangHandler.getText('loopDirection') || '循環線') : shiftStartEnd.end;
+                var startText = shiftStartEnd.start;
 
                 group.innerHTML += `
-                    <div class="level-unlock-card">
-                        <div class="level-unlock-left">
-                            <div class="shift-tag" style="background-color: ${shiftColor}; border-color: ${shiftColor};">
-                                ${shiftLabel}
-                            </div>
-                            <div class="level-route-dir">
-                                <span class="dir-stop">${dirInfo.first}</span>
-                                ${separator}
-                                <span class="dir-stop ${isLoop ? 'loop-text' : ''}" style="${isLoop ? `color:${shiftColor}` : ''}">${destText}</span>
-                            </div>
+                <div class="level-unlock-card">
+                    <div class="level-unlock-left">
+                        <div class="shift-tag" style="background-color: ${shiftColor}; border-color: ${shiftColor}; color: ${shiftTextColor};">
+                            ${shiftLabel}
                         </div>
-                        <div class="level-unlock-right">
-                            <div class="level-req-badge">
-                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                                Lv.${l.level}
-                            </div>
+                        <div class="level-route-dir" style="display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 16px;">
+                            <span class="dir-stop">${startText}</span>
+                            ${separator}
+                            <span class="dir-stop ${isShiftLoop ? 'loop-text' : ''}" style="${isShiftLoop ? `color:${shiftColor}` : ''}">${destText}</span>
                         </div>
                     </div>
-                `;
+                    <div class="level-unlock-right">
+                        <div class="level-req-badge-group">
+${l.level !== undefined && l.level !== null ? `
+                            <span class="modern-req-pill req-lvl">
+                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                                Lv.${l.level}
+                            </span>` : ''}
+                            
+                            ${l.sunshards !== undefined && l.sunshards !== null ? `
+                            <span class="modern-req-pill req-sunshards">
+                                <svg viewBox="0 0 100 100" width="20" height="20" style="margin-right:6px;">
+                                    <circle cx="50" cy="50" r="16" fill="currentColor"/>
+                                    <g stroke="currentColor" stroke-width="6" stroke-linecap="round">
+                                        <line x1="50" y1="18" x2="50" y2="24" />
+                                        <line x1="50" y1="18" x2="50" y2="24" transform="rotate(45 50 50)" />
+                                        <line x1="50" y1="18" x2="50" y2="24" transform="rotate(90 50 50)" />
+                                        <line x1="50" y1="18" x2="50" y2="24" transform="rotate(135 50 50)" />
+                                        <line x1="50" y1="18" x2="50" y2="24" transform="rotate(180 50 50)" />
+                                        <line x1="50" y1="18" x2="50" y2="24" transform="rotate(225 50 50)" />
+                                        <line x1="50" y1="18" x2="50" y2="24" transform="rotate(270 50 50)" />
+                                        <line x1="50" y1="18" x2="50" y2="24" transform="rotate(315 50 50)" />
+                                    </g>
+                                </svg>
+                                ${l.sunshards}
+                            </span>` : ''}
+
+                            ${l.routes && l.routes.length > 0 ? `
+                            <span class="modern-req-pill req-routes" style="display:inline-flex; align-items:center; flex-wrap: wrap; gap: 4px; padding-right: 8px;">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px; flex-shrink: 0;"><path d="M19 17h2l.64-2.54c.24-.959.24-1.962 0-2.92l-1.07-4.27A3 3 0 0 0 17.66 5H4a2 2 0 0 0-2 2v10h2"/><circle cx="16" cy="17" r="2"/><path d="M9 17h5"/><circle cx="7" cy="17" r="2"/></svg>
+${l.routes.map(r => {
+                    var routeItemObj = DataHandler.getFirstRouteByNum(r); // Updated function name
+                    var bg = '#4a90e2', txt = '#ffffff';
+                    if (routeItemObj) {
+                        var sh = DataHandler.getEnabledShifts(routeItemObj);
+                        if (sh && sh.length > 0) {
+                            var cfg = DataHandler.getShiftConfig(routeItemObj, sh[0]);
+                            if (cfg.color) bg = cfg.color;
+                            if (cfg.textColor) txt = cfg.textColor;
+                        }
+                    }
+                    return `<span class="route-badge" style="--route-badge-bg: ${bg}; --route-badge-color: ${txt}; background-color: ${bg}; color: ${txt}; font-size: 13px; padding: 2px 8px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.3); min-width: auto; height: auto; line-height: 1;">${r}</span>`;
+                }).join('')}
+                            </span>` : ''}
+
+                            ${((CONFIG.currentLang === 'zh-CN' || CONFIG.currentLang === 'zh-TW') ? l.unlockDateCn : (l.unlockDateEn || l.unlockDateCn)) ? `
+                            <span class="modern-req-pill req-date">
+                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                ${((CONFIG.currentLang === 'zh-CN' || CONFIG.currentLang === 'zh-TW') ? l.unlockDateCn : (l.unlockDateEn || l.unlockDateCn))}
+                            </span>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
             });
             body.appendChild(group);
         } else {
-            body.innerHTML = `<span style="color:#94a3b8; font-size:14px; display:block; text-align:center; padding: 20px;">${LangHandler.getText('noInformation')}</span>`;
-        }
-
-        content.appendChild(body);
-        overlay.appendChild(content);
-        overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
-        document.body.appendChild(overlay);
-    },
-
-    renderInfoModal: function (routeItem) {
-        const oldOverlay = document.getElementById('info-popup-overlay');
-        if (oldOverlay) oldOverlay.remove();
-
-        const isZh = CONFIG.currentLang === 'zh-CN' || CONFIG.currentLang === 'zh-TW';
-        var mainRouteColor = '#4a90e2';
-        var textColor = routeItem.textColor || '#ffffff';
-        const enabledShifts = DataHandler.getEnabledShifts(routeItem);
-        if (enabledShifts && enabledShifts.length > 0) {
-            const firstShiftConfig = DataHandler.getShiftConfig(routeItem, enabledShifts[0]);
-            if (firstShiftConfig && firstShiftConfig.color) mainRouteColor = firstShiftConfig.color;
-        }
-
-        const overlay = document.createElement('div');
-        overlay.id = 'info-popup-overlay';
-        overlay.className = 'timetable-panel-overlay modern-blur';
-
-        const content = document.createElement('div');
-        content.className = 'timetable-panel-content';
-
-        const closeBtn = document.createElement('button');
-        closeBtn.className = 'timetable-panel-close-modern';
-        closeBtn.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
-        closeBtn.addEventListener('click', () => overlay.remove());
-        content.appendChild(closeBtn);
-
-        const header = document.createElement('div');
-        header.className = 'timetable-panel-header-modern';
-        const titleText = isZh ? `<span class="route-badge" style="--route-badge-bg: ${mainRouteColor}; --route-badge-color: ${textColor}; background-color: ${mainRouteColor};">${routeItem.route}</span> 更多資訊` : `<span class="route-badge" style="--route-badge-bg: ${mainRouteColor}; --route-badge-color: ${textColor}; background-color: ${mainRouteColor};">${routeItem.route}</span> More Info`;
-        header.innerHTML = `<h2 class="panel-title-modern">${titleText}</h2>`;
-        content.appendChild(header);
-
-        const body = document.createElement('div');
-        body.className = 'fare-modal-body';
-        body.style.display = 'flex';
-        body.style.flexDirection = 'column';
-        body.style.gap = '12px'; // 讓每條訊息欄之間有適當呼吸空間
-        body.style.padding = '8px 0';
-
-        let hasInfo = false;
-
-        const createInfoRow = (title, badgesHTML) => {
-            return `
-            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 12px; padding: 14px 18px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; transition: all 0.2s ease;">
-                <div style="font-size: 14px; font-weight: 600; color: #475569; flex-shrink: 0; margin-top: 4px;">${title}</div>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; flex: 1 1 auto; min-width: 200px;">${badgesHTML}</div>
-            </div>`;
-        };
-        if (routeItem.zones && routeItem.zones.length > 0) {
-            hasInfo = true;
-            let badges = routeItem.zones.map(z => `<span class="badge-common zone-badge" style="font-size:13px; padding:6px 12px; margin:0;">${z}</span>`).join('');
-            body.innerHTML += createInfoRow(isZh ? '區域' : 'Zone', badges);
-        }
-        if (routeItem.operators && routeItem.operators.length > 0) {
-            hasInfo = true;
-            let badges = routeItem.operators.map(op => `<span class="badge-common operator-badge" data-operator="${op}" style="font-size:13px; padding:6px 12px; margin:0;">${op}</span>`).join('');
-            body.innerHTML += createInfoRow(isZh ? '營運商' : 'Operator', badges);
-        }
-        if (routeItem.typeTags && routeItem.typeTags.length > 0) {
-            hasInfo = true;
-            let badges = routeItem.typeTags.map(t => {
-                // 解析基本類型名稱與翻譯
-                let typeVal = typeof t === 'string' ? t : t.type;
-                let typeKey = 'type' + typeVal.replace(/\s+/g, '');
-                let transText = LangHandler.getText(typeKey);
-                if (transText === typeKey) transText = typeVal;
-
-                // 基礎路線類型徽章
-                let baseBadge = `<span class="badge-common type-badge" data-type="${typeVal}" style="font-size:13px; padding:6px 12px; margin:0;">${transText}</span>`;
-
-                // 若帶有班次資訊 (代表一個班次時)
-                if (typeof t === 'object' && t.shift) {
-                    let shiftConfig = DataHandler.getShiftConfig(routeItem, t.shift);
-                    let shiftLabel = shiftConfig ? shiftConfig.label : t.shift;
-                    let shiftColor = shiftConfig ? shiftConfig.color : '#4a90e2';
-
-                    // 使用與「路線代碼」完全一致的 shift-tag 結構，不拆分成 route-badge
-                    let shiftTagHTML = `<span class="shift-tag" style="background-color: ${shiftColor}; border-color: ${shiftColor}; margin-left: 0;">${shiftLabel}</span>`;
-
-                    // 套用指定的虛線框容器樣式，確保同一班次的標籤不換行並排顯示
-                    return `<div style="display: inline-flex; flex-wrap: nowrap; align-items: center; gap: 4px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 2px 4px 2px 2px; max-width: 100%; overflow-x: auto;">
-                                ${baseBadge}
-                                ${shiftTagHTML}
-                            </div>`;
-                }
-
-                // 如果沒有班次資訊，直接返回單一標籤
-                return baseBadge;
-            }).join('');
-
-            // 外層容器使用 flex-wrap:wrap 確保多個班次並排時能自然折行，而不是一行一個
-            body.innerHTML += createInfoRow(isZh ? '路線類型' : 'Route Type', `<div style="display:flex; justify-content: flex-end; flex-wrap:wrap; gap:8px;">${badges}</div>`);
-        }
-
-
-        var boundStr = DataHandler.getRouteBound(routeItem);
-        var targetDirection = CONFIG.currentDirection;
-        if (boundStr && boundStr.includes("C")) {
-            targetDirection = "C";
-        }
-
-        var allRouteCodes = DataHandler.getRouteCodes(routeItem);
-
-        var currentRouteCodes = allRouteCodes.filter(c => !c.bound || c.bound.includes(targetDirection));
-
-        if (currentRouteCodes.length > 0) {
-            hasInfo = true;
-            let badges = '';
-
-            if (currentRouteCodes.length > 1) {
-                let badgeList = currentRouteCodes.map(c => {
-                    let shiftConfig = DataHandler.getShiftConfig(routeItem, c.shift);
-                    let shiftLabel = shiftConfig ? shiftConfig.label : c.shift;
-                    let shiftColor = shiftConfig ? shiftConfig.color : '#4a90e2';
-
-                    return `<div style="display: flex; align-items: center; gap: 8px;">
-                                <span class="shift-tag" style="background-color: ${shiftColor}; border-color: ${shiftColor};">${shiftLabel}</span>
-                                <span class="badge-common route-code-badge" style="font-size:13px; padding:6px 12px; margin:0;">${c.code}</span>
-                            </div>`;
-                }).join('');
-                badges = `<div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">${badgeList}</div>`;
-            } else {
-                let text = currentRouteCodes[0].code;
-                badges = `<span class="badge-common route-code-badge" style="font-size:13px; padding:6px 12px; margin:0;">${text}</span>`;
-            }
-            body.innerHTML += createInfoRow(isZh ? '路綫代碼' : 'Route Code', badges);
-        }
-
-        if (!hasInfo) {
             body.innerHTML = `<span style="color:#94a3b8; font-size:14px; display:block; text-align:center; padding: 20px;">${LangHandler.getText('noInformation')}</span>`;
         }
 
@@ -3454,19 +3890,26 @@ var Renderer = {
 
     // 渲染更新日志
     renderUpdateLog: function () {
-        // 修正容器ID，确保指向正确的元素
         var logPanel = document.getElementById('updateLogPanel');
         if (!logPanel) return;
 
         logPanel.innerHTML = '';
 
-        // 确保从updatelog.js获取数据
+        var logHeader = document.createElement('div');
+        logHeader.className = 'log-header';
+
+        var logTitle = document.createElement('div');
+        logTitle.className = 'log-title';
+        logTitle.textContent = LangHandler.getText('updateLog');
+        logHeader.appendChild(logTitle);
+
+        logPanel.appendChild(logHeader);
+
         if (typeof updateLogData !== 'undefined' && updateLogData && updateLogData.logs) {
             var logList = document.createElement('div');
             logList.className = 'log-list';
             logPanel.appendChild(logList);
 
-            // 遍历更新日志数据
             updateLogData.logs.forEach(function (logItem) {
                 var logItemEl = document.createElement('div');
                 logItemEl.className = 'log-item';
@@ -3486,20 +3929,16 @@ var Renderer = {
 
                 logItemEl.appendChild(logItemHeader);
 
-                // 日志标题
                 var logItemTitle = document.createElement('div');
                 logItemTitle.className = 'log-item-title';
                 logItemTitle.textContent = logItem.title || LangHandler.getText('logUpdateContent');
                 logItemEl.appendChild(logItemTitle);
 
-                // 分类内容容器
                 var contentCategories = document.createElement('div');
                 contentCategories.className = 'log-content-categories';
 
-                // 处理分类内容
                 var content = logItem.content || {};
 
-                // 定义分类顺序和样式
                 var categories = [
                     { key: 'added', className: 'log-category-added' },
                     { key: 'fixed', className: 'log-category-fixed' },
@@ -3508,20 +3947,17 @@ var Renderer = {
                     { key: 'improvements', className: 'log-category-improvements' }
                 ];
 
-                // 渲染每个分类
                 categories.forEach(function (category) {
                     if (content[category.key] && content[category.key].length > 0) {
                         var categoryWrap = document.createElement('div');
                         categoryWrap.className = `log-category ${category.className}`;
 
-                        // 分类标题
                         var categoryTitle = document.createElement('div');
                         categoryTitle.className = 'log-category-title';
                         categoryTitle.textContent = LangHandler.getText(`log${category.key.charAt(0).toUpperCase() + category.key.slice(1)}`) ||
                             category.key.charAt(0).toUpperCase() + category.key.slice(1);
                         categoryWrap.appendChild(categoryTitle);
 
-                        // 分类列表
                         var categoryList = document.createElement('ul');
                         categoryList.className = 'log-category-list';
 
@@ -3540,7 +3976,6 @@ var Renderer = {
                 logList.appendChild(logItemEl);
             });
         } else {
-            // 无更新日志数据时显示提示
             var emptyLog = document.createElement('div');
             emptyLog.className = 'empty-log-tip';
             emptyLog.textContent = LangHandler.getText('noUpdateLog');
@@ -3553,64 +3988,53 @@ var Renderer = {
         logPanel.appendChild(logFooter);
     },
 
-    // 初始化页面加载
     initPageLoad: function () {
-        // 初始化语言
         LangHandler.renderAllTexts();
-
-        // 初始化页面事件
         PageController.initPageEvents();
-
-        // 修复4：确保DOM完全加载后初始化键盘
         const input = document.getElementById('routeNumberInput');
         if (input) {
-            // 修复5：使用防抖函数优化输入事件
-            const debouncedInputHandler = debounce(function () {
-                Renderer.initKeyboardValidity(this.value);
-                Renderer.renderRouteSuggestions(this.value);
-            }, 100);
+            const processInput = function (value) {
+                requestAnimationFrame(() => {
+                    Renderer.initKeyboardValidity(value);
+                    Renderer.renderRouteSuggestions(value);
+                });
+            };
 
+            const debouncedInputHandler = debounce(function (e) {
+                processInput(e.target.value);
+            }, 150);
+
+            // Only use 'input', remove the synchronous 'change' listeners
             input.addEventListener('input', debouncedInputHandler);
 
-            // 修复6：添加键盘按钮点击后的输入同步
-            input.addEventListener('change', function () {
-                Renderer.initKeyboardValidity(this.value);
-                Renderer.renderRouteSuggestions(this.value);
-            });
-
-            // 确保页面加载完成后初始化键盘
             setTimeout(() => {
-                Renderer.initKeyboardValidity('');
-                Renderer.renderRouteSuggestions('');
+                processInput('');
             }, 300);
         } else {
-            console.warn('线路编号输入框未找到，请检查 ID: routeNumberInput');
+            console.warn('Error: routeNumberInput');
         }
 
-        // 页面加载完成后的初始化
         window.addEventListener('load', function () {
-            // 确保所有DOM元素加载完成
             setTimeout(() => {
                 Renderer.updatePageLang();
-                // 再次初始化键盘，确保元素已加载
                 if (input) {
                     Renderer.initKeyboardValidity(input.value);
                 }
-                console.log('页面初始化完成，当前语言：', CONFIG.currentLang);
+                console.log('Page initialization done');
+                console.log(CONFIG.currentLang);
             }, 500);
         });
-    }
+    },
 
 };
 
-// ------------- 全局初始化 -------------
-// 页面加载完成后初始化所有功能
 document.addEventListener('DOMContentLoaded', function () {
     try {
-        // 初始化渲染器
         Renderer.initPageLoad();
 
-        // 确保语言切换按钮的初始状态正确
+        ThemeManager.init();
+        ContextMenuManager.init();
+
         const zhBtn = document.getElementById('switchZhBtn');
         const enBtn = document.getElementById('switchEnBtn');
 
@@ -3624,22 +4048,17 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        console.log('应用初始化完成');
+        console.log('Welcome to Sunshine Islands Route Inquiry System:');
     } catch (error) {
-        console.error('应用初始化失败:', error);
-        // 初始化失败时的兜底处理
+        console.error('Failed to load:', error);
         alert(LangHandler.getText('initFailed'));
     }
 });
 
-// ------------- 全局错误处理 -------------
 window.addEventListener('error', function (e) {
-    console.error('全局错误捕获:', e.message, e.filename, e.lineno);
-    // 可以在这里添加错误上报逻辑
+    console.error('Failed to catch:', e.message, e.filename, e.lineno);
 });
 
-// ------------- 工具函数 -------------
-// 防抖函数
 function debounce(func, wait = 200) {
     let timeout;
     return function (...args) {
@@ -3650,7 +4069,6 @@ function debounce(func, wait = 200) {
     };
 }
 
-// 节流函数
 function throttle(func, limit = 300) {
     let lastCall = 0;
     return function (...args) {
@@ -3662,7 +4080,6 @@ function throttle(func, limit = 300) {
     };
 }
 
-// 格式化日期（多语言适配）
 function formatDate(date, format = 'YYYY-MM-DD') {
     if (!date) date = new Date();
     if (typeof date === 'string') date = new Date(date);
@@ -3675,13 +4092,11 @@ function formatDate(date, format = 'YYYY-MM-DD') {
     const minutes = String(date.getMinutes()).padStart(2, '0');
     const seconds = String(date.getSeconds()).padStart(2, '0');
 
-    // 月份名称（多语言）
     const monthNames = {
         'zh-CN': ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
         'en-US': ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     };
 
-    // 星期名称（多语言）
     const weekNames = {
         'zh-CN': ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
         'en-US': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
@@ -3700,197 +4115,1080 @@ function formatDate(date, format = 'YYYY-MM-DD') {
     return result;
 }
 
-// ==========================================
-// 全站點搜尋功能 (Station Search)
-// ==========================================
 document.addEventListener('DOMContentLoaded', function () {
     const stationInput = document.getElementById('stationSearchInput');
-    const dropdown = document.getElementById('stationSearchDropdown');
     const listContainer = document.getElementById('stationListContainer');
 
-    if (stationInput && dropdown && listContainer) {
-        // 1. 監聽輸入事件 (利用你現有的 debounce 防抖函數避免卡頓)
-        stationInput.addEventListener('input', debounce(function (e) {
-            const keyword = e.target.value.trim().toLowerCase();
+    if (stationInput && listContainer) {
+        window.triggerStationSearchLoad = function (keyword = '') {
+            keyword = keyword.trim().toLowerCase();
+            const listContainer = document.getElementById('stationListContainer');
+            if (!listContainer) return;
+            listContainer.innerHTML = '';
 
-            // 2. 執行全資料庫篩選邏輯
-            const results = [];
-            const validRoutes = DataHandler.getValidRoutes(); // 取得所有啟用的路線
+            const isZh = CONFIG.currentLang === 'zh-CN' || CONFIG.currentLang === 'zh-TW';
+
+            if (!keyword) {
+                listContainer.innerHTML = `<div class="station-empty-tip" data-lang-key="searchStopPlaceholder">${LangHandler.getText('searchStopPlaceholder')}</div>`;
+                return;
+            }
+
+            const validRoutes = DataHandler.getValidRoutes();
+            const matchedRoutesMap = new Map(); // 儲存路綫匹配結果
+            const matchedStopsMap = new Map();  // 儲存站點匹配結果
 
             validRoutes.forEach(route => {
-                // 遍歷該路線的所有方向 (A, B, C)
-                ['A', 'B', 'C'].forEach(dir => {
-                    if (route.stops && route.stops[dir]) {
-                        route.stops[dir].forEach(stop => {
-                            if (!stop.visible) return; // 略過隱藏站點
+                const allRouteCodesObj = DataHandler.getRouteCodes(route);
+                const routeCodesStr = allRouteCodesObj.map(c => c.code.toLowerCase());
 
+                // 1. 判斷是否命中了路綫編號或 RouteCode
+                const isMatchRoute = route.route.toLowerCase().includes(keyword) || routeCodesStr.some(code => code.includes(keyword));
+
+                ['A', 'B', 'C'].forEach(dir => {
+                    if (!route.stops || !route.stops[dir] || route.stops[dir].length === 0) return;
+
+                    // 如果命中了路綫，將該方向的有效班次加入路綫結果
+                    if (isMatchRoute) {
+                        const shifts = DataHandler.getEnabledShifts(route, dir);
+                        shifts.forEach(shiftKey => {
+                            const specificCodeObj = allRouteCodesObj.find(c => c.bound === dir && c.shift === shiftKey);
+                            const specificCode = specificCodeObj ? specificCodeObj.code : route.route;
+
+                            // 精確過濾：確保該特定班次的 routeCode 或主編號符合關鍵字
+                            const exactMatch = route.route.toLowerCase().includes(keyword) || specificCode.toLowerCase().includes(keyword);
+
+                            if (exactMatch) {
+                                const key = `ROUTE-${route._id}-${dir}-${shiftKey}`;
+                                if (!matchedRoutesMap.has(key)) {
+                                    matchedRoutesMap.set(key, {
+                                        routeId: route._id,
+                                        routeNum: route.route,
+                                        routeCode: specificCode,
+                                        direction: dir,
+                                        shiftKey: shiftKey,
+                                        routeData: route
+                                    });
+                                }
+                            }
+                        });
+                    }
+
+                    // 2. 判斷是否命中了站點名稱 (新增：如果 searchable 為 false，則跳過不顯示該路綫的站點結果)
+                    if (route.searchable !== false) {
+                        route.stops[dir].forEach(stop => {
+                            if (!stop.visible) return;
                             const nameCn = (stop.nameCn || '').toLowerCase();
                             const nameEn = (stop.nameEn || '').toLowerCase();
+                            const isMatchStop = nameCn.includes(keyword) || nameEn.includes(keyword);
 
-                            // 檢查中文或英文是否包含關鍵字
-                            if (nameCn.includes(keyword) || nameEn.includes(keyword)) {
-                                results.push({
-                                    routeNum: route.route,
-                                    nameCn: stop.nameCn,
-                                    nameEn: stop.nameEn,
-                                    direction: dir
-                                });
+                            if (isMatchStop) {
+                                const key = `STOP-${route._id}-${dir}-${stop.nameCn}`;
+                                if (!matchedStopsMap.has(key)) {
+                                    matchedStopsMap.set(key, {
+                                        routeId: route._id,
+                                        routeNum: route.route,
+                                        nameCn: stop.nameCn,
+                                        nameEn: stop.nameEn,
+                                        direction: dir,
+                                        stopFor: [...(stop.stopFor || [])],
+                                        targetSeq: stop.seq,
+                                        routeData: route
+                                    });
+                                } else {
+                                    const existing = matchedStopsMap.get(key);
+                                    (stop.stopFor || []).forEach(s => {
+                                        if (!existing.stopFor.includes(s)) existing.stopFor.push(s);
+                                    });
+                                }
                             }
                         });
                     }
                 });
             });
 
-            // 3. 渲染結果到畫面上
-            renderStationSearchResults(results, keyword);
-        }, 300));
+            const routeResults = Array.from(matchedRoutesMap.values());
+            const stopResults = Array.from(matchedStopsMap.values());
 
-        function renderStationSearchResults(results, keyword) {
-            listContainer.innerHTML = ''; // 清空舊結果
+            if (routeResults.length === 0 && stopResults.length === 0) {
+                listContainer.innerHTML = `<div class="station-empty-tip">${LangHandler.getText('noSearch', { keyword: keyword })}</div>`;
+                return;
+            }
 
-            if (results.length === 0) {
-                // 新增判斷中英文
-                const emptyText = CONFIG.currentLang === 'en-US'
-                    ? `No stations found for "${keyword}"`
-                    : `找不到符合「${keyword}」的站點`;
-                listContainer.innerHTML = `<div class="station-empty-tip">${emptyText}</div>`;
-            } else {
-                // 去重處理：避免同一個站點在同一條線的雙向被重複顯示兩次
-                const uniqueResults = [];
-                const seen = new Set();
-                results.forEach(r => {
-                    const key = `${r.routeNum}-${r.direction}-${r.nameCn}`;
-                    if (!seen.has(key)) {
-                        seen.add(key);
-                        uniqueResults.push(r);
-                    }
-                });
+            // === 渲染區塊 A ===
+            if (routeResults.length > 0) {
+                const routeGroupTitle = document.createElement('div');
+                routeGroupTitle.style.cssText = "font-size: 20px; font-weight: 800; color: #4a90e2; padding: 5px 10px; text-transform: uppercase; letter-spacing: 0.5px;";
+                routeGroupTitle.textContent = LangHandler.getText('routeResult');
+                listContainer.appendChild(routeGroupTitle);
 
-                uniqueResults.forEach(result => {
+                routeResults.forEach(result => {
                     const item = document.createElement('div');
                     item.className = 'station-item';
 
-                    const cleanCn = result.nameCn.replace(/\^\^/g, '');
-                    const cleanEn = result.nameEn ? result.nameEn.replace(/\^\^/g, '') : '';
-
-                    let badgeColor = '#2563eb';
-                    let textColor = '#ffffff';
-                    let destText = ''; // 👈 新增目的地文字變數
-
-                    const routeInfo = DataHandler.getRouteByNum(result.routeNum);
-                    if (routeInfo) {
-                        textColor = routeInfo.textColor || '#ffffff';
-                        const shifts = DataHandler.getEnabledShifts(routeInfo);
-                        if (shifts && shifts.length > 0) {
-                            badgeColor = DataHandler.getShiftConfig(routeInfo, shifts[0]).color || badgeColor;
-                        }
-
-                        // 👇 計算該方向的目的地文字
-                        const isZh = CONFIG.currentLang === 'zh-CN' || CONFIG.currentLang === 'zh-TW';
-                        const isLoop = routeInfo.bound && routeInfo.bound.includes("C");
-                        const dirInfo = DataHandler.getDirectionStartEndStops(routeInfo, result.direction);
-                        const destName = isLoop ? (LangHandler.getText('loopDirection') || '循環線') : dirInfo.last;
-                        destText = isLoop ? destName : (isZh ? `往 ${destName}` : `To ${destName}`);
+                    const shiftConfig = DataHandler.getShiftConfig(result.routeData, result.shiftKey);
+                    let badgeText = result.routeNum;
+                    if (result.shiftKey !== 'normal') {
+                        let match = shiftConfig.label.match(/^(.+?)\s*\((.+?)\)$/);
+                        badgeText = match ? match[1].trim() : shiftConfig.label;
                     }
 
-                    // 👇 在 HTML 結構中加入 dest-pill，並用 flex 對齊
+                    const badgeColor = shiftConfig.color || '#2563eb';
+                    const textColor = shiftConfig.textColor || '#ffffff';
+
+                    let isShiftLoop = DataHandler.isShiftCircular(result.routeData, result.shiftKey, result.direction);
+                    let startEnd = DataHandler.getShiftStartEnd(result.routeData, result.shiftKey, result.direction);
+                    let startName = startEnd.start;
+                    let endName = startEnd.end;
+
+                    if (!startName || startName === LangHandler.getText('noInformation')) {
+                        let dirStops = DataHandler.getDirectionStartEndStops(result.routeData, result.direction);
+                        startName = dirStops.first;
+                        endName = dirStops.last;
+                    }
+
+                    // 動態組合起訖點 UI
+                    let destTextHtml = '';
+                    if (isShiftLoop) {
+                        destTextHtml = `<span style="color: #64748b;">${startName}</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" style="margin: 0 6px; vertical-align: middle; color: ${badgeColor};"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.59-9.36l5.67-5.67"/></svg> <span style="color: ${badgeColor};">${endName}</span>`;
+                    } else {
+                        destTextHtml = `<span style="color: #64748b;">${startName}</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="#94a3b8" stroke-width="2" fill="none" style="margin: 0 6px; vertical-align: middle;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg> <span>${endName}</span>`;
+                    }
+
                     item.innerHTML = `
-                        <div class="station-name-cn">${cleanCn}</div>
-                        ${cleanEn ? `<div class="station-name-en">${cleanEn}</div>` : ''}
-                        <div class="station-routes" style="display: flex; align-items: center;">
-                            <span class="route-badge" style="--route-badge-bg: ${badgeColor}; --route-badge-color: ${textColor};">${result.routeNum}</span>
-                            <span class="dest-pill" style="margin-left: 8px; background: #f1f5f9; color: #334155; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;">${destText}</span>
+                        <div style="display: flex; flex-direction: column; width: 100%; gap: 10px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span class="route-badge" style="--route-badge-bg: ${badgeColor}; --route-badge-color: ${textColor}; min-width: 50px;">${badgeText}</span>
+                                    <span class="badge-common route-code-badge" style="padding: 4px 8px;">${result.routeCode}</span>
+                                </div>
+                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="#94a3b8" stroke-width="2" fill="none" style="flex-shrink: 0;"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </div>
+                            <span class="dest-pill" style="border: 1px solid #e2e8f0; background-color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 13.5px; font-weight: 600; display: inline-block; width: fit-content;">
+                                ${destTextHtml}
+                            </div>
                         </div>
                     `;
 
-                    // 4. 點擊站點項目時的跳轉邏輯與高亮
                     item.addEventListener('click', () => {
-                        dropdown.classList.add('hidden');
-                        stationInput.value = ''; // 點擊後清空搜尋框
+                        if (result.routeNum === 'S1' || result.routeNum === 'S2') {
+                            window.location.href = './travel/index.html';
+                            return;
+                        }
 
-                        // 設定系統狀態並跳轉到該路線
+                        document.getElementById('stationSearchInput').value = '';
+                        if (listContainer) listContainer.scrollTop = 0;
+
                         CONFIG.currentRouteNum = result.routeNum;
+                        CONFIG.currentRouteId = result.routeId;
                         CONFIG.currentDirection = result.direction;
+                        CONFIG.currentPage = 1;
 
-                        // 計算目標站點在哪一頁
-                        const routeItem = DataHandler.getRouteByNum(result.routeNum);
-                        const validStops = DataHandler.getValidStops(routeItem);
-                        let targetSeq = -1;
-                        let targetIndex = -1;
-
-                        for (let i = 0; i < validStops.length; i++) {
-                            if (validStops[i].nameCn === result.nameCn) {
-                                targetIndex = i;
-                                targetSeq = validStops[i].seq;
-                                break;
-                            }
-                        }
-
-                        // 根據索引計算頁碼
-                        if (targetIndex !== -1) {
-                            CONFIG.currentPage = Math.floor(targetIndex / CONFIG.pageSize) + 1;
-                        } else {
-                            CONFIG.currentPage = 1;
-                        }
-
-                        // 切換畫面
                         PageController.showScreen('stopScreen');
-                        PageController.hideScreen('inputScreen');
-                        Renderer.renderStopPage(result.routeNum);
-
-                        if (targetSeq !== -1) {
-                            setTimeout(() => {
-                                const targetRow = document.querySelector(`.stop-row-visible[data-seq="${targetSeq}"]`);
-                                if (targetRow) {
-                                    // 平滑滾動到畫面中間
-                                    targetRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                    // 加入高亮 Class
-                                    targetRow.classList.add('highlight-flash');
-                                    // 5秒後移除高亮，保持版面乾淨 (已修改為5秒)
-                                    setTimeout(() => {
-                                        targetRow.classList.remove('highlight-flash');
-                                    }, 5000);
-                                }
-                            }, 350); // 留點時間給畫面渲染及轉場動畫
-                        }
+                        PageController.hideScreen('stationSearchScreen');
+                        Renderer.renderStopPage(result.routeId);
                     });
 
                     listContainer.appendChild(item);
                 });
             }
 
-            // 顯示下拉選單
-            dropdown.classList.remove('hidden');
-        }
+            // === 渲染區塊 B ===
+            if (stopResults.length > 0) {
+                const stopGroupTitle = document.createElement('div');
+                stopGroupTitle.style.cssText = "font-size: 20px; font-weight: 800; color: #4a90e2; padding: 5px 10px; text-transform: uppercase; letter-spacing: 0.5px;";
+                stopGroupTitle.textContent = LangHandler.getText('stopResult');
+                listContainer.appendChild(stopGroupTitle);
 
-        // 5. 點擊畫面其他空白處時，自動隱藏下拉選單
-        document.addEventListener('click', (e) => {
-            if (!stationInput.contains(e.target) && !dropdown.contains(e.target)) {
-                dropdown.classList.add('hidden');
+                stopResults.forEach(result => {
+                    const item = document.createElement('div');
+                    item.className = 'station-item';
+                    const cleanCn = result.nameCn.replace(/\^\^/g, '');
+                    const cleanEn = result.nameEn ? result.nameEn.replace(/\^\^/g, '') : '';
+
+                    let shiftRowsHtml = '';
+
+                    // 【修復重點】改用 getRouteById 來獲取路線資料，徹底解決同編號互相覆蓋的 Bug
+                    const routeInfo = DataHandler.getRouteById(result.routeId);
+
+                    if (routeInfo) {
+                        let shifts = DataHandler.getEnabledShifts(routeInfo, result.direction);
+                        if (shifts && shifts.length > 0) {
+                            if (Array.isArray(result.stopFor)) {
+                                shifts = shifts.filter(shiftKey => result.stopFor.includes(shiftKey));
+                            }
+                            if (shifts.length > 0) {
+                                let seenExtra = new Set();
+                                shifts.forEach(shiftKey => {
+                                    const shiftConfig = DataHandler.getShiftConfig(routeInfo, shiftKey);
+                                    let badgeText = result.routeNum;
+                                    let isNormal = (shiftKey === 'normal');
+
+                                    if (!isNormal) {
+                                        let match = shiftConfig.label.match(/^(.+?)\s*\((.+?)\)$/);
+                                        badgeText = match ? match[1].trim() : shiftConfig.label;
+                                    }
+
+                                    if (!seenExtra.has(badgeText + shiftKey)) {
+                                        seenExtra.add(badgeText + shiftKey);
+                                        let badgeColor = shiftConfig.color || '#2563eb';
+                                        let textColor = shiftConfig.textColor || '#ffffff';
+                                        let boundKey = result.direction;
+                                        let isShiftLoop = DataHandler.isShiftCircular(routeInfo, shiftKey, boundKey);
+
+                                        let destName = DataHandler.getShiftStartEnd(routeInfo, shiftKey, boundKey).end;
+                                        if (!destName || destName === LangHandler.getText('noInformation')) {
+                                            destName = DataHandler.getDirectionStartEndStops(routeInfo, boundKey).last;
+                                        }
+
+                                        let destText = '';
+                                        if (isShiftLoop) {
+                                            let loopText = LangHandler.getText('loopDirection') || '循環線';
+                                            destText = isZh ? `${loopText} (經 ${destName})` : `${loopText} (via ${destName})`;
+                                        } else {
+                                            destText = isZh ? `往 ${destName}` : `to ${destName}`;
+                                        }
+
+                                        let badgeHtml = `<span class="route-badge" style="--route-badge-bg: ${badgeColor}; --route-badge-color: ${textColor}; min-width: 50px;">${badgeText}</span>`;
+                                        let destHtml = `<span class="dest-pill" style="margin-left: 8px; padding: 4px 10px; border: 1px solid #e2e8f0; background-color: #f1f5f9; padding: 6px 12px; border-radius: 8px; font-size: 13.5px; font-weight: 600; display: inline-block; width: fit-content;">${destText}</span>`;
+
+                                        shiftRowsHtml += `
+                                            <div style="display: flex; align-items: center; width: 100%;">
+                                                ${badgeHtml}
+                                                ${destHtml}
+                                            </div>
+                                        `;
+                                    }
+                                });
+                            }
+                        }
+                    }
+
+                    item.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <div style="flex: 1; min-width: 0;">
+                                <div class="station-name-cn">${cleanCn}</div>
+                                ${cleanEn ? `<div class="station-name-en">${cleanEn}</div>` : ''}
+                                <div class="station-routes" style="display: flex; flex-direction: column; width: 100%; gap: 6px; margin-top: 8px;">
+                                    ${shiftRowsHtml}
+                                </div>
+                            </div>
+                            <svg viewBox="0 0 24 24" width="16" height="16" stroke="#94a3b8" stroke-width="2" fill="none" style="margin-left: 12px; flex-shrink: 0;"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </div>
+                    `;
+
+                    item.addEventListener('click', () => {
+                        if (result.routeNum === 'S1' || result.routeNum === 'S2') {
+                            window.location.href = './travel/index.html';
+                            return;
+                        }
+
+                        document.getElementById('stationSearchInput').value = '';
+                        window.triggerStationSearchLoad();
+                        if (listContainer) listContainer.scrollTop = 0;
+
+                        CONFIG.currentRouteNum = result.routeNum;
+                        CONFIG.currentRouteId = result.routeId;
+                        CONFIG.currentDirection = result.direction;
+
+                        const validStops = DataHandler.getValidStops(routeInfo);
+                        let targetSeq = result.targetSeq;
+                        let targetIndex = validStops.findIndex(s => s.seq === targetSeq);
+
+                        CONFIG.currentPage = targetIndex !== -1 ? Math.floor(targetIndex / CONFIG.pageSize) + 1 : 1;
+
+                        PageController.showScreen('stopScreen');
+                        PageController.hideScreen('stationSearchScreen');
+                        Renderer.renderStopPage(result.routeId);
+
+                        if (targetSeq !== -1) {
+                            setTimeout(() => {
+                                const targetRow = document.querySelector(`.stop-row-visible[data-seq="${targetSeq}"]`);
+                                if (targetRow) {
+                                    targetRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                    targetRow.classList.add('highlight-flash');
+                                    setTimeout(() => targetRow.classList.remove('highlight-flash'), 5000);
+                                }
+                            }, 350);
+                        }
+                    });
+                    listContainer.appendChild(item);
+                });
+            }
+        };
+
+        stationInput.addEventListener('input', debounce(function () {
+            window.triggerStationSearchLoad(this.value);
+        }, 150));
+    }
+});
+
+// ==========================================
+// ThemeManager: 深色模式切換管理
+// ==========================================
+var ThemeManager = {
+    init: function () {
+        this.bindEvents();
+        this.loadTheme();
+
+        // 監聽系統主題變化
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+            if (localStorage.getItem('sibsTheme') === 'system' || !localStorage.getItem('sibsTheme')) {
+                this.applyTheme('system');
             }
         });
+    },
 
-        // 6. 點擊輸入框本身時，自動觸發搜尋以顯示所有站點
-        stationInput.addEventListener('click', () => {
-            stationInput.dispatchEvent(new Event('input'));
+    bindEvents: function () {
+        const lightBtn = document.getElementById('themeLightBtn');
+        const darkBtn = document.getElementById('themeDarkBtn');
+        const systemBtn = document.getElementById('themeSystemBtn');
+
+        if (lightBtn) lightBtn.addEventListener('click', () => this.setTheme('light'));
+        if (darkBtn) darkBtn.addEventListener('click', () => this.setTheme('dark'));
+        if (systemBtn) systemBtn.addEventListener('click', () => this.setTheme('system'));
+    },
+
+    setTheme: function (theme) {
+        localStorage.setItem('sibsTheme', theme);
+        this.applyTheme(theme);
+        this.updateUI(theme);
+    },
+
+    loadTheme: function () {
+        const savedTheme = localStorage.getItem('sibsTheme') || 'system';
+        this.applyTheme(savedTheme);
+        this.updateUI(savedTheme);
+    },
+
+    applyTheme: function (theme) {
+        isDark = false;
+        if (theme === 'dark') {
+            isDark = true;
+        } else if (theme === 'light') {
+            isDark = false;
+        } else {
+            isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        }
+
+        if (isDark) {
+            document.body.classList.add('dark-theme');
+        } else {
+            document.body.classList.remove('dark-theme');
+        }
+    },
+
+    updateUI: function (theme) {
+        document.querySelectorAll('.theme-toggle').forEach(btn => btn.classList.remove('active'));
+        if (theme === 'light') {
+            const btn = document.getElementById('themeLightBtn');
+            if (btn) btn.classList.add('active');
+        } else if (theme === 'dark') {
+            const btn = document.getElementById('themeDarkBtn');
+            if (btn) btn.classList.add('active');
+        } else {
+            const btn = document.getElementById('themeSystemBtn');
+            if (btn) btn.classList.add('active');
+        }
+    }
+};
+
+var ContextMenuManager = {
+    // 預設使用自訂選單
+    useCustom: localStorage.getItem('sibsContextMenu') !== 'native',
+
+    init: function () {
+        this.bindSettings();
+
+        this.menu = document.getElementById('customContextMenu');
+        if (!this.menu) return;
+
+        document.addEventListener('contextmenu', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            if (!this.useCustom) return;
+
+            e.preventDefault();
+            this.showMenu(e.clientX, e.clientY);
         });
 
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('#customContextMenu')) return;
+            this.hideMenu();
+        });
 
+        window.addEventListener('scroll', () => this.hideMenu(), { passive: true });
+        window.addEventListener('resize', () => this.hideMenu(), { passive: true });
+
+        this.bindActions();
+    },
+
+    bindSettings: function () {
+        const customBtn = document.getElementById('menuCustomBtn');
+        const nativeBtn = document.getElementById('menuNativeBtn');
+
+        if (!customBtn || !nativeBtn) return;
+
+        // 初始 UI 狀態
+        if (this.useCustom) {
+            customBtn.classList.add('active');
+            nativeBtn.classList.remove('active');
+        } else {
+            nativeBtn.classList.add('active');
+            customBtn.classList.remove('active');
+        }
+
+        customBtn.addEventListener('click', () => {
+            this.useCustom = true;
+            localStorage.setItem('sibsContextMenu', 'custom');
+            customBtn.classList.add('active');
+            nativeBtn.classList.remove('active');
+        });
+
+        nativeBtn.addEventListener('click', () => {
+            this.useCustom = false;
+            localStorage.setItem('sibsContextMenu', 'native');
+            nativeBtn.classList.add('active');
+            customBtn.classList.remove('active');
+        });
+    },
+
+    showMenu: function (x, y) {
+        this.menu.classList.remove('hidden');
+
+        const rect = this.menu.getBoundingClientRect();
+        const winWidth = window.innerWidth;
+        const winHeight = window.innerHeight;
+
+        let posX = x;
+        let posY = y;
+
+        if (x + rect.width > winWidth) posX = winWidth - rect.width - 10;
+        if (y + rect.height > winHeight) posY = winHeight - rect.height - 10;
+
+        this.menu.style.left = posX + 'px';
+        this.menu.style.top = posY + 'px';
+    },
+
+    hideMenu: function () {
+        this.menu.classList.add('hidden');
+    },
+
+    bindActions: function () {
+        const backBtn = document.getElementById('ctxBackBtn');
+        const reloadBtn = document.getElementById('ctxReloadBtn');
+        const settingsBtn = document.getElementById('ctxSettingsBtn');
+
+        if (backBtn) {
+            backBtn.addEventListener('click', () => {
+                this.hideMenu();
+                PageController.showScreen('funcScreen');
+                PageController.hideScreen('inputScreen');
+                PageController.hideScreen('stopScreen');
+                PageController.hideScreen('stationSearchScreen');
+                PageController.hideScreen('updateLogScreen');
+                resetRouteQueryState();
+            });
+        }
+        if (reloadBtn) {
+            reloadBtn.addEventListener('click', () => {
+                this.hideMenu();
+                window.location.reload();
+            });
+        }
+        if (settingsBtn) {
+            settingsBtn.addEventListener('click', () => {
+                this.hideMenu();
+                const settingsModal = document.getElementById('settingsModal');
+                if (settingsModal) settingsModal.classList.remove('hidden');
+            });
+        }
     }
+};
 
-    const mobileSearchBtn = document.getElementById('mobileSearchToggle');
-const mobileCloseBtn = document.getElementById('mobileSearchClose');
-const searchWrap = document.getElementById('searchContainerWrap');
-const searchInput = document.getElementById('stationSearchInput');
+var P2PManager = {
+    allStops: [],
+    rawStopsData: [],
+    activeInputField: 'start',
 
-if (mobileSearchBtn && mobileCloseBtn && searchWrap) {
-    mobileSearchBtn.addEventListener('click', () => {
-        searchWrap.classList.add('active');
-        if (searchInput) searchInput.focus();
-    });
+    init: function () {
+        this.bindEvents();
+        this.extractAllStops();
+        this.renderAllStopsGrid();
+    },
 
-    mobileCloseBtn.addEventListener('click', () => {
-        searchWrap.classList.remove('active');
-    });
-}
-});
+    extractAllStops: function () {
+        const stopsMap = new Map();
+        DataHandler.getValidRoutes().forEach(route => {
+            ['A', 'B', 'C'].forEach(dir => {
+                if (route.stops && route.stops[dir]) {
+                    route.stops[dir].forEach(stop => {
+                        if (stop.visible) {
+                            let cleanName = stop.nameCn.replace(/\^\^/g, '');
+                            let cleanNameEn = stop.nameEn ? stop.nameEn.replace(/\^\^/g, '') : '';
+                            if (!stopsMap.has(cleanName)) {
+                                stopsMap.set(cleanName, {
+                                    nameCn: cleanName,
+                                    nameEn: cleanNameEn,
+                                    nameSubCn: stop.nameSubCn || '',
+                                    nameSubEn: stop.nameSubEn || ''
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        });
+        this.rawStopsData = Array.from(stopsMap.values()).sort((a, b) => a.nameCn.localeCompare(b.nameCn, 'zh-HK'));
+        this.allStops = this.rawStopsData.map(s => s.nameCn);
+    },
+
+    renderAllStopsGrid: function () {
+        const grid = document.getElementById('p2pStopsGrid');
+        if (!grid) return;
+        grid.innerHTML = '';
+
+        const isZh = CONFIG.currentLang === 'zh-CN' || CONFIG.currentLang === 'zh-TW';
+
+        this.rawStopsData.forEach(stop => {
+            const btn = document.createElement('button');
+            btn.className = 'p2p-stop-pill';
+
+            const dispName = isZh ? stop.nameCn : (stop.nameEn || stop.nameCn);
+            const dispSub = isZh ? stop.nameSubCn : (stop.nameSubEn || stop.nameSubCn);
+
+            btn.innerHTML = `<div class="p-cn">${dispName}</div>${dispSub ? `<div class="p-sub">${dispSub}</div>` : ''}`;
+            btn.onclick = () => {
+                if (this.activeInputField === 'start') {
+                    document.getElementById('p2pStartInput').value = dispName;
+                    this.activeInputField = 'end';
+                } else {
+                    document.getElementById('p2pEndInput').value = dispName;
+                }
+            };
+            grid.appendChild(btn);
+        });
+    },
+
+    bindEvents: function () {
+        const startInput = document.getElementById('p2pStartInput');
+        const endInput = document.getElementById('p2pEndInput');
+        const swapBtn = document.getElementById('p2pSwapBtn');
+        const searchBtn = document.getElementById('p2pSearchBtn');
+        const radios = document.querySelectorAll('input[name="p2pPref"]');
+
+        startInput.addEventListener('focus', () => this.activeInputField = 'start');
+        endInput.addEventListener('focus', () => this.activeInputField = 'end');
+
+        radios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                document.querySelectorAll('.p2p-radio-label').forEach(lbl => lbl.classList.remove('active'));
+                e.target.closest('.p2p-radio-label').classList.add('active');
+            });
+        });
+
+        swapBtn.onclick = () => {
+            const temp = startInput.value;
+            startInput.value = endInput.value;
+            endInput.value = temp;
+        };
+
+        const setupSuggest = (inputEl, suggestEl, fieldType) => {
+            inputEl.addEventListener('input', () => {
+                const val = inputEl.value.trim().toLowerCase();
+                suggestEl.innerHTML = '';
+                if (!val) { suggestEl.classList.add('hidden'); return; }
+
+                const isZh = CONFIG.currentLang === 'zh-CN' || CONFIG.currentLang === 'zh-TW';
+
+                const matches = this.rawStopsData.filter(s =>
+                    s.nameCn.toLowerCase().includes(val) ||
+                    s.nameSubCn.toLowerCase().includes(val) ||
+                    (s.nameEn && s.nameEn.toLowerCase().includes(val)) ||
+                    (s.nameSubEn && s.nameSubEn.toLowerCase().includes(val))
+                ).slice(0, 8);
+
+                if (matches.length > 0) {
+                    matches.forEach(match => {
+                        const div = document.createElement('div');
+                        div.className = 'p2p-suggest-item';
+
+                        const dispName = isZh ? match.nameCn : (match.nameEn || match.nameCn);
+                        const dispSub = isZh ? match.nameSubCn : (match.nameSubEn || match.nameSubCn);
+
+                        div.innerHTML = `<span class="m-name">${dispName}</span>${dispSub ? `<span class="s-name">${dispSub}</span>` : ''}`;
+                        div.onclick = () => {
+                            inputEl.value = dispName;
+                            suggestEl.classList.add('hidden');
+                        };
+                        suggestEl.appendChild(div);
+                    });
+                    suggestEl.classList.remove('hidden');
+                } else {
+                    suggestEl.classList.add('hidden');
+                }
+            });
+        };
+
+        setupSuggest(startInput, document.getElementById('p2pStartSuggest'), 'start');
+        setupSuggest(endInput, document.getElementById('p2pEndSuggest'), 'end');
+        searchBtn.onclick = () => this.calculateRoute();
+
+        document.getElementById('backToP2PBtn').onclick = () => {
+            PageController.showScreen('p2pScreen');
+            PageController.hideScreen('p2pDetailScreen');
+        };
+    },
+
+    toggleStopsPanel: function () {
+        const grid = document.getElementById('p2pStopsGrid');
+        const arrow = document.getElementById('stopsPanelArrow');
+        grid.classList.toggle('hidden');
+        arrow.style.transform = grid.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+    },
+
+    getLegFare: function (routeItem, dir, startIdx, endIdx, stops) {
+        let fares = routeItem.fares || {};
+        let baseAdult = fares.adult || 0;
+        let baseChild = fares.child || (baseAdult / 2);
+        let baseElder = fares.elder || (baseAdult / 2);
+        let baseStudent = fares.student || (baseAdult / 2);
+
+        let finalAdult = baseAdult, finalChild = baseChild, finalElder = baseElder, finalStudent = baseStudent;
+        let fareType = '全程收費';
+
+        let startName = stops[startIdx].nameCn.replace(/\^\^/g, '');
+        let endName = stops[endIdx].nameCn.replace(/\^\^/g, '');
+
+        // 1. 自動計算分段收費 (只要上車站點大於等於分段點即可享有)
+        if (fares.sectionFares && Array.isArray(fares.sectionFares)) {
+            let bestMatchedPrice = baseAdult;
+            let bestSection = null;
+
+            for (let sf of fares.sectionFares) {
+                if (sf.direction && !sf.direction.includes(dir)) continue;
+
+                // 找出該分段點在路綫中的位置
+                let boundIdx = stops.findIndex(s => s.nameCn.replace(/\^\^/g, '') === sf.fromCn);
+
+                // 如果乘客的上車站點(startIdx) 在分段點之後或剛好在分段點上，且價格更便宜
+                if (boundIdx !== -1 && startIdx >= boundIdx) {
+                    if (sf.price !== undefined && sf.price < bestMatchedPrice) {
+                        bestMatchedPrice = sf.price;
+                        bestSection = sf;
+                    }
+                }
+            }
+
+            if (bestSection) {
+                finalAdult = bestSection.price !== undefined ? bestSection.price : finalAdult;
+                finalChild = bestSection.childPrice !== undefined ? bestSection.childPrice : finalChild;
+                finalElder = bestSection.elderPrice !== undefined ? bestSection.elderPrice : finalElder;
+                finalStudent = bestSection.studentPrice !== undefined ? bestSection.studentPrice : finalStudent;
+                fareType = '分段收費';
+            }
+        }
+
+        // 2. 自動計算短途回贈 / 雙向分段 (需精確匹配起訖點)
+        if (fares.shortDistanceRebates && Array.isArray(fares.shortDistanceRebates)) {
+            let rebate = fares.shortDistanceRebates.find(sr =>
+                (!sr.direction || sr.direction.includes(dir)) &&
+                (sr.startStopCn === startName || sr.startStop === startName) &&
+                (sr.alightStopCn === endName || sr.alightStop === endName)
+            );
+
+            if (rebate) {
+                finalAdult = rebate.actualFare !== undefined ? rebate.actualFare : finalAdult;
+                finalChild = rebate.childFare !== undefined ? rebate.childFare : finalChild;
+                finalElder = rebate.elderFare !== undefined ? rebate.elderFare : finalElder;
+                finalStudent = rebate.studentFare !== undefined ? rebate.studentFare : finalStudent;
+                fareType = '短途回贈';
+            }
+        }
+
+        return {
+            fare: finalAdult,
+            adult: finalAdult, child: finalChild, elder: finalElder, student: finalStudent,
+            type: fareType,
+            originalAdult: baseAdult
+        };
+    },
+
+    // 請將此方法加入 P2PManager 內部
+    getExpectedWaitTime: function (routeItem, dir) {
+        if (!routeItem.timetable || !routeItem.timetable[dir]) return null;
+
+        const now = new Date();
+        const currentHour = now.getHours();
+        const currentMinute = now.getMinutes();
+        const currentTimeVal = currentHour * 60 + currentMinute;
+        const dayOfWeek = now.getDay(); // 0 是週日
+
+        let activeIntervalText = null;
+        const shifts = routeItem.timetable[dir];
+
+        for (let shiftKey in shifts) {
+            const shiftConfigs = Array.isArray(shifts[shiftKey]) ? shifts[shiftKey] : [shifts[shiftKey]];
+
+            for (let config of shiftConfigs) {
+                // 判斷今日是否為該班次的營運日
+                let dayMatch = false;
+                const sDays = config.serviceDays;
+                if (sDays === 'daily') dayMatch = true;
+                else if (sDays === 'weekday' && dayOfWeek >= 1 && dayOfWeek <= 5) dayMatch = true;
+                else if (sDays === 'saturday' && dayOfWeek === 6) dayMatch = true;
+                else if (sDays === 'sunday' && dayOfWeek === 0) dayMatch = true;
+                else if (sDays === 'weekend_holiday' && (dayOfWeek === 0 || dayOfWeek === 6)) dayMatch = true;
+                else if (sDays === 'holiday' && dayOfWeek === 0) dayMatch = true; // 簡化處理：將週日視為假日
+
+                if (!dayMatch || !config.interval) continue;
+
+                // 檢查當下時間是否落在該班次的營運區間內
+                for (let intv of config.interval) {
+                    if (!intv.time || !intv.time.includes('-')) continue;
+                    const times = intv.time.split('-');
+                    const startVal = parseInt(times[0].split(':')[0]) * 60 + parseInt(times[0].split(':')[1]);
+                    let endVal = parseInt(times[1].split(':')[0]) * 60 + parseInt(times[1].split(':')[1]);
+
+                    // 處理跨夜班次 (例如 23:00 - 01:00)
+                    if (endVal <= startVal) endVal += 24 * 60;
+                    let checkTime = currentTimeVal;
+                    if (checkTime < startVal && endVal > 24 * 60) checkTime += 24 * 60;
+
+                    if (checkTime >= startVal && checkTime <= endVal) {
+                        activeIntervalText = intv.interval;
+                        break;
+                    }
+                }
+                if (activeIntervalText) break;
+            }
+            if (activeIntervalText) break;
+        }
+
+        // 若查無班次或班次標記為停駛 ("0")，直接剔除
+        if (!activeIntervalText || activeIntervalText === "0" || activeIntervalText === 0) return null;
+
+        // 若班次為範圍 (例如 "6 - 8")，取平均值或最大值作為保守等車時間
+        if (typeof activeIntervalText === 'string' && activeIntervalText.includes('-')) {
+            const parts = activeIntervalText.split('-');
+            return (parseInt(parts[0].trim()) + parseInt(parts[1].trim())) / 2;
+        }
+        return parseInt(activeIntervalText);
+    },
+
+    calculateRoute: function () {
+        const rawStart = document.getElementById('p2pStartInput').value.trim();
+        const rawEnd = document.getElementById('p2pEndInput').value.trim();
+        const pref = document.querySelector('input[name="p2pPref"]:checked').value;
+        const resultContainer = document.getElementById('p2pResultContainer');
+
+        if (!rawStart || !rawEnd || rawStart === rawEnd) return;
+
+        // 翻譯還原器：確保不論輸入中英文，底層路由始終使用 nameCn 計算
+        const resolveToCn = (inputName) => {
+            const lower = inputName.toLowerCase();
+            const found = this.rawStopsData.find(s =>
+                s.nameCn.toLowerCase() === lower ||
+                (s.nameEn && s.nameEn.toLowerCase() === lower)
+            );
+            return found ? found.nameCn : inputName;
+        };
+
+        const startStop = resolveToCn(rawStart);
+        const endStop = resolveToCn(rawEnd);
+
+        resultContainer.innerHTML = `<div class="p2p-loading-msg">正在為您高速規劃最優聯乘方案...</div>`;
+
+        setTimeout(() => {
+            const startTime = performance.now();
+            const TIME_LIMIT = 2500; // 2.5 秒安全限制，防止卡死
+
+            // === 請嵌入至 P2PManager.calculateRoute 中建立索引的迴圈內 ===
+            const validRoutes = DataHandler.getValidRoutes();
+            let stopToRoutes = new Map();
+
+            validRoutes.forEach(route => {
+                // 1. 檢查是否被禁用搜尋
+                if (route.bansearch === true) return;
+
+                // 2. 需求：嚴格檢查是否有時間表或班次間隔配置，無配置則絕不盲目猜測規劃
+                const hasTimetable = route.timetable && Object.keys(route.timetable).length > 0;
+                const hasInterval = route.interval && Object.keys(route.interval).length > 0;
+                if (!hasTimetable && !hasInterval) {
+                    console.log(`路綫 ${route.route} 因缺乏時間表/班次間隔配置已被規劃器剔除`);
+                    return;
+                }
+
+                // 建立轉乘索引圖...
+                ['A', 'B', 'C'].forEach(dir => {
+                    if (!route.stops || !route.stops[dir]) return;
+                    let validStops = route.stops[dir].filter(s => s.visible);
+                    validStops.forEach((stop, idx) => {
+                        let sName = stop.nameCn.replace(/\^\^/g, '');
+                        if (!stopToRoutes.has(sName)) stopToRoutes.set(sName, []);
+                        stopToRoutes.get(sName).push({ route, dir, idx, allStops: validStops });
+                    });
+                });
+            });
+
+            let solutions = [];
+
+            // 2. 依據線路數量分層搜尋：1條線 -> 2條線 -> 3條線 -> 4條線
+            for (let maxLegs = 1; maxLegs <= 4; maxLegs++) {
+                // 如果前一層已經找到完美直達方案，且使用者偏好「最少轉乘」，則可提早結束
+                if (solutions.length > 0 && pref === 'lessTransfer') break;
+
+                let queue = [{ currentStop: startStop, legs: [], transfers: 0, fare: 0 }];
+                let bestCostToStop = new Map();
+                bestCostToStop.set(startStop, { transfers: 0, fare: 0 });
+
+                while (queue.length > 0) {
+                    // 性能防卡死檢查
+                    if (performance.now() - startTime > TIME_LIMIT) {
+                        console.warn("路由計算即將超時，觸發保護機制");
+                        break;
+                    }
+
+                    let current = queue.shift();
+
+                    // 抵達終點
+                    if (current.currentStop === endStop) {
+                        solutions.push(current);
+                        if (solutions.length >= 15) break; // 收集足夠方案即停止
+                        continue;
+                    }
+
+                    // 達到當前層級的最大線路數
+                    if (current.legs.length >= maxLegs) continue;
+
+                    let availableLines = stopToRoutes.get(current.currentStop) || [];
+                    // 在 P2PManager.calculateRoute 內部的 while 迴圈中
+                    // 找到 for (let line of availableLines) { ... } 這一段，並替換/插入以下邏輯：
+
+                    for (let line of availableLines) {
+                        let alreadyRodeThisRoute = current.legs.some(leg => leg.routeId === line.route._id);
+                        if (alreadyRodeThisRoute) continue;
+
+                        // ⛔ 嚴格限制：計算當下等車時間。如果是 null 代表目前收車/無班次，直接跳過！
+                        let expectedWait = this.getExpectedWaitTime(line.route, line.dir);
+                        if (expectedWait === null) continue;
+
+                        for (let i = line.idx + 1; i < line.allStops.length; i++) {
+                            let nextStopName = line.allStops[i].nameCn.replace(/\^\^/g, '');
+                            let fareInfo = this.getLegFare(line.route, line.dir, line.idx, i, line.allStops);
+
+                            let newFare = current.fare + fareInfo.fare;
+                            let newTransfers = current.legs.length;
+
+                            // 假定每站行駛約需 2 分鐘，加上等車時間作為該段航程的時間成本
+                            let travelTime = (i - line.idx) * 2;
+                            let legTotalTime = travelTime + expectedWait;
+                            let newTimeCost = (current.totalTime || 0) + legTotalTime;
+
+                            let existingBest = bestCostToStop.get(nextStopName);
+                            let isWorthExploring = false;
+
+                            if (!existingBest) {
+                                isWorthExploring = true;
+                            } else if (newTransfers < existingBest.transfers || newFare < existingBest.fare || newTimeCost < existingBest.time) {
+                                isWorthExploring = true;
+                            }
+
+                            if (isWorthExploring) {
+                                bestCostToStop.set(nextStopName, {
+                                    transfers: newTransfers,
+                                    fare: newFare,
+                                    time: newTimeCost
+                                });
+
+                                let newLeg = {
+                                    routeId: line.route._id,
+                                    routeItem: line.route, dir: line.dir,
+                                    route: line.route.route, color: line.route.shiftConfig?.normal?.color || '#2563eb',
+                                    from: current.currentStop, to: nextStopName,
+                                    stopsCount: i - line.idx, fare: fareInfo.fare, fareInfo: fareInfo,
+                                    startIdx: line.idx, endIdx: i, fullStops: line.allStops,
+                                    waitTime: expectedWait // 將等待時間存入 leg 以供 UI 顯示
+                                };
+
+                                queue.push({
+                                    currentStop: nextStopName,
+                                    legs: [...current.legs, newLeg],
+                                    transfers: newTransfers,
+                                    fare: newFare,
+                                    totalTime: newTimeCost
+                                });
+                            }
+                        }
+                    }
+                }
+                if (performance.now() - startTime > TIME_LIMIT) break;
+            }
+
+            // 3. 過濾完全相同搭乘順序的冗餘方案
+            let uniqueSolsMap = new Map();
+            solutions.forEach(sol => {
+                let key = sol.legs.map(l => l.routeId).join('|'); // [修改]
+                if (!uniqueSolsMap.has(key) || uniqueSolsMap.get(key).fare > sol.fare) {
+                    uniqueSolsMap.set(key, sol);
+                }
+            });
+
+            let uniqueSols = Array.from(uniqueSolsMap.values());
+
+            if (uniqueSols.length === 0) {
+                resultContainer.innerHTML = `<div class="modern-route-card" style="text-align:center; padding:30px; color:#64748b;">找不到可連接的公車路線。</div>`;
+                return;
+            }
+
+            if (pref === 'lessTransfer') {
+                uniqueSols.sort((a, b) => a.transfers - b.transfers || a.fare - b.fare);
+            } else {
+                uniqueSols.sort((a, b) => a.fare - b.fare || a.transfers - b.transfers);
+            }
+
+            this.renderResults(uniqueSols.slice(0, 8), resultContainer);
+        }, 50);
+    },
+
+    renderResults: function (solutions, container) {
+        container.innerHTML = `<h3 class="results-title">${LangHandler.getText('p2pOptionCount', { count: solutions.length })}</h3>`;
+
+        solutions.forEach(sol => {
+            let badgesHtml = sol.legs.map(l => `<span class="route-badge" style="background:${l.color}; border: 1px solid rgba(255,255,255,0.2);">${l.route}</span>`).join('<span class="p2p-badge-arrow">➔</span>');
+
+            let transferText = sol.transfers === 0 ? LangHandler.getText('p2pDirect') : LangHandler.getText('p2pTransferCount', { count: sol.transfers });
+
+            let card = document.createElement('div');
+            card.className = 'neo-result-card glass-panel';
+            card.innerHTML = `
+                <div class="neo-res-flow">${badgesHtml}</div>
+                <div class="neo-res-meta">
+                    <div class="neo-res-price">$${sol.fare.toFixed(1)}</div>
+                    <div class="neo-res-transfer">${transferText}</div>
+                </div>
+            `;
+            card.onclick = () => this.showP2PDetail(sol);
+            container.appendChild(card);
+        });
+    },
+
+    showP2PDetail: function (solution) {
+        PageController.showScreen('p2pDetailScreen');
+        PageController.hideScreen('p2pScreen');
+
+        const container = document.getElementById('p2pDetailContainer');
+        container.innerHTML = '';
+        const isZh = CONFIG.currentLang === 'zh-CN' || CONFIG.currentLang === 'zh-TW';
+
+        // 頂部登機證 Summary
+        const summary = document.createElement('div');
+        summary.className = 'neo-pass-summary';
+        summary.innerHTML = `
+            <div class="sum-left">
+                <span class="sum-lbl">${LangHandler.getText('p2pTotalFare')}</span>
+                <span class="sum-val">$${solution.fare.toFixed(1)}</span>
+            </div>
+            <div class="sum-right">
+                ${solution.legs.map(l => `<span class="route-badge" style="background:${l.color}; font-size:15px; padding:6px 12px;">${l.route}</span>`).join('<span class="p2p-badge-arrow">➔</span>')}
+            </div>
+        `;
+        container.appendChild(summary);
+
+        // 每一段航程 (Leg)
+        solution.legs.forEach((leg, idx) => {
+            const legBox = document.createElement('div');
+            legBox.className = 'neo-leg-box glass-panel';
+
+            // 🌟 獲取路線終點站 (Dest-Pill)
+            let destName = DataHandler.getDirectionStartEndStops(leg.routeItem, leg.dir).last;
+            let isLoop = leg.routeItem.circular === true;
+            if (isLoop) destName = isZh ? '循環線' : 'Loop';
+            let destText = isLoop ? destName : (isZh ? `往 ${destName}` : `to ${destName}`);
+
+            let timelineHtml = ``;
+            leg.fullStops.forEach((stop, sIdx) => {
+                let isRiding = sIdx >= leg.startIdx && sIdx <= leg.endIdx;
+                if (!isRiding) return;
+
+                let isStart = sIdx === leg.startIdx;
+                let isEnd = sIdx === leg.endIdx;
+                let cleanName = stop.nameCn.replace(/\^\^/g, '');
+                let cleanNameEn = stop.nameEn ? stop.nameEn.replace(/\^\^/g, '') : cleanName;
+                let displayName = isZh ? cleanName : cleanNameEn;
+                let subNameHtml = stop.nameSubCn ? `<div class="sub-n">${isZh ? stop.nameSubCn : (stop.nameSubEn || stop.nameSubCn)}</div>` : '';
+
+                timelineHtml += `
+                    <div class="neo-timeline-row">
+                        <div class="neo-time-left">
+                            <div class="neo-time-node" style="border-color: ${leg.color}; ${isStart || isEnd ? `background-color: ${leg.color};` : ''}"></div>
+                            ${!isEnd ? `<div class="neo-time-line" style="background-color: ${leg.color};"></div>` : ''}
+                        </div>
+                        <div class="neo-time-main">
+                            <div class="main-n">${displayName}</div>
+                            ${subNameHtml}
+                        </div>
+                        <div class="neo-time-right">
+                            ${isStart ? `<span class="status-badge board">${LangHandler.getText('p2pBoard')}</span>` : ''}
+                            ${isEnd ? `<span class="status-badge alight">${LangHandler.getText('p2pAlight')}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+
+            // 票價資訊與備註
+            let fareInfo = leg.fareInfo;
+            let sectionFareTips = '';
+
+            if (fareInfo.type === '分段收費') {
+                let sectionPrefix = isZh ? 'ⓘ 此為分段收費 (原價 $' : 'ⓘ Section Fare (Original $';
+                sectionFareTips = `<div style="font-size:12px; color:#059669; background:#ecfdf5; padding:6px 10px; border-radius:6px; display:inline-block; font-weight:600;">${sectionPrefix}${fareInfo.originalAdult.toFixed(1)})</div>`;
+            } else if (fareInfo.type === '短途回贈') {
+                let rebateTip = isZh ? '⟲ 短途回贈：下車請再次拍卡！' : '⟲ Rebate: Please tap card again upon alighting!';
+                sectionFareTips = `<div style="font-size:12px; color:#d97706; background:#fffbeb; padding:6px 10px; border-radius:6px; display:inline-block; font-weight:600;">${rebateTip}</div>`;
+            }
+
+            legBox.innerHTML = `
+                <div class="neo-leg-header" style="border-left: 6px solid ${leg.color}">
+                    <div style="display: flex; flex-direction: column; gap: 8px; flex: 1;">
+                        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                            <span class="route-badge" style="background:${leg.color}">${leg.route}</span>
+                            <span class="neo-leg-title">${isZh ? leg.from : leg.fullStops[leg.startIdx].nameEn.replace(/\^\^/g, '')} ➔ ${isZh ? leg.to : leg.fullStops[leg.endIdx].nameEn.replace(/\^\^/g, '')}</span>
+                            <span class="dest-pill" style="background: #f1f5f9; color: #334155; padding: 4px 10px; border-radius: 12px; font-size: 13px; font-weight: 600;">${destText}</span>
+                        </div>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <span class="time-meta-badge">
+                                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 12"></polyline></svg>
+                                ${LangHandler.getText('p2pMinsFreq', { time: Math.ceil(leg.waitTime) })}
+                            </span>
+                            <span class="time-meta-badge">
+                                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                                ${LangHandler.getText('p2pStopsCount', { count: leg.stopsCount })}
+                            </span>
+                        </div>
+                    </div>
+                    <div style="text-align: right; flex-shrink: 0;">
+                        <div style="font-size: 22px; font-weight: 800; color: #3b82f6;">$${fareInfo.adult.toFixed(1)}</div>
+                    </div>
+                </div>
+                <div class="neo-leg-body">
+                    ${sectionFareTips ? `<div style="padding: 0 24px 16px 24px;">${sectionFareTips}</div>` : ''}
+                    ${timelineHtml}
+                </div>
+            `;
+
+            container.appendChild(legBox);
+
+            // 轉乘分隔線
+            if (idx < solution.legs.length - 1) {
+                const transDivider = document.createElement('div');
+                transDivider.style.cssText = 'display: flex; align-items: center; justify-content: center; gap: 10px; color: #94a3b8; font-size: 14px; font-weight: 600; margin: -8px 0;';
+                transDivider.innerHTML = `
+                    <div style="height: 1px; background: #cbd5e1; flex: 1;"></div>
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+                    <span>${LangHandler.getText('p2pTransferAt')}</span>
+                    <div style="height: 1px; background: #cbd5e1; flex: 1;"></div>
+                `;
+                container.appendChild(transDivider);
+            }
+        });
+    }
+};

@@ -1,35 +1,48 @@
 var updateLogData = {
     title: "Update Logs",
-    version: "v0.3.1",
-    updateTime: "2026-01-12",
+    version: "v0.4.1",
+    updateTime: "2026-06-26",
     logs: [
         {
             id: 1,
-            version: "v0.3.1",
-            time: "2026-01-12",
-            title: "Improvements [12]",
+            version: "v0.4.1",
+            time: "2026-06-26",
+            title: "Big Improvements [27]",
             content: {
                 added: [
-                    "Added main changed logs counter (easiest update, lol)",
-                    "Adding the Schedule Display, with the beginning stop and ending stop in the Route Description Panel",
-                    "Adding (Two Way) Section Fares display",
-                    "Adding Service hours and days of the week in the timetable",
-                    "Adding the Setting Page with language changer",
-                    "Will add the Wiki Reference button in each route"
+                    "Added Badges",
+                    "Added Bus stop search",
+                    "Added Context Menu Toggle",
+                    "Added Fares Display",
+                    "Added Filter",
+                    "Added Language Toggle",
+                    "Added Mobile UI version",
+                    "Added More Info Display",
+                    "Added Nearby Routes Display on each bus stop",
+                    "Added Point-to-Point Search (BETA)",
+                    "Added Settings",
+                    "Added Stops Inquiry",
+                    "Added Switch Direction Button",
+                    "Added Timetable Display",
+                    "Added Theme Toggle",
+                    "Added Unlock Levels Display",
+                    "Added Wiki Button"
                 ],
                 fixed: [
-                    "Fixing double scrolling panel appeared at Matched Routes",
-                    "Fixing route backgrounds could not be customized",
-                    "Fixing route number is not displayed in the Stop-list title"
+                    "Fixed custom keyboard input could be spammed",
+                    "Fixed double scrolling panel were appeared at Matched Routes",
+                    "Fixed route badges could not be customized",
+                    "Fixed route number could not be more than 1"
                 ],
                 removed: [
-                    "Removing Custom route name",
-                    "Removing Page-switching function"
+                    "Removed weird card or containers animation"
                 ],
-                revamped: [
-                    "Revamping Matched Routes button UI",
-                    "Revamping new VIA-DIRECTION panel such as O-o-o-o-O (next...)",
-                    "(Continue...) The Max amount will be according to the route N171"
+                revamped: [,
+                    "Revamped all scrolling panel",
+                    "Revamped loading.png",
+                    "Revamped new via-direction panel",
+                    "Revamped main page UI",
+                    "Revamped matched route card"
                 ],
                 improvements: [
                     "Other minor bug fixes and improvements"
@@ -38,6 +51,20 @@ var updateLogData = {
         },
         {
             id: 2,
+            version: "v0.3.1",
+            time: "2026-01-12",
+            title: "Minor Improvements [1]",
+            content: {
+                added: [
+                    "Added main changed logs counter"
+                ],
+                improvements: [
+                    "Other minor bug fixes and improvements"
+                ]
+            }
+        },
+        {
+            id: 3,
             version: "v0.2.2",
             time: "2026-01-11",
             title: "Improvements [8]",
@@ -64,7 +91,7 @@ var updateLogData = {
             }
         },
         {
-            id: 3,
+            id: 4,
             version: "v0.2.1",
             time: "2026-01-07",
             title: "Published the first version at github [1]",
@@ -78,10 +105,10 @@ var updateLogData = {
             }
         },
         {
-            id: 4,
+            id: 5,
             version: "v0.1.2",
             time: "2026-01-07",
-            title: "Little changes (2) [2]",
+            title: "Minor changes [2]",
             content: {
                 added: [
                     "Added Route labels and colors",
@@ -93,10 +120,10 @@ var updateLogData = {
             }
         },
         {
-            id: 5,
+            id: 6,
             version: "v0.1.1",
             time: "2026-01-06",
-            title: "Little changes (1) [2]",
+            title: "Minor changes [2]",
             content: {
                 added: [
                     "Added Direction button that can change the another direction",
@@ -108,7 +135,7 @@ var updateLogData = {
             }
         },
         {
-            id: 6,
+            id: 7,
             version: "v0.0.1",
             time: "2026-01-05",
             title: "Website created (not published yet) [2]",
