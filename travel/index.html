@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>旅遊路綫查詢系統 | Travel Bus Route Inquiry System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="inputScreen" class="screen input-screen hidden">
+        <button id="backToFuncBtn" class="back-btn app-back-btn" data-lang-key="backBtn">返回</button>
+
+        <div class="lang-switch-wrap"
+            style="position: fixed; right: 20px; left: auto; top: 18px; transform: none; z-index: 999; display: flex; gap: 8px;">
+            <button id="switchZhBtn" class="lang-btn active">中文</button>
+            <button id="switchEnBtn" class="lang-btn">ENG</button>
+        </div>
+
+        <div class="app-header">
+            <h1 class="app-title" data-lang-key="appTitle">旅遊路綫查詢系統</h1>
+        </div>
+        <div class="app-content input-content">
+            <div class="input-keyboard-suggest-wrap">
+                <div class="input-keyboard-wrap">
+                    <div class="input-container">
+                        <div class="input-title-wrap">
+                            <div class="input-box">
+                                <div class="input-field-wrap">
+                                    <label for="routeNumberInput" data-lang-key="routeNumberLabel">路綫</label>
+                                    <input type="text" id="routeNumberInput" class="custom-input" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="customKeyboard" class="custom-keyboard">
+                        <div class="keyboard-grid">
+                            <div class="key-group">
+                                <button class="main-num-key" data-key="S">S</button>
+                            </div>
+                            <div class="key-group">
+                                <button class="main-num-key" data-key="1">1</button>
+                            </div>
+                            <div class="key-group">
+                                <button class="main-num-key" data-key="2">2</button>
+                            </div>
+                        </div>
+                        <div class="keyboard-func-group">
+                            <button id="keyboardDeleteBtn" class="func-key delete-key"
+                                data-lang-key="deleteBtn">删除</button>
+                            <button id="keyboardClearBtn" class="func-key clear-key"
+                                data-lang-key="clearBtn">清空</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="routeSuggestPanel" class="route-suggest-panel">
+                    <div class="suggest-title" data-lang-key="suggestTitle">匹配的线路</div>
+                    <div id="suggestList" class="suggest-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="stopScreen" class="screen stop-screen hidden">
+        <button id="backToInputBtn" class="back-btn app-back-btn" data-lang-key="backBtn">返回</button>
+        <div class="app-header">
+            <h1 class="app-title" id="stopPageTitle" data-lang-key="stopPageTitleWithRoute">test</h1>
+        </div>
+        <div class="app-content stop-content">
+            <div id="stopContainer" class="stop-container">
+                
+            </div>
+        </div>
+    </div>
+
+    <script src="lang.js"></script>
+    <script src="routedata.js"></script>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const input = document.getElementById('routeNumberInput');
+            if (input) {
+                input.addEventListener('click', function () {
+                    const keyboard = document.getElementById("customKeyboard");
+                    if (keyboard) {
+                        keyboard.classList.remove("hidden");
+                        if (typeof Renderer !== 'undefined') {
+                            Renderer.initKeyboardValidity(input.value);
+                        }
+                    }
+                });
+
+                input.addEventListener('keydown', function (e) {
+                    e.preventDefault();
+                });
+                input.addEventListener('paste', function (e) {
+                    e.preventDefault();
+                });
+
+                input.addEventListener('change', function () {
+                    Renderer.initKeyboardValidity(input.value);
+                    Renderer.renderRouteSuggestions(input.value);
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
